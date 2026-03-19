@@ -525,12 +525,12 @@
 
   .inactive-badge {
     font-family: 'Cinzel', serif;
-    font-size: 9px;
-    letter-spacing: 0.15em;
+    font-size: 10px;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--text-dim);
-    border: 1px solid var(--border);
-    padding: 1px 5px;
+    border: 1px solid #4a3f28;
+    padding: 2px 6px;
     margin-left: 6px;
     vertical-align: middle;
   }
@@ -1756,7 +1756,7 @@ function getRoleRowsHtml(sorted, dates, bottom20threshold, top20threshold, point
           <td class="priority-cell">${(() => {
             const { score, tooltip } = calculatePriority(p, bottom20threshold, top20threshold, pointValues);
             if (!score) return '<span style="color:var(--text-dim);font-style:italic;font-size:12px;">—</span>';
-            const normScore = score * priorityNorm;
+            const normScore = Math.round(score * priorityNorm * 10) / 10;
             const col = priorityColor(normScore);
             const displayStr = normScore % 1 === 0 ? normScore.toFixed(0) : normScore.toFixed(1);
             const fullTip = tooltip + `&#10;Score: ${score.toFixed(2)}`;
@@ -2498,7 +2498,7 @@ function onItemChange() {
     const { score: prScore, tooltip: prTooltip } = calculatePriority(p, eligBottom20, eligTop20, eligThreshPts);
     const { mult, hard, soft } = prioMultiplier(p);
     const adjScore = prScore * mult;
-    const normPr = adjScore * prNormFactor;
+    const normPr = Math.round(adjScore * prNormFactor * 10) / 10;
     const displayPr = normPr % 1 === 0 ? normPr.toFixed(0) : normPr.toFixed(1);
     const prStr = prScore > 0 ? displayPr : '—';
     const prCol = prScore > 0 ? priorityColor(normPr) : 'var(--text-dim)';
