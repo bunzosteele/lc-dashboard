@@ -1523,11 +1523,13 @@ function parseCSV(text) {
       currentRole.players.push({ name, attended: 0, window: 0, pct: null, flags, n, inactive: false });
     } else {
       const first = trueIdx[0], last = trueIdx[trueIdx.length - 1];
-      const window = last - first + 1;
-      const attended = flags.slice(first, last + 1).filter(Boolean).length;
-      const pct = (attended / window) * 100;
       const raidsSinceLast = (totalRaids - 1) - last; // how many raids after their last attendance
       const inactive = raidsSinceLast > 2;
+      // For active players, extend window to the latest raid so missing recent raids counts against them
+      const windowEnd = inactive ? last : (totalRaids - 1);
+      const window = windowEnd - first + 1;
+      const attended = flags.slice(first, windowEnd + 1).filter(Boolean).length;
+      const pct = (attended / window) * 100;
       currentRole.players.push({ name, attended, window, pct, flags, n, first, last, inactive });
     }
   }
@@ -1637,7 +1639,7 @@ function gearColor(count) {
 
 function calculatePriority(p, bottom20threshold, top20threshold, pointValues) {
   // Must have attended more than 2 raids
-  if (!p.pct || p.attended <= 2) return { score: 0, tooltip: 'Insufficient raids attended' };
+  if (!p.pct || p.attended < 2) return { score: 0, tooltip: 'Insufficient raids attended' };
 
   // Attendance score: floor(pct/10) * raids attended
   const attFloor = Math.floor(p.pct / 10);
@@ -1743,8 +1745,8 @@ function getRoleRowsHtml(sorted, dates, bottom20threshold, top20threshold, point
       html += `
         ${(() => {
         const pts = pointsByPlayer[normalizeName(p.name)] ?? 0;
-        const isBottom = !p.inactive && p.pct !== null && p.attended > 2 && pts <= bottom20threshold && pointValues.length > 0;
-        const isTop = !p.inactive && p.pct !== null && p.attended > 2 && pts >= top20threshold && pointValues.length > 0;
+        const isBottom = !p.inactive && p.pct !== null && p.attended >= 2 && pts <= bottom20threshold && pointValues.length > 0;
+        const isTop = !p.inactive && p.pct !== null && p.attended >= 2 && pts >= top20threshold && pointValues.length > 0;
         const ptClass = isTop ? 'pts-top' : isBottom ? 'pts-bottom' : '';
         const { score: prScore } = calculatePriority(p, bottom20threshold, top20threshold, pointValues);
         const prNorm = prScore * priorityNorm;
@@ -1808,7 +1810,7 @@ function renderRoleBody(tbody, role, dates, thresholds) {
   const { bottom20threshold, top20threshold, pointValues } = thresholds;
   const sorted = getSortedPlayers(role.name, role.players, bottom20threshold, top20threshold, pointValues);
   const allPriorityScores = sorted
-    .filter(p => p.pct !== null && !p.inactive && p.attended > 2)
+    .filter(p => p.pct !== null && !p.inactive && p.attended >= 2)
     .map(p => calculatePriority(p, bottom20threshold, top20threshold, pointValues).score)
     .filter(s => s > 0);
   const maxPriority = allPriorityScores.length > 0 ? Math.max(...allPriorityScores) : 1;
@@ -1836,7 +1838,7 @@ function render({ dates, roles }) {
 
   // Avg consumes (weighted by raids attended)
   let _totalWeighted = 0, _totalWeight = 0;
-  roles.flatMap(r => r.players).filter(p => p.pct !== null && !p.inactive && p.attended > 2).forEach(p => {
+  roles.flatMap(r => r.players).filter(p => p.pct !== null && !p.inactive && p.attended >= 2).forEach(p => {
     const scores = Object.values(buffScoreByPlayerDate[normalizeName(p.name)] || {}).map(v => v?.total).filter(v => v !== null);
     if (!scores.length) return;
     const playerAvg = scores.reduce((a, b) => a + b, 0) / scores.length;
@@ -1859,7 +1861,7 @@ function render({ dates, roles }) {
     if (!role.players.length) continue;
 
     // Calculate top/bottom 20% thresholds — active, non-inactive players with >2 raids only
-    const roleActive = role.players.filter(p => p.pct !== null && !p.inactive && p.attended > 2);
+    const roleActive = role.players.filter(p => p.pct !== null && !p.inactive && p.attended >= 2);
     const rolePoints = roleActive.map(p => pointsByPlayer[normalizeName(p.name)] ?? 0).sort((a, b) => a - b);
     const bottom20threshold = rolePoints.length > 0 ? rolePoints[Math.floor(rolePoints.length * 0.2)] : 0;
     const top20threshold = rolePoints.length > 0 ? rolePoints[Math.floor(rolePoints.length * 0.8)] : Infinity;
@@ -1906,7 +1908,7 @@ function render({ dates, roles }) {
 
     // Calculate priority normalisation factor: X = 100 / maxPriority so highest = 100
     const allPriorityScores = sorted
-      .filter(p => p.pct !== null && !p.inactive && p.attended > 2)
+      .filter(p => p.pct !== null && !p.inactive && p.attended >= 2)
       .map(p => calculatePriority(p, bottom20threshold, top20threshold, pointValues).score)
       .filter(s => s > 0);
     const maxPriority = allPriorityScores.length > 0 ? Math.max(...allPriorityScores) : 1;
@@ -2439,7 +2441,7 @@ function onItemChange() {
 
   // Get thresholds for all eligible players combined (treat as one group)
   const eligThreshPts = eligible
-    .filter(p => p.pct !== null && !p.inactive && p.attended > 2)
+    .filter(p => p.pct !== null && !p.inactive && p.attended >= 2)
     .map(p => pointsByPlayer[normalizeName(p.name)] ?? 0)
     .sort((a, b) => a - b);
   const eligBottom20 = eligThreshPts.length ? eligThreshPts[Math.floor(eligThreshPts.length * 0.2)] : 0;
