@@ -347,6 +347,8 @@
     font-weight: 400;
     color: var(--text);
     letter-spacing: 0.02em;
+    min-width: 16ch;
+    width: 16ch;
   }
 
   .raids-num {
@@ -1874,7 +1876,7 @@ const PROXIES = [
 const fetchErrors = [];
 
 function addError(source, message) {
-  fetchErrors.push({ source, message, time: new Date().toLocaleTimeString() });
+  fetchErrors.push({ source, message, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) });
 }
 
 function showErrors() {
@@ -1960,9 +1962,9 @@ async function fetchData() {
     }
 
     if (fetchErrors.length) {
-      setStatus(`Updated at ${new Date().toLocaleTimeString()} — <span style="cursor:pointer;text-decoration:underline;" onclick="showErrors()">⚠ ${fetchErrors.length} warning(s) (click to view)</span>`, 'loading');
+      setStatus(`Updated at ${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})} — <span style="cursor:pointer;text-decoration:underline;" onclick="showErrors()">⚠ ${fetchErrors.length} warning(s) (click to view)</span>`, 'loading');
     } else {
-      setStatus(`Updated at ${new Date().toLocaleTimeString()}`, 'success');
+      setStatus(`Updated at ${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}`, 'success');
     }
     render(data);
   } catch(e) {
@@ -2387,7 +2389,7 @@ function render({ dates, roles }) {
       <div class="role-body" id="rolebody-${roleSafeId}">
       <table>
         <colgroup>
-          <col style="width:160px;"> <!-- Player -->
+          <col style="width:16ch;min-width:16ch;"> <!-- Player -->
           <col style="width:70px;">  <!-- Priority -->
           <col style="width:24px;">  <!-- Gear flag -->
           <col style="width:64px;">  <!-- Loot Score -->
@@ -3230,7 +3232,7 @@ function onItemChange() {
   el.innerHTML = itemHeaderHtml + `
     <table style="width:100%;border-collapse:collapse;margin-top:24px;">
       <colgroup>
-        <col style="width:160px;"> <!-- Player -->
+        <col style="width:16ch;min-width:16ch;"> <!-- Player -->
         <col style="width:70px;">  <!-- Priority -->
         <col style="width:24px;">  <!-- Gear flag -->
         <col style="width:80px;">  <!-- Loot Score -->
