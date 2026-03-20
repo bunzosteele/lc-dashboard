@@ -3709,18 +3709,20 @@ function onItemChange() {
   const candidateItemId = getItemId(item);
   const BIS_PHASE = 1; // hardcoded to phase 1 for now
 
+  // Check if candidate is on BiS for anyone — if not, hide all indicators
+  const candidateOnBisForAnyone = candidateItemId
+    ? Object.values(bisData).some(slots => Object.values(slots).some(items => items.some(([id,,p]) => id === candidateItemId && p === BIS_PHASE)))
+    : false;
+
   function currentItemCellHtml(playerKey, slots) {
     const dimCell = '<td style="text-align:center;color:var(--text-dim);font-style:italic;">—</td>';
     if (!slots || !slots.length) return dimCell;
     const gear = gearListingByPlayer[playerKey]?.slots;
     if (!gear || slots[0] === '__unknown__') return dimCell;
 
-    // Find the player name from key for EPV lookups
-    const playerName = Object.keys(canonicalNames).includes(playerKey)
-      ? (canonicalNames[playerKey] || playerKey)
-      : lastRenderData.roles.flatMap(r => r.players).find(p => normalizeName(p.name) === playerKey)?.name || playerKey;
-
-    const candidateEpv = getPlayerItemEpv(playerName, candidateItemId, BIS_PHASE);
+    const playerName = lastRenderData.roles.flatMap(r => r.players)
+      .find(p => normalizeName(p.name) === playerKey)?.name || playerKey;
+    const candidateEpv = candidateOnBisForAnyone ? getPlayerItemEpv(playerName, candidateItemId, BIS_PHASE) : null;
 
     const items = slots.map(slot => gear[slot]).filter(Boolean);
     if (!items.length) return dimCell;
@@ -3728,37 +3730,47 @@ function onItemChange() {
     const html = items.map(name => {
       const id = getItemId(name);
       const icon = id && itemIcons[id]
-        ? `<img src="https://wow.zamimg.com/images/wow/icons/medium/${itemIcons[id]}.jpg" style="width:18px;height:18px;border:1px solid #555;border-radius:2px;vertical-align:middle;flex-shrink:0;" />`
+        ? \`<img src="https://wow.zamimg.com/images/wow/icons/medium/\${itemIcons[id]}.jpg" style="width:18px;height:18px;border:1px solid #555;border-radius:2px;vertical-align:middle;flex-shrink:0;" />\`
         : '';
 
-      // BiS analysis for current item
       let bisIndicator = '';
-      if (id) {
+      if (candidateOnBisForAnyone && id) {
         const currentEpv = getPlayerItemEpv(playerName, id, BIS_PHASE);
         const currentRank = getPlayerItemBisRank(playerName, id, BIS_PHASE);
 
-        if (currentRank === null) {
-          // Not on BiS list at all — warning indicator
-          bisIndicator = ` <span style="color:#d4a017;font-size:12px;" title="Current item not on BiS list for this spec">⚠</span>`;
-        } else if (candidateEpv !== null && currentEpv !== null) {
-          // Both on BiS list — show EPV delta as tooltip on current item
+        if (candidateEpv === null) {
+          // Candidate is on BiS for others but not this player's spec — red stop
+          bisIndicator = \`<span style="font-size:15px;flex-shrink:0;" title="This item is not on the BiS list for this player's spec">🛑</span>\`;
+        } else if (currentRank === null) {
+          // Candidate is on their BiS, but current item is not — gold warning
+          bisIndicator = \`<span style="font-size:13px;color:#d4a017;flex-shrink:0;" title="Current item is not on the BiS list for this player's spec">⚠</span>\`;
+        } else if (currentEpv !== null) {
+          // Both on BiS — directional arrow based on EPV delta
           const delta = candidateEpv - currentEpv;
-          const sign = delta >= 0 ? '+' : '';
-          const deltaColor = delta > 10 ? '#4caa6e' : delta > 0 ? '#8abf50' : delta === 0 ? 'var(--text-dim)' : '#c94c4c';
-          bisIndicator = ` <span style="color:${deltaColor};font-size:11px;font-family:'Cinzel',serif;" title="Candidate EPV: ${candidateEpv.toFixed(1)} | Current EPV: ${currentEpv.toFixed(1)} | Delta: ${sign}${delta.toFixed(1)}">${sign}${delta.toFixed(1)}</span>`;
+          const tip = \`Candidate EPV: \${candidateEpv.toFixed(1)} | Current EPV: \${currentEpv.toFixed(1)} | Delta: \${delta >= 0 ? '+' : ''}\${delta.toFixed(1)}\`;
+          if (delta >= 20) {
+            bisIndicator = \`<span style="font-size:16px;color:#4caa6e;flex-shrink:0;" title="\${tip}">⇑</span>\`;
+          } else if (delta >= 5) {
+            bisIndicator = \`<span style="font-size:16px;color:#8abf50;flex-shrink:0;" title="\${tip}">↑</span>\`;
+          } else if (delta <= -20) {
+            bisIndicator = \`<span style="font-size:16px;color:#c94c4c;flex-shrink:0;" title="\${tip}">⇓</span>\`;
+          } else if (delta <= -5) {
+            bisIndicator = \`<span style="font-size:16px;color:#e07040;flex-shrink:0;" title="\${tip}">↓</span>\`;
+          } else {
+            bisIndicator = \`<span style="font-size:16px;color:var(--text-dim);flex-shrink:0;" title="\${tip}">→</span>\`;
+          }
         }
       }
 
-      const link = id
-        ? `<a href="https://www.wowhead.com/tbc/item=${id}" data-wowhead="item=${id}&dataset=tbc" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--gold-light);font-size:15px;white-space:nowrap;">${icon}${name}</a>${bisIndicator}`
-        : `<span style="font-size:15px;color:var(--gold-light);">${name}</span>`;
-      return link;
+      return id
+        ? \`<span style="display:inline-flex;align-items:center;gap:5px;">\${bisIndicator}<a href="https://www.wowhead.com/tbc/item=\${id}" data-wowhead="item=\${id}&dataset=tbc" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--gold-light);font-size:15px;white-space:nowrap;">\${icon}\${name}</a></span>\`
+        : \`<span style="display:inline-flex;align-items:center;gap:5px;">\${bisIndicator}<span style="font-size:15px;color:var(--gold-light);">\${name}</span></span>\`;
     }).join('<br style="margin:2px 0;">');
 
-    return `<td style="padding:3px 8px;vertical-align:middle;text-align:left;">${html}</td>`;
+    return \`<td style="padding:3px 8px;vertical-align:middle;text-align:left;">\${html}</td>\`;
   }
 
-  const relevantSlots = getRelevantSlots(item);
+    const relevantSlots = getRelevantSlots(item);
 
   function lootPlayerRow(p, dimmed, badge) {
     const key = normalizeName(p.name);
