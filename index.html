@@ -999,6 +999,7 @@
 
   <div class="controls">
     <button class="btn primary" onclick="fetchData()">⟳ Fetch Data</button>
+    <button class="btn" id="wclConnectTopBtn" onclick="connectWcl()" style="display:none;">⚡ Connect WarcraftLogs</button>
     <div class="group-btns">
       <button class="group-btn active" data-mode="role" onclick="setGrouping('role')">Role</button>
       <button class="group-btn" data-mode="t45" onclick="setGrouping('t45')">T4/5</button>
@@ -1646,9 +1647,9 @@ async function loadWclConfigFromRepo(password) {
 
 function setWclStatus(msg, type = '') {
   const el = document.getElementById('wclStatus');
-  if (!el) return;
-  el.textContent = msg;
-  el.style.color = type === 'error' ? 'var(--red)' : type === 'success' ? '#4caa6e' : 'var(--text-dim)';
+  if (el) { el.textContent = msg; el.style.color = type === 'error' ? 'var(--red)' : type === 'success' ? '#4caa6e' : 'var(--text-dim)'; }
+  const topBtn = document.getElementById('wclConnectTopBtn');
+  if (topBtn) topBtn.style.display = (type === 'success') ? 'none' : '';
 }
 
 async function getWclToken() {
@@ -1693,7 +1694,7 @@ async function fetchWclAllStars(realm) {
     await Promise.all(players.map(async p => {
       const wclName = canonicalNames[normalizeName(p.name)] || p.name;
       const isHealer = p.roleName === 'Healers';
-      const metric = isHealer ? 'HealingDone' : 'DPS';
+      const metric = isHealer ? 'hps' : 'dps';
       const charQuery = `{
         characterData {
           character(name: "${wclName}", serverSlug: "${realm}", serverRegion: "${WCL_REGION}") {
@@ -2226,6 +2227,14 @@ function getRoleRowsHtml(sorted, dates, bottom20threshold, top20threshold, point
             const col = hi ? C5 : t20 ? C4 : b20 ? C2 : zlo ? C1 : C3;
             return `color:${col};`;
           })()}">${pts}</td>
+          <td style="text-align:center;">${(() => {
+            const wcl = wclData[normalizeName(p.name)];
+            if (!wcl || wcl.points === null) return '<span style="color:var(--text-dim);font-size:11px;">—</span>';
+            const pct = wcl.rank && wcl.outOf ? Math.round((1 - (wcl.rank - 1) / wcl.outOf) * 100) : null;
+            const col = wclColor(pct);
+            const tip = `Points: ${Math.round(wcl.points)}${wcl.rank ? ` | Rank: ${wcl.rank}/${wcl.outOf}` : ''}${wcl.bestPerf ? ` | Best: ${Math.round(wcl.bestPerf)}%` : ''}`;
+            return `<span style="color:${col};font-family:'Cinzel',serif;font-size:12px;font-weight:600;" title="${tip}">${Math.round(wcl.points)}</span>`;
+          })()}</td>
           <td class="consumes-cell">${(() => {
             const scores = Object.values(buffScoreByPlayerDate[normalizeName(p.name)] || {}).map(v => v?.total).filter(v => v !== null);
             if (!scores.length) return '<span style="color:var(--text-dim);font-style:italic;font-size:13px;">—</span>';
@@ -2244,14 +2253,6 @@ function getRoleRowsHtml(sorted, dates, bottom20threshold, top20threshold, point
               <span class="att-pct ${cls}">${pctStr}</span>
             </div>
           </td>
-          <td style="text-align:center;">${(() => {
-            const wcl = wclData[normalizeName(p.name)];
-            if (!wcl || wcl.points === null) return '<span style="color:var(--text-dim);font-size:11px;">—</span>';
-            const pct = wcl.rank && wcl.outOf ? Math.round((1 - (wcl.rank - 1) / wcl.outOf) * 100) : null;
-            const col = wclColor(pct);
-            const tip = `Points: ${Math.round(wcl.points)}${wcl.rank ? ` | Rank: ${wcl.rank}/${wcl.outOf}` : ''}${wcl.bestPerf ? ` | Best: ${Math.round(wcl.bestPerf)}%` : ''}`;
-            return `<span style="color:${col};font-family:'Cinzel',serif;font-size:12px;font-weight:600;" title="${tip}">${Math.round(wcl.points)}</span>`;
-          })()}</td>
         </tr>
       `;
   }
@@ -2338,11 +2339,11 @@ function render({ dates, roles }) {
           <col style="width:70px;">  <!-- Priority -->
           <col style="width:24px;">  <!-- Gear flag -->
           <col style="width:64px;">  <!-- Loot Score -->
+          <col style="width:70px;">  <!-- WCL -->
           <col style="width:80px;">  <!-- Consumes -->
           <col>                      <!-- Raids (dots) -->
           <col style="width:50px;">  <!-- # -->
           <col style="width:140px;"> <!-- Attendance % -->
-          <col style="width:70px;">  <!-- WCL -->
         </colgroup>
         <thead id="thead-${roleSafeId}">
           <tr>
@@ -2350,11 +2351,11 @@ function render({ dates, roles }) {
             <th data-col="priority" onclick="setSort('${roleSafeId}', '${role.name}', 'priority')" style="cursor:pointer;text-align:center;" title="Loot priority recommendation based on raid attendance, consume usage, and loot received.">Priority<span class="sort-arrow">${state.col==='priority' ? (state.dir==='desc' ? ' ▾' : ' ▴') : ' ⬦'}</span></th>
             <th></th>
             <th data-col="points" onclick="setSort('${roleSafeId}', '${role.name}', 'points')" style="cursor:pointer;text-align:center;" title="Amount of loot received relative to raids attended.">Loot Score<span class="sort-arrow">${state.col==='points' ? (state.dir==='desc' ? ' ▾' : ' ▴') : ' ⬦'}</span></th>
+            <th data-col="wcl" onclick="setSort('${roleSafeId}', '${role.name}', 'wcl')" style="cursor:pointer;text-align:center;" title="WarcraftLogs All Stars points for current tier.">WCL<span class="sort-arrow">${state.col==='wcl' ? (state.dir==='desc' ? ' ▾' : ' ▴') : ' ⬦'}</span></th>
             <th data-col="consumes" onclick="setSort('${roleSafeId}', '${role.name}', 'consumes')" style="cursor:pointer;text-align:center;" title="Uptime of all required consumables.">Consumes<span class="sort-arrow">${state.col==='consumes' ? (state.dir==='desc' ? ' ▾' : ' ▴') : ' ⬦'}</span></th>
             <th style="text-align:center;" title="Raids attended. Color indicates consumable usage.">Raids</th>
             <th data-col="attendance" onclick="setSort('${roleSafeId}', '${role.name}', 'attendance')" style="cursor:pointer;text-align:center;">#<span class="sort-arrow">${state.col==='attendance' ? (state.dir==='desc' ? ' ▾' : ' ▴') : ' ⬦'}</span></th>
             <th data-col="pct" onclick="setSort('${roleSafeId}', '${role.name}', 'pct')" style="cursor:pointer;">Attendance %<span class="sort-arrow">${state.col==='pct' ? (state.dir==='desc' ? ' ▾' : ' ▴') : ' ⬦'}</span></th>
-            <th data-col="wcl" onclick="setSort('${roleSafeId}', '${role.name}', 'wcl')" style="cursor:pointer;text-align:center;" title="WarcraftLogs All Stars points for current tier.">WCL<span class="sort-arrow">${state.col==='wcl' ? (state.dir==='desc' ? ' ▾' : ' ▴') : ' ⬦'}</span></th>
           </tr>
         </thead>
         <tbody id="table-${roleSafeId}">
@@ -2481,6 +2482,9 @@ function initWclIfSaved() {
   const storedExpiry = parseInt(sessionStorage.getItem('wclTokenExpiry') || '0');
   if (stored && Date.now() < storedExpiry) {
     setWclStatus('✓ Connected to WarcraftLogs (' + WCL_REALM + ')', 'success');
+  } else {
+    const topBtn = document.getElementById('wclConnectTopBtn');
+    if (topBtn) topBtn.style.display = '';
   }
 }
 
