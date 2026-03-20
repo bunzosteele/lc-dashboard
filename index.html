@@ -994,7 +994,6 @@
 <div class="container">
   <header>
     <h1>Don't Be Suspicious</h1>
-    <div style="font-size:10px;color:var(--text-dim);letter-spacing:0.15em;font-family:'Cinzel',serif;margin-top:2px;">v' + VERSION + '</div>
     <p class="subtitle">Loot Council Summary</p>
   </header>
 
@@ -1581,13 +1580,12 @@ async function handleWclCallback() {
   return true;
 }
 
-const VERSION = '2026.3.20';
 const WCL_CLIENT_ID = 'a1577bef-44fb-4fb3-87f6-555c24400a38';
 const WCL_REDIRECT_URI = 'https://bunzosteele.github.io/dbs-lc/';
 const WCL_REALM = 'dreamscythe';
 const WCL_AUTH_URL = 'https://www.warcraftlogs.com/oauth/authorize';
 const WCL_TOKEN_URL = 'https://www.warcraftlogs.com/oauth/token';
-const WCL_API_URL = 'https://www.warcraftlogs.com/api/v2/client';
+const WCL_API_URL = 'https://www.warcraftlogs.com/api/v2/user'; // PKCE uses /user endpoint
 const WCL_REGION = 'US';
 let wclToken = null;
 let wclTokenExpiry = 0;
@@ -1681,26 +1679,10 @@ async function wclGraphQL(query, token) {
 async function fetchWclAllStars(realm) {
   const token = await getWclToken();
   if (!token) return;
-  const query = `{
-    worldData {
-      expansion(id: 16) {
-        zones {
-          id name
-          brackets { min max bucket type }
-        }
-      }
-    }
-  }`;
+  // Zone 1008 = Gruul's Lair + Magtheridon's Lair on TBC Classic Anniversary
+  const zone = { id: 1008, name: "Gruul / Magtheridon" };
+  console.log('Using hardcoded WCL zone:', zone.id, zone.name);
   try {
-    // First get the current TBC phase zone ID
-    const zoneData = await wclGraphQL(query, token).catch(e => { console.warn('Zone query failed:', e); return null; });
-    console.log('WCL zone data:', JSON.stringify(zoneData)?.slice(0, 200));
-    if (!zoneData) { console.warn('No zone data returned'); return; }
-    const zones = zoneData?.data?.worldData?.expansion?.zones || [];
-    console.log('WCL zones:', zones.length, zones.map(z => z.id + ':' + z.name).join(', '));
-    if (!zones.length) { console.warn('No zones found'); return; }
-    const zone = zones[zones.length - 1];
-    console.log('Using zone:', zone.id, zone.name);
 
     const players = lastRenderData.roles.flatMap(r => r.players).filter(p => p.name && p.pct !== null);
     console.log('Fetching WCL for', players.length, 'players');
@@ -1708,7 +1690,7 @@ async function fetchWclAllStars(realm) {
       const charQuery = `{
         characterData {
           character(name: "${p.name}", serverSlug: "${realm}", serverRegion: "${WCL_REGION}") {
-            zoneRankings(zoneID: ${zone.id}, difficulty: 4)
+            zoneRankings(zoneID: ${zone.id})
           }
         }
       }`;
@@ -2713,7 +2695,7 @@ function parseBuffConsumables(text, label) {
 claSheets = loadClaSheets();
 renderClaList();
 initWclIfSaved();
-document.title = "Don't Be Suspicious v" + VERSION;
+
 
 // Auto-load CLA sheets from repo JSON if no sheets saved locally
 async function loadClaSheetsFromRepo() {
