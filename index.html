@@ -1319,15 +1319,17 @@ function parseClasses(text) {
 
 async function fetchItemIcons() {
   const ids = [...new Set(Object.values(gearItemIds).filter(v => typeof v === 'number'))];
-  await Promise.all(ids.map(async id => {
-    if (itemIcons[id]) return; // already fetched
+  const toFetch = ids.filter(id => !itemIcons[id]);
+  console.log(`fetchItemIcons: ${ids.length} total IDs, ${toFetch.length} to fetch`);
+  await Promise.all(toFetch.map(async id => {
     try {
       const res = await fetch(`${ICON_SCRIPT}?itemId=${id}`);
-      if (!res.ok) return;
+      if (!res.ok) { console.warn('Icon fetch failed for id:', id, res.status); return; }
       const data = await res.json();
       if (data.icon) itemIcons[id] = data.icon.toLowerCase();
-    } catch(e) {}
+    } catch(e) { console.warn('Icon fetch error for id:', id, e.message); }
   }));
+  console.log(`fetchItemIcons: done, ${Object.keys(itemIcons).length} icons cached`);
 }
 
 function fetchItemMap() {
@@ -1714,14 +1716,14 @@ async function fetchWclAllStars(realm) {
       if (!wclData.hasOwnProperty(key)) wclData[key] = null;
     });
 
-    // Final re-render to update sort order if sorted by WCL
-    if (lastRenderData.roles.length) render(lastRenderData);
+    // Final re-render to update sort order if sorted by WCL (skip if in loot view)
+    if (lastRenderData.roles.length && groupingMode !== 'loot') render(lastRenderData);
   } catch(e) {
     console.warn('WCL fetch failed:', e.message);
     lastRenderData.roles.flatMap(r => r.players).forEach(p => {
       wclData[normalizeName(p.name)] = null;
     });
-    if (lastRenderData.roles.length) render(lastRenderData);
+    if (lastRenderData.roles.length && groupingMode !== 'loot') render(lastRenderData);
   }
 }
 
@@ -2149,6 +2151,7 @@ function groupPlayers(allPlayers) {
   if (groupingMode === 'role') return lastRenderData.roles;
 
   const groups = GROUPINGS[groupingMode];
+  if (!groups) return lastRenderData.roles; // fallback for unknown modes (e.g. 'loot')
   return groups.map(g => {
     const players = allPlayers.filter(p => {
       const cls = classMap[normalizeName(p.name)];
@@ -2564,7 +2567,7 @@ function renderClaList() {
     <div class="cla-row">
       <span class="cla-row-label">${s.label}</span>
       <span class="cla-row-url" title="${s.url}">${s.url.substring(0, 60)}...</span>
-      <span class="cla-row-gids">Gear: ${s.gearGid} / Buff: ${s.buffGid}</span>
+      <span class="cla-row-gids">Gear: ${s.gearGid} / Listing: ${s.gearListingGid || '—'} / Buff: ${s.buffGid}</span>
       <button class="cla-remove" onclick="removeCla(${i})" title="Remove">✕</button>
     </div>
   `).join('');
@@ -2781,6 +2784,7 @@ async function fetchAllClaData() {
     try {
       const data = parseGearListing(text);
       const thisDate = claSheetDates[label] || null;
+      let count = 0;
       Object.entries(data).forEach(([playerName, slots]) => {
         const key = normalizeName(playerName);
         const existingLabel = gearListingByPlayer[key]?.label;
@@ -2791,10 +2795,12 @@ async function fetchAllClaData() {
           const ei = existingLabel ? claSheets.findIndex(s => s.label === existingLabel) : -1;
           isNewer = sheetIdx >= ei;
         }
-        if (isNewer) gearListingByPlayer[key] = { label, slots };
+        if (isNewer) { gearListingByPlayer[key] = { label, slots }; count++; }
       });
-    } catch(e) { addError(`CLA "${label}" — Gear Listing`, `Parse error: ${e.message}`); }
+      console.log(`Gear listing "${label}": ${Object.keys(data).length} players parsed, ${count} updated`);
+    } catch(e) { addError(`CLA "${label}" — Gear Listing`, `Parse error: ${e.message}`); console.warn('Gear listing parse error:', label, e); }
   }
+  console.log(`gearListingByPlayer: ${Object.keys(gearListingByPlayer).length} players total`);
 }
 
 
