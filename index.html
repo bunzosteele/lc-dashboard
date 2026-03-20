@@ -1135,6 +1135,7 @@ let claDataByPlayer = {};
 let canonicalNames = {}; // normalized key -> exact name with special chars from CLA
 let buffScoreByPlayerDate = {}; // normalized name -> { normalizedDate -> pct }
 let latestGearIssuesByPlayer = {}; // normalized name -> { label, issues[] }
+let gearListingByPlayer = {}; // normalized name -> { Head, Neck, ... } from most recent CLA gear listing
 let claSheetDates = {}; // label -> Date object parsed from buff tab C3
 let classMap = {}; // normalized name -> class (e.g. 'Warrior')
 let glossaryData = []; // array of { raid, boss, item, eligibleClasses[] }
@@ -2746,16 +2747,23 @@ async function fetchAllClaData() {
   claDataByPlayer = {};
   buffScoreByPlayerDate = {};
   latestGearIssuesByPlayer = {};
+  gearListingByPlayer = {};
   claSheetDates = {};
   canonicalNames = {};
 
-  // Fetch all CLA sheets in parallel, collecting raw gear results first
-  const gearResults = []; // { label, text } in fetch-completion order
+  // Fetch all CLA sheets in parallel, collecting raw results first
+  const gearResults = [];        // { label, text }
+  const gearListingResults = []; // { label, text, sheetIdx }
 
-  await Promise.all(claSheets.flatMap(sheet => [
+  await Promise.all(claSheets.flatMap((sheet, sheetIdx) => [
     fetchSheet(sheet.sheetId, sheet.gearGid)
       .then(text => gearResults.push({ label: sheet.label, text }))
       .catch(e => addError(`CLA "${sheet.label}" — Gear Issues (gid: ${sheet.gearGid})`, e.message)),
+    sheet.gearListingGid
+      ? fetchSheet(sheet.sheetId, sheet.gearListingGid)
+          .then(text => gearListingResults.push({ label: sheet.label, text, sheetIdx }))
+          .catch(e => addError(`CLA "${sheet.label}" — Gear Listing (gid: ${sheet.gearListingGid})`, e.message))
+      : Promise.resolve(),
     fetchSheet(sheet.sheetId, sheet.buffGid)
       .then(text => {
         try { parseBuffConsumables(text, sheet.label); }
@@ -2764,10 +2772,28 @@ async function fetchAllClaData() {
       .catch(e => addError(`CLA "${sheet.label}" — Buff Consumables (gid: ${sheet.buffGid})`, e.message)),
   ]));
 
-  // Now that claSheetDates is fully populated, parse gear issues with correct recency
+  // Now that claSheetDates is fully populated, parse gear issues and gear listings with correct recency
   for (const { label, text } of gearResults) {
     try { parseGearIssues(text, label); }
     catch(e) { addError(`CLA "${label}" — Gear Issues`, `Parse error: ${e.message}`); }
+  }
+  for (const { label, text, sheetIdx } of gearListingResults) {
+    try {
+      const data = parseGearListing(text);
+      const thisDate = claSheetDates[label] || null;
+      Object.entries(data).forEach(([playerName, slots]) => {
+        const key = normalizeName(playerName);
+        const existingLabel = gearListingByPlayer[key]?.label;
+        const existingDate = existingLabel ? (claSheetDates[existingLabel] || null) : null;
+        let isNewer;
+        if (thisDate && existingDate) { isNewer = thisDate >= existingDate; }
+        else {
+          const ei = existingLabel ? claSheets.findIndex(s => s.label === existingLabel) : -1;
+          isNewer = sheetIdx >= ei;
+        }
+        if (isNewer) gearListingByPlayer[key] = { label, slots };
+      });
+    } catch(e) { addError(`CLA "${label}" — Gear Listing`, `Parse error: ${e.message}`); }
   }
 }
 
@@ -3235,6 +3261,44 @@ function onItemChange() {
     return 0;
   });
 
+  // Determine which gear slots to show for the selected item
+  function getRelevantSlots(itemName) {
+    // Find the slot this item occupies in any player's gear listing
+    const normItem = normalizeName(itemName);
+    for (const { slots } of Object.values(gearListingByPlayer)) {
+      for (const [slot, name] of Object.entries(slots)) {
+        if (normalizeName(name) === normItem) {
+          if (slot === 'Ring1' || slot === 'Ring2') return ['Ring1','Ring2'];
+          if (slot === 'Trinket1' || slot === 'Trinket2') return ['Trinket1','Trinket2'];
+          if (slot === 'Weapon') return ['Weapon','Off-Hand'];
+          if (slot === 'Off-Hand') return ['Weapon','Off-Hand'];
+          return [slot];
+        }
+      }
+    }
+    // Fallback: guess from item name patterns
+    return null;
+  }
+
+  function currentItemCellHtml(playerKey, slots) {
+    if (!slots || !slots.length) return '<td style="text-align:center;color:var(--text-dim);font-style:italic;">—</td>';
+    const gear = gearListingByPlayer[playerKey]?.slots;
+    if (!gear) return '<td style="text-align:center;color:var(--text-dim);font-style:italic;font-size:11px;">No data</td>';
+    const items = slots.map(slot => gear[slot]).filter(Boolean);
+    if (!items.length) return '<td style="text-align:center;color:var(--text-dim);font-style:italic;">—</td>';
+    const html = items.map(name => {
+      const id = getItemId(name);
+      const icon = id && itemIcons[id] ? `<img src="https://wow.zamimg.com/images/wow/icons/small/${itemIcons[id]}.jpg" style="width:15px;height:15px;border:1px solid #444;border-radius:2px;vertical-align:middle;flex-shrink:0;" />` : '';
+      const link = id
+        ? `<a href="https://www.wowhead.com/tbc/item=${id}" data-wowhead="item=${id}&dataset=tbc" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;text-decoration:none;color:var(--text-muted);font-size:12px;">${icon}${name}</a>`
+        : `<span style="font-size:12px;color:var(--text-muted);">${name}</span>`;
+      return link;
+    }).join('<br>');
+    return `<td style="padding:4px 8px;vertical-align:middle;">${html}</td>`;
+  }
+
+  const relevantSlots = getRelevantSlots(item);
+
   function lootPlayerRow(p, dimmed, badge) {
     const key = normalizeName(p.name);
     const cc = classColor(p.name);
@@ -3343,6 +3407,7 @@ function onItemChange() {
           <span class="att-pct" style="color:${attCol};">${pctStr}</span>
         </div>
       </td>
+      ${relevantSlots ? currentItemCellHtml(key, relevantSlots) : ''}
     </tr>`;
   }
 
@@ -3374,6 +3439,7 @@ function onItemChange() {
           <th style="padding:6px 12px;text-align:center;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;color:var(--text-dim);" title="Raids attended. Color indicates consumable usage.">Raids</th>
           ${thS('#','attendance')}
           ${thS('Attendance %','pct','left')}
+          ${relevantSlots ? '<th style=\"padding:6px 12px;font-family:\'Cinzel\',serif;font-size:10px;letter-spacing:0.2em;color:var(--text-dim);white-space:nowrap;\">Current Item</th>' : ''}
         </tr>
       </thead>
       <tbody>
