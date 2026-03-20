@@ -1796,7 +1796,7 @@ async function saveClaSheetsToGitHub() {
   }
 }
 
-const APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbw-oQgQyJ5BkF2EAsyKl6yQbaUe_QGuvZhP8oBToQrdUer-yRUOyp6XnDJe1jrcCZGr/exec';
+const APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycby6uy5Hmvm7ggUSFJ0LtbzFrJ8moHXuImQWmCIAHW6oia7v6_KNuZRghXaVfUtPh9XJ/exec';
 const ICON_SCRIPT = 'https://script.google.com/macros/s/AKfycbyBs6sgRoX6Zy3a3lq9q6fR4o0spLHRfKc-G63Vy8JUBTQa2HFWhnP8MxFGm8JxjNo/exec';
 
 // Fetch a Google Sheet tab via Apps Script proxy
@@ -2611,7 +2611,8 @@ async function lookupItemId(itemName) {
     const text = await proxyFetch(rawUrl);
     const data = JSON.parse(text);
     if (data.id) return data.id;
-    console.warn('No ID returned for:', itemName, data);
+    if (data.debug) console.warn('Wowhead response for', itemName, ':', data.status, data.debug);
+    else console.warn('No ID returned for:', itemName, data);
     return null;
   } catch(e) {
     console.warn('lookupItemId failed for:', itemName, e.message);
