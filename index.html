@@ -3105,6 +3105,71 @@ const BIS_SPEC_LABELS = {
 const BIS_SLOT_ORDER = ['Head','Neck','Shoulders','Back','Chest','Wrist','Hands','Waist',
   'Legs','Feet','Ring','Trinket','Main Hand','One Hand','Off Hand','Two Hand','Ranged'];
 
+const ROLE_CLASS_TO_BIS_SPECS = {
+  'Tanks|Warrior':        ['Prot'],
+  'Tanks|Paladin':        ['Tank'],
+  'Tanks|Druid':          ['Bear'],
+  'Physical DPS|Warrior': ['Fury', 'Arms'],
+  'Physical DPS|Rogue':   ['Rog'],
+  'Physical DPS|Paladin': ['Ret'],
+  'Physical DPS|Shaman':  ['Enh'],
+  'Physical DPS|Druid':   ['Cat'],
+  'Ranged DPS|Mage':      ['Arc', 'Fire'],
+  'Ranged DPS|Warlock':   ['Aff', 'Dest'],
+  'Ranged DPS|Priest':    ['Shad'],
+  'Ranged DPS|Shaman':    ['Ele'],
+  'Ranged DPS|Druid':     ['Owl'],
+  'Ranged DPS|Hunter':    ['BM', 'SV'],
+  'Healers|Priest':       ['Holy'],
+  'Healers|Paladin':      ['Heal'],
+  'Healers|Shaman':       ['Resto'],
+  'Healers|Druid':        ['Tree'],
+};
+
+// Get the BiS specs for a player given their role and class
+function getPlayerBisSpecs(playerName) {
+  const role = lastRenderData.roles.find(r => r.players.some(p => normalizeName(p.name) === normalizeName(playerName)))?.name || '';
+  const cls = classMap[normalizeName(playerName)] || '';
+  return ROLE_CLASS_TO_BIS_SPECS[role + '|' + cls] || [];
+}
+
+// Get the best EPV for an item ID for a player across all their applicable specs, for a given phase
+function getPlayerItemEpv(playerName, itemId, phase) {
+  const specs = getPlayerBisSpecs(playerName);
+  if (!specs.length || !itemId) return null;
+  let best = null;
+  for (const spec of specs) {
+    if (!bisData[spec]) continue;
+    for (const items of Object.values(bisData[spec])) {
+      for (const [id, rank, p, epv100] of items) {
+        if (id === itemId && p === phase) {
+          const epv = epv100 / 100;
+          if (best === null || epv > best) best = epv;
+        }
+      }
+    }
+  }
+  return best;
+}
+
+// Get the best BiS rank for an item ID for a player across all their applicable specs
+function getPlayerItemBisRank(playerName, itemId, phase) {
+  const specs = getPlayerBisSpecs(playerName);
+  if (!specs.length || !itemId) return null;
+  let best = null;
+  for (const spec of specs) {
+    if (!bisData[spec]) continue;
+    for (const items of Object.values(bisData[spec])) {
+      for (const [id, rank, p] of items) {
+        if (id === itemId && p === phase) {
+          if (best === null || rank < best) best = rank;
+        }
+      }
+    }
+  }
+  return best;
+}
+
 // Get display name for an item ID — uses stored name, falls back to ID
 function getBisItemName(id) {
   for (const [key, val] of Object.entries(gearItemIds)) {
@@ -3640,20 +3705,56 @@ function onItemChange() {
     return null;
   }
 
+  // Get candidate item id and EPV once for use in all rows
+  const candidateItemId = getItemId(item);
+  const BIS_PHASE = 1; // hardcoded to phase 1 for now
+
   function currentItemCellHtml(playerKey, slots) {
     const dimCell = '<td style="text-align:center;color:var(--text-dim);font-style:italic;">—</td>';
     if (!slots || !slots.length) return dimCell;
     const gear = gearListingByPlayer[playerKey]?.slots;
     if (!gear || slots[0] === '__unknown__') return dimCell;
+
+    // Find the player name from key for EPV lookups
+    const playerName = Object.keys(canonicalNames).includes(playerKey)
+      ? (canonicalNames[playerKey] || playerKey)
+      : lastRenderData.roles.flatMap(r => r.players).find(p => normalizeName(p.name) === playerKey)?.name || playerKey;
+
+    const candidateEpv = getPlayerItemEpv(playerName, candidateItemId, BIS_PHASE);
+
     const items = slots.map(slot => gear[slot]).filter(Boolean);
     if (!items.length) return dimCell;
+
     const html = items.map(name => {
       const id = getItemId(name);
-      const icon = id && itemIcons[id] ? `<img src="https://wow.zamimg.com/images/wow/icons/medium/${itemIcons[id]}.jpg" style="width:18px;height:18px;border:1px solid #555;border-radius:2px;vertical-align:middle;flex-shrink:0;" />` : '';
-      return id
-        ? `<a href="https://www.wowhead.com/tbc/item=${id}" data-wowhead="item=${id}&dataset=tbc" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--gold-light);font-size:15px;white-space:nowrap;">${icon}${name}</a>`
+      const icon = id && itemIcons[id]
+        ? `<img src="https://wow.zamimg.com/images/wow/icons/medium/${itemIcons[id]}.jpg" style="width:18px;height:18px;border:1px solid #555;border-radius:2px;vertical-align:middle;flex-shrink:0;" />`
+        : '';
+
+      // BiS analysis for current item
+      let bisIndicator = '';
+      if (id) {
+        const currentEpv = getPlayerItemEpv(playerName, id, BIS_PHASE);
+        const currentRank = getPlayerItemBisRank(playerName, id, BIS_PHASE);
+
+        if (currentRank === null) {
+          // Not on BiS list at all — warning indicator
+          bisIndicator = ` <span style="color:#d4a017;font-size:12px;" title="Current item not on BiS list for this spec">⚠</span>`;
+        } else if (candidateEpv !== null && currentEpv !== null) {
+          // Both on BiS list — show EPV delta as tooltip on current item
+          const delta = candidateEpv - currentEpv;
+          const sign = delta >= 0 ? '+' : '';
+          const deltaColor = delta > 10 ? '#4caa6e' : delta > 0 ? '#8abf50' : delta === 0 ? 'var(--text-dim)' : '#c94c4c';
+          bisIndicator = ` <span style="color:${deltaColor};font-size:11px;font-family:'Cinzel',serif;" title="Candidate EPV: ${candidateEpv.toFixed(1)} | Current EPV: ${currentEpv.toFixed(1)} | Delta: ${sign}${delta.toFixed(1)}">${sign}${delta.toFixed(1)}</span>`;
+        }
+      }
+
+      const link = id
+        ? `<a href="https://www.wowhead.com/tbc/item=${id}" data-wowhead="item=${id}&dataset=tbc" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--gold-light);font-size:15px;white-space:nowrap;">${icon}${name}</a>${bisIndicator}`
         : `<span style="font-size:15px;color:var(--gold-light);">${name}</span>`;
+      return link;
     }).join('<br style="margin:2px 0;">');
+
     return `<td style="padding:3px 8px;vertical-align:middle;text-align:left;">${html}</td>`;
   }
 
