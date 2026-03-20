@@ -1743,9 +1743,23 @@ async function fetchWclAllStars(realm) {
       if (i + BATCH_SIZE < players.length) await new Promise(r => setTimeout(r, 500));
     }
 
+    // Ensure any players that still have spinners (no data, no explicit failure) get a dash
+    players.forEach(p => {
+      const key = normalizeName(p.name);
+      if (!wclData[key]) updateWclCell(key, null);
+    });
+
     // Final re-render to update sort order if sorted by WCL
     if (lastRenderData.roles.length) render(lastRenderData);
-  } catch(e) { console.warn('WCL fetch failed:', e.message); }
+  } catch(e) {
+    console.warn('WCL fetch failed:', e.message);
+    // On total failure, clear all spinners
+    const allPlayers = lastRenderData.roles.flatMap(r => r.players);
+    allPlayers.forEach(p => {
+      const key = normalizeName(p.name);
+      if (!wclData[key]) updateWclCell(key, null);
+    });
+  }
 }
 
 function wclCellHtml(wcl, playerName) {
