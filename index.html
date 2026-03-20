@@ -1600,8 +1600,11 @@ async function getWclToken() {
   const clientSecret = sessionStorage.getItem('wclClientSecret');
   if (!clientId || !clientSecret) return null;
   try {
-    const url = ICON_SCRIPT + '?wclAuth=1&clientId=' + encodeURIComponent(clientId) + '&clientSecret=' + encodeURIComponent(clientSecret);
-    const res = await fetch(url);
+    const res = await fetch(ICON_SCRIPT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ wclAuth: true, clientId, clientSecret })
+    });
     if (!res.ok) return null;
     const data = await res.json();
     if (!data.access_token) { console.warn('WCL token error:', JSON.stringify(data)); return null; }
@@ -1625,7 +1628,11 @@ async function fetchWclAllStars(realm) {
   }`;
   try {
     // First get the current TBC phase zone ID
-    const zoneRes = await fetch(ICON_SCRIPT + '?wclQuery=' + encodeURIComponent(query) + '&token=' + encodeURIComponent(token));
+    const zoneRes = await fetch(ICON_SCRIPT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ wclQuery: query, token })
+    });
     if (!zoneRes.ok) return;
     const zoneData = await zoneRes.json();
     const zones = zoneData?.data?.worldData?.expansion?.zones || [];
@@ -1644,7 +1651,11 @@ async function fetchWclAllStars(realm) {
         }
       }`;
       try {
-        const charRes = await fetch(ICON_SCRIPT + '?wclQuery=' + encodeURIComponent(charQuery) + '&token=' + encodeURIComponent(token));
+        const charRes = await fetch(ICON_SCRIPT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wclQuery: charQuery, token })
+        });
         if (!charRes.ok) return;
         const charData = await charRes.json();
         const rankings = charData?.data?.characterData?.character?.zoneRankings;
@@ -1719,7 +1730,7 @@ async function saveClaSheetsToGitHub() {
 }
 
 const APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbwewgQ14fY_34nK0HpKRt2YuVy2FLQZmfu-FrjraGQa55I5oKmYk7p_X3zsswxZAPU4/exec';
-const ICON_SCRIPT = 'https://script.google.com/macros/s/AKfycbw-ijl1Qzx3eopIKkC5eFKbA0siMdwSz6onfZi6gDl95RrEgHqUsdqgPp1jUjknFTOL/exec';
+const ICON_SCRIPT = 'https://script.google.com/macros/s/AKfycbxLxP1RJn7XhYjsBEq6K9i2s_AwLOSJU0MGMRPcnW7dj8VkFDQUtHoJo24Y3nsNaESb/exec';
 
 // Fetch a Google Sheet tab via Apps Script proxy
 async function fetchSheet(sheetId, gid) {
