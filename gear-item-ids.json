@@ -16933,2006 +16933,2006 @@
   },
   "_bis_32774": {
     "id": 32774,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_ring_16",
+    "slot": "Finger",
+    "name": "The Black Pearl"
   },
   "_bis_28679": {
     "id": 28679,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_plate05",
+    "slot": "Chest",
+    "name": "Grand Marshal's Lamellar Chestpiece"
   },
   "_bis_28681": {
     "id": 28681,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_22",
+    "slot": "Head",
+    "name": "Grand Marshal's Lamellar Helm"
   },
   "_bis_32778": {
     "id": 32778,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_plate_06",
+    "slot": "Feet",
+    "name": "Boots of Righteous Fortitude"
   },
   "_bis_28683": {
     "id": 28683,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_22",
+    "slot": "Shoulder",
+    "name": "Grand Marshal's Lamellar Shoulders"
   },
   "_bis_32786": {
     "id": 32786,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_08",
+    "slot": "Feet",
+    "name": "Veteran's Dragonhide Boots"
   },
   "_bis_32798": {
     "id": 32798,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_17",
+    "slot": "Waist",
+    "name": "Veteran's Dragonhide Belt"
   },
   "_bis_28709": {
     "id": 28709,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_plate05",
+    "slot": "Chest",
+    "name": "Grand Marshal's Scaled Chestpiece"
   },
   "_bis_30767": {
     "id": 30767,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_22",
+    "slot": "Hands",
+    "name": "Inferno Tempered Gauntlets"
   },
   "_bis_28724": {
     "id": 28724,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_plate_17",
+    "slot": "Legs",
+    "name": "Grand Marshal's Lamellar Legguards"
   },
   "_bis_34898": {
     "id": 34898,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_12",
+    "slot": "Two-Hand",
+    "name": "Staff of the Forest Lord"
   },
   "_bis_28809": {
     "id": 28809,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_29",
+    "slot": "Shoulder",
+    "name": "High Warlord's Chain Spaulders"
   },
   "_bis_28812": {
     "id": 28812,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_30",
+    "slot": "Head",
+    "name": "High Warlord's Dragonhide Helm"
   },
   "_bis_30862": {
     "id": 30862,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_19",
+    "slot": "Wrist",
+    "name": "Blessed Adamantite Bracers"
   },
   "_bis_8345": {
     "id": 8345,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_04",
+    "slot": "Head",
+    "name": "Wolfshead Helm"
   },
   "_bis_30878": {
     "id": 30878,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_65",
+    "slot": "Shoulder",
+    "name": "Glimmering Steel Mantle"
   },
   "_bis_28831": {
     "id": 28831,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_plate05",
+    "slot": "Chest",
+    "name": "High Warlord's Lamellar Chestpiece"
   },
   "_bis_28833": {
     "id": 28833,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_22",
+    "slot": "Head",
+    "name": "High Warlord's Lamellar Helm"
   },
   "_bis_28834": {
     "id": 28834,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_plate_17",
+    "slot": "Legs",
+    "name": "High Warlord's Lamellar Legguards"
   },
   "_bis_30883": {
     "id": 30883,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_60",
+    "slot": "Two-Hand",
+    "name": "Pillar of Ferocity"
   },
   "_bis_28835": {
     "id": 28835,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_22",
+    "slot": "Shoulder",
+    "name": "High Warlord's Lamellar Shoulders"
   },
   "_bis_34985": {
     "id": 34985,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_wand_09",
+    "slot": "Ranged",
+    "name": "Brutal Gladiator's Baton of Light"
   },
   "_bis_34986": {
     "id": 34986,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shield_54",
+    "slot": "Off Hand",
+    "name": "Brutal Gladiator's Barrier"
   },
   "_bis_34987": {
     "id": 34987,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_74",
+    "slot": "Two-Hand",
+    "name": "Brutal Gladiator's Battle Staff"
   },
   "_bis_34988": {
     "id": 34988,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_mace_74",
+    "slot": "Off Hand",
+    "name": "Brutal Gladiator's Bonecracker"
   },
   "_bis_34989": {
     "id": 34989,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_mace_49",
+    "slot": "Two-Hand",
+    "name": "Brutal Gladiator's Bonegrinder"
   },
   "_bis_34991": {
     "id": 34991,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_65",
+    "slot": "Hands",
+    "name": "Brutal Gladiator's Chain Gauntlets"
   },
   "_bis_34992": {
     "id": 34992,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet128",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Chain Helm"
   },
   "_bis_34993": {
     "id": 34993,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_mail_20",
+    "slot": "Legs",
+    "name": "Brutal Gladiator's Chain Leggings"
   },
   "_bis_34994": {
     "id": 34994,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_90",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Chain Spaulders"
   },
   "_bis_34995": {
     "id": 34995,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_axe_1h_blacksmithing_02",
+    "slot": "Off Hand",
+    "name": "Brutal Gladiator's Chopper"
   },
   "_bis_34996": {
     "id": 34996,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_axe_1h_blacksmithing_02",
+    "slot": "One-Hand",
+    "name": "Brutal Gladiator's Cleaver"
   },
   "_bis_34997": {
     "id": 34997,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_axe_73",
+    "slot": "Two-Hand",
+    "name": "Brutal Gladiator's Decapitator"
   },
   "_bis_34998": {
     "id": 34998,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_25",
+    "slot": "Hands",
+    "name": "Brutal Gladiator's Dragonhide Gloves"
   },
   "_bis_34999": {
     "id": 34999,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_126",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Dragonhide Helm"
   },
   "_bis_35000": {
     "id": 35000,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_leather_07",
+    "slot": "Legs",
+    "name": "Brutal Gladiator's Dragonhide Legguards"
   },
   "_bis_35001": {
     "id": 35001,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_88",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Dragonhide Spaulders"
   },
   "_bis_35002": {
     "id": 35002,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_cloth_05",
+    "slot": "Chest",
+    "name": "Brutal Gladiator's Dragonhide Tunic"
   },
   "_bis_30904": {
     "id": 30904,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_plate02",
+    "slot": "Chest",
+    "name": "Savior's Grasp"
   },
   "_bis_35004": {
     "id": 35004,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_132",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Dreadweave Hood"
   },
   "_bis_28861": {
     "id": 28861,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_plate05",
+    "slot": "Chest",
+    "name": "High Warlord's Scaled Chestpiece"
   },
   "_bis_35006": {
     "id": 35006,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_96",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Dreadweave Mantle"
   },
   "_bis_30974": {
     "id": 30974,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_98",
+    "slot": "Head",
+    "name": "Onslaught Greathelm"
   },
   "_bis_35008": {
     "id": 35008,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_misc_book_06",
+    "slot": "Held In Off-hand",
+    "name": "Brutal Gladiator's Endgame"
   },
   "_bis_35009": {
     "id": 35009,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_96",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Felweave Amice"
   },
   "_bis_35010": {
     "id": 35010,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_132",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Felweave Cowl"
   },
   "_bis_35011": {
     "id": 35011,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_49",
+    "slot": "Hands",
+    "name": "Brutal Gladiator's Felweave Handguards"
   },
   "_bis_35013": {
     "id": 35013,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_cloth_22",
+    "slot": "Legs",
+    "name": "Brutal Gladiator's Felweave Trousers"
   },
   "_bis_35014": {
     "id": 35014,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_mace_73",
+    "slot": "Main Hand",
+    "name": "Brutal Gladiator's Gavel"
   },
   "_bis_35015": {
     "id": 35015,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_sword_116",
+    "slot": "Two-Hand",
+    "name": "Brutal Gladiator's Greatsword"
   },
   "_bis_35017": {
     "id": 35017,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_axe_1h_blacksmithing_02",
+    "slot": "Off Hand",
+    "name": "Brutal Gladiator's Hacker"
   },
   "_bis_35018": {
     "id": 35018,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_weapon_crossbow_26",
+    "slot": "Ranged",
+    "name": "Brutal Gladiator's Heavy Crossbow"
   },
   "_bis_30976": {
     "id": 30976,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_plate_23",
+    "slot": "Chest",
+    "name": "Onslaught Chestguard"
   },
   "_bis_35022": {
     "id": 35022,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_25",
+    "slot": "Hands",
+    "name": "Brutal Gladiator's Kodohide Gloves"
   },
   "_bis_35023": {
     "id": 35023,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_126",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Kodohide Helm"
   },
   "_bis_35024": {
     "id": 35024,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_leather_07",
+    "slot": "Legs",
+    "name": "Brutal Gladiator's Kodohide Legguards"
   },
   "_bis_35025": {
     "id": 35025,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_88",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Kodohide Spaulders"
   },
   "_bis_35028": {
     "id": 35028,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_52",
+    "slot": "Hands",
+    "name": "Brutal Gladiator's Lamellar Gauntlets"
   },
   "_bis_35029": {
     "id": 35029,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_127",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Lamellar Helm"
   },
   "_bis_35030": {
     "id": 35030,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_plate_29",
+    "slot": "Legs",
+    "name": "Brutal Gladiator's Lamellar Legguards"
   },
   "_bis_35031": {
     "id": 35031,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_89",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Lamellar Shoulders"
   },
   "_bis_35032": {
     "id": 35032,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_17",
+    "slot": "Hands",
+    "name": "Brutal Gladiator's Leather Gloves"
   },
   "_bis_35033": {
     "id": 35033,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_126",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Leather Helm"
   },
   "_bis_35034": {
     "id": 35034,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_leather_12",
+    "slot": "Legs",
+    "name": "Brutal Gladiator's Leather Legguards"
   },
   "_bis_35035": {
     "id": 35035,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_88",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Leather Spaulders"
   },
   "_bis_35037": {
     "id": 35037,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_weapon_hand_15",
+    "slot": "Off Hand",
+    "name": "Brutal Gladiator's Left Render"
   },
   "_bis_35038": {
     "id": 35038,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_weapon_hand_15",
+    "slot": "Off Hand",
+    "name": "Brutal Gladiator's Left Ripper"
   },
   "_bis_30943": {
     "id": 30943,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_21",
+    "slot": "Hands",
+    "name": "Verdant Gloves"
   },
   "_bis_30944": {
     "id": 30944,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_06",
+    "slot": "Wrist",
+    "name": "Umberhowl's Collar"
   },
   "_bis_30941": {
     "id": 30941,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_leather_01",
+    "slot": "Legs",
+    "name": "Ash Tempered Legguards"
   },
   "_bis_35044": {
     "id": 35044,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet128",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Linked Helm"
   },
   "_bis_35045": {
     "id": 35045,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_mail_20",
+    "slot": "Legs",
+    "name": "Brutal Gladiator's Linked Leggings"
   },
   "_bis_35046": {
     "id": 35046,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_90",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Linked Spaulders"
   },
   "_bis_35047": {
     "id": 35047,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_weapon_bow_31",
+    "slot": "Ranged",
+    "name": "Brutal Gladiator's Longbow"
   },
   "_bis_35049": {
     "id": 35049,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_65",
+    "slot": "Hands",
+    "name": "Brutal Gladiator's Mail Gauntlets"
   },
   "_bis_35050": {
     "id": 35050,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet128",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Mail Helm"
   },
   "_bis_35052": {
     "id": 35052,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_90",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Mail Spaulders"
   },
   "_bis_35053": {
     "id": 35053,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_64",
+    "slot": "Hands",
+    "name": "Brutal Gladiator's Mooncloth Gloves"
   },
   "_bis_35054": {
     "id": 35054,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_132",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Mooncloth Hood"
   },
   "_bis_35055": {
     "id": 35055,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_cloth_28",
+    "slot": "Legs",
+    "name": "Brutal Gladiator's Mooncloth Leggings"
   },
   "_bis_35056": {
     "id": 35056,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_96",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Mooncloth Mantle"
   },
   "_bis_35058": {
     "id": 35058,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_weapon_shortblade_75",
+    "slot": "Off Hand",
+    "name": "Brutal Gladiator's Mutilator"
   },
   "_bis_35060": {
     "id": 35060,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_52",
+    "slot": "Hands",
+    "name": "Brutal Gladiator's Ornamented Gloves"
   },
   "_bis_35061": {
     "id": 35061,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_127",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Ornamented Headcover"
   },
   "_bis_28919": {
     "id": 28919,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_hammer_04",
+    "slot": "Two-Hand",
+    "name": "High Warlord's Maul"
   },
   "_bis_35064": {
     "id": 35064,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_weapon_halberd_20",
+    "slot": "Two-Hand",
+    "name": "Brutal Gladiator's Painsaw"
   },
   "_bis_35063": {
     "id": 35063,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_89",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Ornamented Spaulders"
   },
   "_bis_30970": {
     "id": 30970,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_62",
+    "slot": "Hands",
+    "name": "Onslaught Handguards"
   },
   "_bis_35067": {
     "id": 35067,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_62",
+    "slot": "Hands",
+    "name": "Brutal Gladiator's Plate Gauntlets"
   },
   "_bis_35068": {
     "id": 35068,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_127",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Plate Helm"
   },
   "_bis_35069": {
     "id": 35069,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_plate_27",
+    "slot": "Legs",
+    "name": "Brutal Gladiator's Plate Legguards"
   },
   "_bis_35070": {
     "id": 35070,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_89",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Plate Shoulders"
   },
   "_bis_35071": {
     "id": 35071,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_mace_74",
+    "slot": "One-Hand",
+    "name": "Brutal Gladiator's Pummeler"
   },
   "_bis_35072": {
     "id": 35072,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_sword_114",
+    "slot": "Off Hand",
+    "name": "Brutal Gladiator's Quickblade"
   },
   "_bis_35073": {
     "id": 35073,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shield_52",
+    "slot": "Off Hand",
+    "name": "Brutal Gladiator's Redoubt"
   },
   "_bis_35074": {
     "id": 35074,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_misc_book_06",
+    "slot": "Held In Off-hand",
+    "name": "Brutal Gladiator's Reprieve"
   },
   "_bis_35075": {
     "id": 35075,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_weapon_rifle_21",
+    "slot": "Ranged",
+    "name": "Brutal Gladiator's Rifle"
   },
   "_bis_35076": {
     "id": 35076,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_weapon_hand_15",
+    "slot": "Main Hand",
+    "name": "Brutal Gladiator's Right Ripper"
   },
   "_bis_30980": {
     "id": 30980,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_62",
+    "slot": "Shoulder",
+    "name": "Onslaught Shoulderguards"
   },
   "_bis_35078": {
     "id": 35078,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_65",
+    "slot": "Hands",
+    "name": "Brutal Gladiator's Ringmail Gauntlets"
   },
   "_bis_35079": {
     "id": 35079,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet128",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Ringmail Helm"
   },
   "_bis_35080": {
     "id": 35080,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_mail_20",
+    "slot": "Legs",
+    "name": "Brutal Gladiator's Ringmail Leggings"
   },
   "_bis_35081": {
     "id": 35081,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_90",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Ringmail Spaulders"
   },
   "_bis_35082": {
     "id": 35082,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_mace_71",
+    "slot": "Main Hand",
+    "name": "Brutal Gladiator's Salvation"
   },
   "_bis_30978": {
     "id": 30978,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_plate_27",
+    "slot": "Legs",
+    "name": "Onslaught Legguards"
   },
   "_bis_30988": {
     "id": 30988,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_96",
+    "slot": "Head",
+    "name": "Lightbringer Greathelm"
   },
   "_bis_35084": {
     "id": 35084,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_132",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Satin Hood"
   },
   "_bis_35086": {
     "id": 35086,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_96",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Satin Mantle"
   },
   "_bis_35090": {
     "id": 35090,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_127",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Scaled Helm"
   },
   "_bis_35091": {
     "id": 35091,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_plate_29",
+    "slot": "Legs",
+    "name": "Brutal Gladiator's Scaled Legguards"
   },
   "_bis_28948": {
     "id": 28948,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_hammer_04",
+    "slot": "Two-Hand",
+    "name": "Grand Marshal's Maul"
   },
   "_bis_35093": {
     "id": 35093,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_weapon_shortblade_75",
+    "slot": "One-Hand",
+    "name": "Brutal Gladiator's Shanker"
   },
   "_bis_35094": {
     "id": 35094,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shield_53",
+    "slot": "Off Hand",
+    "name": "Brutal Gladiator's Shield Wall"
   },
   "_bis_35095": {
     "id": 35095,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_weapon_shortblade_75",
+    "slot": "Off Hand",
+    "name": "Brutal Gladiator's Shiv"
   },
   "_bis_35096": {
     "id": 35096,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_96",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Silk Amice"
   },
   "_bis_35097": {
     "id": 35097,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_132",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Silk Cowl"
   },
   "_bis_35098": {
     "id": 35098,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_47",
+    "slot": "Hands",
+    "name": "Brutal Gladiator's Silk Handguards"
   },
   "_bis_35092": {
     "id": 35092,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_89",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Scaled Shoulders"
   },
   "_bis_35100": {
     "id": 35100,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_cloth_27",
+    "slot": "Legs",
+    "name": "Brutal Gladiator's Silk Trousers"
   },
   "_bis_35101": {
     "id": 35101,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_sword_114",
+    "slot": "One-Hand",
+    "name": "Brutal Gladiator's Slicer"
   },
   "_bis_35102": {
     "id": 35102,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_weapon_shortblade_73",
+    "slot": "Main Hand",
+    "name": "Brutal Gladiator's Spellblade"
   },
   "_bis_35103": {
     "id": 35103,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_60",
+    "slot": "Two-Hand",
+    "name": "Brutal Gladiator's Staff"
   },
   "_bis_33056": {
     "id": 33056,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_ring_60",
+    "slot": "Finger",
+    "name": "Veteran's Band of Dominance"
   },
   "_bis_31009": {
     "id": 31009,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_51",
+    "slot": "Two-Hand",
+    "name": "Wildcaller"
   },
   "_bis_35107": {
     "id": 35107,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_wand_09",
+    "slot": "Ranged",
+    "name": "Brutal Gladiator's Touch of Defeat"
   },
   "_bis_35109": {
     "id": 35109,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_74",
+    "slot": "Two-Hand",
+    "name": "Brutal Gladiator's War Staff"
   },
   "_bis_35112": {
     "id": 35112,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_126",
+    "slot": "Head",
+    "name": "Brutal Gladiator's Wyrmhide Helm"
   },
   "_bis_35113": {
     "id": 35113,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_leather_07",
+    "slot": "Legs",
+    "name": "Brutal Gladiator's Wyrmhide Legguards"
   },
   "_bis_35114": {
     "id": 35114,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_88",
+    "slot": "Shoulder",
+    "name": "Brutal Gladiator's Wyrmhide Spaulders"
   },
   "_bis_28976": {
     "id": 28976,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_17",
+    "slot": "Waist",
+    "name": "Marshal's Dragonhide Belt"
   },
   "_bis_28977": {
     "id": 28977,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_08",
+    "slot": "Feet",
+    "name": "Marshal's Dragonhide Boots"
   },
   "_bis_28978": {
     "id": 28978,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_07",
+    "slot": "Wrist",
+    "name": "Marshal's Dragonhide Bracers"
   },
   "_bis_35129": {
     "id": 35129,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_ring_60",
+    "slot": "Finger",
+    "name": "Guardian's Band of Dominance"
   },
   "_bis_31034": {
     "id": 31034,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_58",
+    "slot": "Hands",
+    "name": "Thunderheart Gauntlets"
   },
   "_bis_35130": {
     "id": 35130,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_ring_60",
+    "slot": "Finger",
+    "name": "Guardian's Band of Salvation"
   },
   "_bis_35132": {
     "id": 35132,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_necklace_36",
+    "slot": "Neck",
+    "name": "Guardian's Pendant of Conquest"
   },
   "_bis_35131": {
     "id": 35131,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_ring_60",
+    "slot": "Finger",
+    "name": "Guardian's Band of Triumph"
   },
   "_bis_35134": {
     "id": 35134,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_necklace_36",
+    "slot": "Neck",
+    "name": "Guardian's Pendant of Salvation"
   },
   "_bis_35135": {
     "id": 35135,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_necklace_36",
+    "slot": "Neck",
+    "name": "Guardian's Pendant of Triumph"
   },
   "_bis_31039": {
     "id": 31039,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_94",
+    "slot": "Head",
+    "name": "Thunderheart Cover"
   },
   "_bis_35133": {
     "id": 35133,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_necklace_36",
+    "slot": "Neck",
+    "name": "Guardian's Pendant of Dominance"
   },
   "_bis_31042": {
     "id": 31042,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_leather_15",
+    "slot": "Chest",
+    "name": "Thunderheart Chestguard"
   },
   "_bis_35139": {
     "id": 35139,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_cloth_05",
+    "slot": "Feet",
+    "name": "Guardian's Kodohide Boots"
   },
   "_bis_31044": {
     "id": 31044,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_leather_26",
+    "slot": "Legs",
+    "name": "Thunderheart Leggings"
   },
   "_bis_35136": {
     "id": 35136,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_plate_09",
+    "slot": "Feet",
+    "name": "Guardian's Chain Sabatons"
   },
   "_bis_35140": {
     "id": 35140,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_plate_08",
+    "slot": "Feet",
+    "name": "Guardian's Lamellar Greaves"
   },
   "_bis_35143": {
     "id": 35143,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_plate_09",
+    "slot": "Feet",
+    "name": "Guardian's Mail Sabatons"
   },
   "_bis_31048": {
     "id": 31048,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_58",
+    "slot": "Shoulder",
+    "name": "Thunderheart Pauldrons"
   },
   "_bis_35144": {
     "id": 35144,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_cloth_12",
+    "slot": "Feet",
+    "name": "Guardian's Mooncloth Slippers"
   },
   "_bis_35146": {
     "id": 35146,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_plate_01",
+    "slot": "Feet",
+    "name": "Guardian's Plate Greaves"
   },
   "_bis_35147": {
     "id": 35147,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_plate_09",
+    "slot": "Feet",
+    "name": "Guardian's Ringmail Sabatons"
   },
   "_bis_35148": {
     "id": 35148,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_plate_08",
+    "slot": "Feet",
+    "name": "Guardian's Scaled Greaves"
   },
   "_bis_35150": {
     "id": 35150,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_cloth_05",
+    "slot": "Feet",
+    "name": "Guardian's Wyrmhide Boots"
   },
   "_bis_35151": {
     "id": 35151,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_13",
+    "slot": "Waist",
+    "name": "Guardian's Chain Girdle"
   },
   "_bis_35154": {
     "id": 35154,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_12",
+    "slot": "Waist",
+    "name": "Guardian's Kodohide Belt"
   },
   "_bis_35155": {
     "id": 35155,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_12",
+    "slot": "Waist",
+    "name": "Guardian's Lamellar Belt"
   },
   "_bis_35158": {
     "id": 35158,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_13",
+    "slot": "Waist",
+    "name": "Guardian's Mail Girdle"
   },
   "_bis_35161": {
     "id": 35161,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_14",
+    "slot": "Waist",
+    "name": "Guardian's Plate Belt"
   },
   "_bis_35162": {
     "id": 35162,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_13",
+    "slot": "Waist",
+    "name": "Guardian's Ringmail Girdle"
   },
   "_bis_35163": {
     "id": 35163,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_12",
+    "slot": "Waist",
+    "name": "Guardian's Scaled Belt"
   },
   "_bis_35166": {
     "id": 35166,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_18",
+    "slot": "Wrist",
+    "name": "Guardian's Chain Bracers"
   },
   "_bis_35167": {
     "id": 35167,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_09",
+    "slot": "Wrist",
+    "name": "Guardian's Dragonhide Bracers"
   },
   "_bis_35169": {
     "id": 35169,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_09",
+    "slot": "Wrist",
+    "name": "Guardian's Kodohide Bracers"
   },
   "_bis_35170": {
     "id": 35170,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_17",
+    "slot": "Wrist",
+    "name": "Guardian's Lamellar Bracers"
   },
   "_bis_35174": {
     "id": 35174,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_02",
+    "slot": "Wrist",
+    "name": "Guardian's Mooncloth Cuffs"
   },
   "_bis_35175": {
     "id": 35175,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_17",
+    "slot": "Wrist",
+    "name": "Guardian's Ornamented Bracers"
   },
   "_bis_35176": {
     "id": 35176,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_17",
+    "slot": "Wrist",
+    "name": "Guardian's Plate Bracers"
   },
   "_bis_35177": {
     "id": 35177,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_18",
+    "slot": "Wrist",
+    "name": "Guardian's Ringmail Bracers"
   },
   "_bis_35178": {
     "id": 35178,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_17",
+    "slot": "Wrist",
+    "name": "Guardian's Scaled Bracers"
   },
   "_bis_35180": {
     "id": 35180,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_09",
+    "slot": "Wrist",
+    "name": "Guardian's Wyrmhide Bracers"
   },
   "_bis_35185": {
     "id": 35185,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gizmo_newgoggles",
+    "slot": "Head",
+    "name": "Justicebringer 3000 Specs"
   },
   "_bis_31106": {
     "id": 31106,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_01",
+    "slot": "Head",
+    "name": "Stalker's Helmet of Second Sight"
   },
   "_bis_22947": {
     "id": 22947,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_necklace_28naxxramas",
+    "slot": "Neck",
+    "name": "Pendant of Forgotten Names"
   },
   "_bis_29096": {
     "id": 29096,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_chain_15",
+    "slot": "Chest",
+    "name": "Breastplate of Malorne"
   },
   "_bis_29097": {
     "id": 29097,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_25",
+    "slot": "Hands",
+    "name": "Gauntlets of Malorne"
   },
   "_bis_29098": {
     "id": 29098,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_15",
+    "slot": "Head",
+    "name": "Stag-Helm of Malorne"
   },
   "_bis_29099": {
     "id": 29099,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_mail_15",
+    "slot": "Legs",
+    "name": "Greaves of Malorne"
   },
   "_bis_29100": {
     "id": 29100,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_14",
+    "slot": "Shoulder",
+    "name": "Mantle of Malorne"
   },
   "_bis_33207": {
     "id": 33207,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_plate_10",
+    "slot": "Feet",
+    "name": "Implacable Guardian Sabatons"
   },
   "_bis_33216": {
     "id": 33216,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_plate_24",
+    "slot": "Chest",
+    "name": "Chestguard of Hidden Purpose"
   },
   "_bis_31186": {
     "id": 31186,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_51",
+    "slot": "Two-Hand",
+    "name": "Braxxis' Staff of Slumber"
   },
   "_bis_29173": {
     "id": 29173,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_necklace_06",
+    "slot": "Neck",
+    "name": "Strength of the Untamed"
   },
   "_bis_35319": {
     "id": 35319,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_necklace_36",
+    "slot": "Neck",
+    "name": "Vindicator's Pendant of Subjugation"
   },
   "_bis_29180": {
     "id": 29180,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_08",
+    "slot": "Waist",
+    "name": "Blessed Scale Girdle"
   },
   "_bis_35333": {
     "id": 35333,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_30",
+    "slot": "Head",
+    "name": "Mooncloth Cowl"
   },
   "_bis_35336": {
     "id": 35336,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_02",
+    "slot": "Shoulder",
+    "name": "Mooncloth Shoulderpads"
   },
   "_bis_35337": {
     "id": 35337,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_cloth_43",
+    "slot": "Chest",
+    "name": "Mooncloth Vestments"
   },
   "_bis_31258": {
     "id": 31258,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_ring_ahnqiraj_04",
+    "slot": "Finger",
+    "name": "Band of Sorrow"
   },
   "_bis_35357": {
     "id": 35357,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_30",
+    "slot": "Head",
+    "name": "Dragonhide Helm"
   },
   "_bis_23071": {
     "id": 23071,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_leather_09",
+    "slot": "Legs",
+    "name": "Leggings of Apocalypse"
   },
   "_bis_35359": {
     "id": 35359,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_12",
+    "slot": "Shoulder",
+    "name": "Dragonhide Spaulders"
   },
   "_bis_33327": {
     "id": 33327,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_mask_02",
+    "slot": "Head",
+    "name": "Mask of Introspection"
   },
   "_bis_35380": {
     "id": 35380,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_29",
+    "slot": "Shoulder",
+    "name": "Stalker's Chain Spaulders"
   },
   "_bis_31285": {
     "id": 31285,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_leather_06",
+    "slot": "Chest",
+    "name": "Chestguard of the Talon"
   },
   "_bis_29264": {
     "id": 29264,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_22",
+    "slot": "Waist",
+    "name": "Tree-Mender's Belt"
   },
   "_bis_29265": {
     "id": 29265,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_chain_05",
+    "slot": "Feet",
+    "name": "Barkchip Boots"
   },
   "_bis_31319": {
     "id": 31319,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_ring_ahnqiraj_01",
+    "slot": "Finger",
+    "name": "Band of Impenetrable Defenses"
   },
   "_bis_29276": {
     "id": 29276,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_ring_62",
+    "slot": "Finger",
+    "name": "Violet Signet"
   },
   "_bis_31334": {
     "id": 31334,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_50",
+    "slot": "Two-Hand",
+    "name": "Staff of Natural Fury"
   },
   "_bis_29288": {
     "id": 29288,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_ring_62",
+    "slot": "Finger",
+    "name": "Violet Signet"
   },
   "_bis_35467": {
     "id": 35467,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_cloth_43",
+    "slot": "Chest",
+    "name": "Mooncloth Vestments"
   },
   "_bis_33446": {
     "id": 33446,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_27",
+    "slot": "Waist",
+    "name": "Girdle of Stromgarde's Hope"
   },
   "_bis_29357": {
     "id": 29357,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_22",
+    "slot": "Hands",
+    "name": "Master Thief's Gloves"
   },
   "_bis_29359": {
     "id": 29359,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_56",
+    "slot": "Two-Hand",
+    "name": "Feral Staff of Lashing"
   },
   "_bis_31409": {
     "id": 31409,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_15",
+    "slot": "Hands",
+    "name": "Gladiator's Mooncloth Gloves"
   },
   "_bis_31410": {
     "id": 31410,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_30",
+    "slot": "Head",
+    "name": "Gladiator's Mooncloth Hood"
   },
   "_bis_31411": {
     "id": 31411,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_cloth_05",
+    "slot": "Legs",
+    "name": "Gladiator's Mooncloth Leggings"
   },
   "_bis_31414": {
     "id": 31414,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_49",
+    "slot": "Two-Hand",
+    "name": "Wild Wood Staff"
   },
   "_bis_33465": {
     "id": 33465,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_12",
+    "slot": "Two-Hand",
+    "name": "Staff of Primal Fury"
   },
   "_bis_31426": {
     "id": 31426,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_07",
+    "slot": "Wrist",
+    "name": "Agile Mountain Bracers"
   },
   "_bis_33518": {
     "id": 33518,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_plate_28",
+    "slot": "Legs",
+    "name": "High Justicar's Legplates"
   },
   "_bis_33519": {
     "id": 33519,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_67",
+    "slot": "Hands",
+    "name": "Handguards of the Templar"
   },
   "_bis_33520": {
     "id": 33520,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_02",
+    "slot": "Wrist",
+    "name": "Vambraces of the Naaru"
   },
   "_bis_27410": {
     "id": 27410,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_06",
+    "slot": "Head",
+    "name": "Collar of Command"
   },
   "_bis_27415": {
     "id": 27415,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_42",
+    "slot": "Head",
+    "name": "Darkguard Face Mask"
   },
   "_bis_31532": {
     "id": 31532,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_cloth_07",
+    "slot": "Feet",
+    "name": "Supple Leather Boots"
   },
   "_bis_27449": {
     "id": 27449,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shield_05",
+    "slot": "Off Hand",
+    "name": "Blood Knight Defender"
   },
   "_bis_27491": {
     "id": 27491,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_ring_59",
+    "slot": "Finger",
+    "name": "Signet of Repose"
   },
   "_bis_33661": {
     "id": 33661,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shield_31",
+    "slot": "Off Hand",
+    "name": "Vengeful Gladiator's Barrier"
   },
   "_bis_31620": {
     "id": 31620,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_15",
+    "slot": "Hands",
+    "name": "Grand Marshal's Mooncloth Mitts"
   },
   "_bis_31622": {
     "id": 31622,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_30",
+    "slot": "Head",
+    "name": "Grand Marshal's Mooncloth Cowl"
   },
   "_bis_33671": {
     "id": 33671,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_58",
+    "slot": "Hands",
+    "name": "Vengeful Gladiator's Dragonhide Gloves"
   },
   "_bis_31624": {
     "id": 31624,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_02",
+    "slot": "Shoulder",
+    "name": "Grand Marshal's Mooncloth Shoulderpads"
   },
   "_bis_33672": {
     "id": 33672,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_94",
+    "slot": "Head",
+    "name": "Vengeful Gladiator's Dragonhide Helm"
   },
   "_bis_33673": {
     "id": 33673,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_leather_26",
+    "slot": "Legs",
+    "name": "Vengeful Gladiator's Dragonhide Legguards"
   },
   "_bis_33674": {
     "id": 33674,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_58",
+    "slot": "Shoulder",
+    "name": "Vengeful Gladiator's Dragonhide Spaulders"
   },
   "_bis_33675": {
     "id": 33675,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_leather_15",
+    "slot": "Chest",
+    "name": "Vengeful Gladiator's Dragonhide Tunic"
   },
   "_bis_31628": {
     "id": 31628,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_02",
+    "slot": "Shoulder",
+    "name": "High Warlord's Mooncloth Shoulderpads"
   },
   "_bis_31625": {
     "id": 31625,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_cloth_43",
+    "slot": "Chest",
+    "name": "Grand Marshal's Mooncloth Vestments"
   },
   "_bis_31629": {
     "id": 31629,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_cloth_43",
+    "slot": "Chest",
+    "name": "High Warlord's Mooncloth Vestments"
   },
   "_bis_31626": {
     "id": 31626,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_30",
+    "slot": "Head",
+    "name": "High Warlord's Mooncloth Cowl"
   },
   "_bis_33681": {
     "id": 33681,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_misc_book_06",
+    "slot": "Held In Off-hand",
+    "name": "Vengeful Gladiator's Endgame"
   },
   "_bis_31658": {
     "id": 31658,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_30",
+    "slot": "Head",
+    "name": "Scout's Hood"
   },
   "_bis_33716": {
     "id": 33716,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_60",
+    "slot": "Two-Hand",
+    "name": "Vengeful Gladiator's Staff"
   },
   "_bis_33723": {
     "id": 33723,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_60",
+    "slot": "Hands",
+    "name": "Vengeful Gladiator's Ornamented Gloves"
   },
   "_bis_33735": {
     "id": 33735,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shield_31",
+    "slot": "Off Hand",
+    "name": "Vengeful Gladiator's Redoubt"
   },
   "_bis_33736": {
     "id": 33736,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_misc_book_06",
+    "slot": "Held In Off-hand",
+    "name": "Vengeful Gladiator's Reprieve"
   },
   "_bis_33755": {
     "id": 33755,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shield_31",
+    "slot": "Off Hand",
+    "name": "Vengeful Gladiator's Shield Wall"
   },
   "_bis_23519": {
     "id": 23519,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_22",
+    "slot": "Head",
+    "name": "Felsteel Helm"
   },
   "_bis_23523": {
     "id": 23523,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_plate_04",
+    "slot": "Legs",
+    "name": "Khorium Pants"
   },
   "_bis_23524": {
     "id": 23524,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_11",
+    "slot": "Waist",
+    "name": "Khorium Belt"
   },
   "_bis_23532": {
     "id": 23532,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_29",
+    "slot": "Hands",
+    "name": "Gauntlets of the Iron Tower"
   },
   "_bis_23536": {
     "id": 23536,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_38",
+    "slot": "Head",
+    "name": "Oathkeeper's Helm"
   },
   "_bis_33810": {
     "id": 33810,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_114",
+    "slot": "Head",
+    "name": "Amani Mask of Death"
   },
   "_bis_37927": {
     "id": 37927,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_ring_60",
+    "slot": "Finger",
+    "name": "Guardian's Band of Subjugation"
   },
   "_bis_37928": {
     "id": 37928,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_necklace_36",
+    "slot": "Neck",
+    "name": "Guardian's Pendant of Subjugation"
   },
   "_bis_37929": {
     "id": 37929,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_necklace_36",
+    "slot": "Neck",
+    "name": "Guardian's Pendant of Reprieve"
   },
   "_bis_27703": {
     "id": 27703,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_29",
+    "slot": "Hands",
+    "name": "Gladiator's Lamellar Gauntlets"
   },
   "_bis_21605": {
     "id": 21605,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_19",
+    "slot": "Hands",
+    "name": "Gloves of the Hidden Temple"
   },
   "_bis_27757": {
     "id": 27757,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_56",
+    "slot": "Two-Hand",
+    "name": "Greatstaff of the Leviathan"
   },
   "_bis_33903": {
     "id": 33903,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_14",
+    "slot": "Waist",
+    "name": "Vindicator's Ornamented Belt"
   },
   "_bis_33905": {
     "id": 33905,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_plate_04",
+    "slot": "Feet",
+    "name": "Vindicator's Ornamented Greaves"
   },
   "_bis_29815": {
     "id": 29815,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_necklace_04",
+    "slot": "Neck",
+    "name": "Chain of Glowing Tendrils"
   },
   "_bis_27798": {
     "id": 27798,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_19",
+    "slot": "Hands",
+    "name": "Gauntlets of Vindication"
   },
   "_bis_25761": {
     "id": 25761,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_34",
+    "slot": "Two-Hand",
+    "name": "Staff of Beasts"
   },
   "_bis_25778": {
     "id": 25778,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_07",
+    "slot": "Wrist",
+    "name": "Manacles of Remembrance"
   },
   "_bis_31924": {
     "id": 31924,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_ring_50naxxramas",
+    "slot": "Finger",
+    "name": "Yor's Revenge"
   },
   "_bis_25788": {
     "id": 25788,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_12",
+    "slot": "Hands",
+    "name": "Dauntless Handguards"
   },
   "_bis_27847": {
     "id": 27847,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_34",
+    "slot": "Shoulder",
+    "name": "Fanblade Pauldrons"
   },
   "_bis_27871": {
     "id": 27871,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "spell_holy_summonlightwell",
+    "slot": "Neck",
+    "name": "Maladaar's Blessed Chaplet"
   },
   "_bis_31967": {
     "id": 31967,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_28",
+    "slot": "Hands",
+    "name": "Merciless Gladiator's Dragonhide Gloves"
   },
   "_bis_31969": {
     "id": 31969,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_cloth_05",
+    "slot": "Legs",
+    "name": "Merciless Gladiator's Dragonhide Legguards"
   },
   "_bis_27877": {
     "id": 27877,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_42",
+    "slot": "Two-Hand",
+    "name": "Draenic Wildstaff"
   },
   "_bis_27882": {
     "id": 27882,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_plate_17",
+    "slot": "Legs",
+    "name": "Gladiator's Scaled Legguards"
   },
   "_bis_27887": {
     "id": 27887,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shield_35",
+    "slot": "Off Hand",
+    "name": "Platinum Shield of the Valorous"
   },
   "_bis_27891": {
     "id": 27891,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_qirajidol_sage",
+    "slot": "Trinket",
+    "name": "Adamantine Figurine"
   },
   "_bis_32014": {
     "id": 32014,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_mace_52",
+    "slot": "Two-Hand",
+    "name": "Merciless Gladiator's Maul"
   },
   "_bis_32016": {
     "id": 32016,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_30",
+    "slot": "Head",
+    "name": "Merciless Gladiator's Mooncloth Hood"
   },
   "_bis_27938": {
     "id": 27938,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_73",
+    "slot": "Head",
+    "name": "Savage Mask of the Lynx Lord"
   },
   "_bis_32042": {
     "id": 32042,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_plate_17",
+    "slot": "Legs",
+    "name": "Merciless Gladiator's Scaled Legguards"
   },
   "_bis_30010": {
     "id": 30010,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_51",
+    "slot": "Two-Hand",
+    "name": "Fleshling Simulation Staff"
   },
   "_bis_30021": {
     "id": 30021,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_50",
+    "slot": "Two-Hand",
+    "name": "Wildfury Greatstaff"
   },
   "_bis_21864": {
     "id": 21864,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_02",
+    "slot": "Shoulder",
+    "name": "Soulcloth Shoulders"
   },
   "_bis_30088": {
     "id": 30088,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_axe_46",
+    "slot": "Two-Hand",
+    "name": "Skyforged Great Axe"
   },
   "_bis_34193": {
     "id": 34193,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_89",
+    "slot": "Shoulder",
+    "name": "Spaulders of the Thalassian Savior"
   },
   "_bis_38289": {
     "id": 38289,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_misc_elvencoins",
+    "slot": "Trinket",
+    "name": "Coren's Lucky Coin"
   },
   "_bis_34198": {
     "id": 34198,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_12",
+    "slot": "Two-Hand",
+    "name": "Stanchion of Primal Instinct"
   },
   "_bis_34240": {
     "id": 34240,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_20",
+    "slot": "Hands",
+    "name": "Gauntlets of the Soothed Soul"
   },
   "_bis_34243": {
     "id": 34243,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_25",
+    "slot": "Head",
+    "name": "Helm of Burning Righteousness"
   },
   "_bis_28126": {
     "id": 28126,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_28",
+    "slot": "Hands",
+    "name": "Gladiator's Dragonhide Gloves"
   },
   "_bis_28128": {
     "id": 28128,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_cloth_05",
+    "slot": "Legs",
+    "name": "Gladiator's Dragonhide Legguards"
   },
   "_bis_28130": {
     "id": 28130,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_leather_03",
+    "slot": "Chest",
+    "name": "Gladiator's Dragonhide Tunic"
   },
   "_bis_32243": {
     "id": 32243,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_chain_08",
+    "slot": "Feet",
+    "name": "Pearl Inlaid Boots"
   },
   "_bis_30222": {
     "id": 30222,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_chain_15",
+    "slot": "Chest",
+    "name": "Nordrassil Chestplate"
   },
   "_bis_30223": {
     "id": 30223,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_25",
+    "slot": "Hands",
+    "name": "Nordrassil Handgrips"
   },
   "_bis_30228": {
     "id": 30228,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_15",
+    "slot": "Head",
+    "name": "Nordrassil Headdress"
   },
   "_bis_30229": {
     "id": 30229,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_mail_15",
+    "slot": "Legs",
+    "name": "Nordrassil Feral-Kilt"
   },
   "_bis_30230": {
     "id": 30230,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_14",
+    "slot": "Shoulder",
+    "name": "Nordrassil Feral-Mantle"
   },
   "_bis_28203": {
     "id": 28203,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_chain_15",
+    "slot": "Chest",
+    "name": "Breastplate of the Righteous"
   },
   "_bis_24114": {
     "id": 24114,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_necklace_07",
+    "slot": "Neck",
+    "name": "Braided Eternium Chain"
   },
   "_bis_28211": {
     "id": 28211,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_ring_10",
+    "slot": "Finger",
+    "name": "Lieutenant's Signet of Lordaeron"
   },
   "_bis_24116": {
     "id": 24116,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_necklace_28",
+    "slot": "Neck",
+    "name": "Eye of the Night"
   },
   "_bis_24121": {
     "id": 24121,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_necklace_ahnqiraj_02",
+    "slot": "Neck",
+    "name": "Chain of the Twilight Owl"
   },
   "_bis_24127": {
     "id": 24127,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelcrafting_jadeowl",
+    "slot": "Trinket",
+    "name": "Figurine - Talasite Owl"
   },
   "_bis_24155": {
     "id": 24155,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_51",
+    "slot": "Two-Hand",
+    "name": "Ursol's Claw"
   },
   "_bis_32354": {
     "id": 32354,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_96",
+    "slot": "Head",
+    "name": "Crown of Empowered Fate"
   },
   "_bis_28285": {
     "id": 28285,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_25",
+    "slot": "Head",
+    "name": "Helm of the Righteous"
   },
   "_bis_34432": {
     "id": 34432,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_02",
+    "slot": "Wrist",
+    "name": "Lightbringer Bracers"
   },
   "_bis_30339": {
     "id": 30339,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_ring_03",
+    "slot": "Finger",
+    "name": "Protectorate Assassin's Ring"
   },
   "_bis_34442": {
     "id": 34442,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_17",
+    "slot": "Wrist",
+    "name": "Onslaught Wristguards"
   },
   "_bis_34444": {
     "id": 34444,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_09",
+    "slot": "Wrist",
+    "name": "Thunderheart Wristguards"
   },
   "_bis_30371": {
     "id": 30371,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_08",
+    "slot": "Waist",
+    "name": "Lightwarden's Girdle"
   },
   "_bis_28325": {
     "id": 28325,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_49",
+    "slot": "Two-Hand",
+    "name": "Dreamer's Dragonstaff"
   },
   "_bis_34487": {
     "id": 34487,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_27",
+    "slot": "Waist",
+    "name": "Lightbringer Belt"
   },
   "_bis_30400": {
     "id": 30400,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_03",
+    "slot": "Wrist",
+    "name": "Thadell's Bracers"
   },
   "_bis_24258": {
     "id": 24258,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_misc_cape_16",
+    "slot": "Back",
+    "name": "Resolute Cape"
   },
   "_bis_24260": {
     "id": 24260,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_misc_cape_16",
+    "slot": "Back",
+    "name": "Manaweave Cloak"
   },
   "_bis_34547": {
     "id": 34547,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_33",
+    "slot": "Waist",
+    "name": "Onslaught Waistguard"
   },
   "_bis_34556": {
     "id": 34556,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_24",
+    "slot": "Waist",
+    "name": "Thunderheart Waistguard"
   },
   "_bis_34559": {
     "id": 34559,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_chain_08",
+    "slot": "Feet",
+    "name": "Lightbringer Treads"
   },
   "_bis_32512": {
     "id": 32512,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_28",
+    "slot": "Waist",
+    "name": "Girdle of Lordaeron's Fallen"
   },
   "_bis_34568": {
     "id": 34568,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_plate_06",
+    "slot": "Feet",
+    "name": "Onslaught Boots"
   },
   "_bis_34573": {
     "id": 34573,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_wolf",
+    "slot": "Feet",
+    "name": "Thunderheart Treads"
   },
   "_bis_34576": {
     "id": 34576,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "ability_warrior_focusedrage",
+    "slot": "Trinket",
+    "name": "Battlemaster's Cruelty"
   },
   "_bis_28443": {
     "id": 28443,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_belt_17",
+    "slot": "Waist",
+    "name": "General's Dragonhide Belt"
   },
   "_bis_28444": {
     "id": 28444,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_08",
+    "slot": "Feet",
+    "name": "General's Dragonhide Boots"
   },
   "_bis_34605": {
     "id": 34605,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_chest_chain_15",
+    "slot": "Chest",
+    "name": "Breastplate of Fierce Survival"
   },
   "_bis_34612": {
     "id": 34612,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_boots_chain_05",
+    "slot": "Feet",
+    "name": "Greaves of the Penitent Knight"
   },
   "_bis_32571": {
     "id": 32571,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_02",
+    "slot": "Wrist",
+    "name": "Dawnsteel Bracers"
   },
   "_bis_28476": {
     "id": 28476,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_mace_52",
+    "slot": "Two-Hand",
+    "name": "Gladiator's Maul"
   },
   "_bis_32573": {
     "id": 32573,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_66",
+    "slot": "Shoulder",
+    "name": "Dawnsteel Shoulders"
   },
   "_bis_24398": {
     "id": 24398,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_12",
+    "slot": "Shoulder",
+    "name": "Mantle of the Dusk-Dweller"
   },
   "_bis_28528": {
     "id": 28528,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_misc_pocketwatch_02",
+    "slot": "Trinket",
+    "name": "Moroes' Lucky Pocket Watch"
   },
   "_bis_34680": {
     "id": 34680,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_jewelry_necklace_39",
+    "slot": "Neck",
+    "name": "Shattered Sun Pendant of Resolve"
   },
   "_bis_34698": {
     "id": 34698,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_bracer_16",
+    "slot": "Wrist",
+    "name": "Bracers of the Forest Stalker"
   },
   "_bis_34700": {
     "id": 34700,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_gauntlets_26",
+    "slot": "Hands",
+    "name": "Gauntlets of Divine Blessings"
   },
   "_bis_24461": {
     "id": 24461,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_mace_21",
+    "slot": "Two-Hand",
+    "name": "Hatebringer"
   },
   "_bis_24466": {
     "id": 24466,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_mail_21",
+    "slot": "Legs",
+    "name": "Skulldugger's Leggings"
   },
   "_bis_28617": {
     "id": 28617,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_29",
+    "slot": "Shoulder",
+    "name": "Grand Marshal's Chain Spaulders"
   },
   "_bis_28619": {
     "id": 28619,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_helmet_30",
+    "slot": "Head",
+    "name": "Grand Marshal's Dragonhide Helm"
   },
   "_bis_28622": {
     "id": 28622,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_shoulder_12",
+    "slot": "Shoulder",
+    "name": "Grand Marshal's Dragonhide Spaulders"
   },
   "_bis_22513": {
     "id": 22513,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_pants_cloth_05",
+    "slot": "Legs",
+    "name": "Leggings of Faith"
   },
   "_bis_28658": {
     "id": 28658,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_staff_55",
+    "slot": "Two-Hand",
+    "name": "Terestian's Stranglestaff"
   },
   "_bis_34810": {
     "id": 34810,
-    "icon": null,
-    "slot": null,
-    "name": null
+    "icon": "inv_misc_cape_20",
+    "slot": "Back",
+    "name": "Cloak of Blade Turning"
   }
 }
