@@ -3405,114 +3405,85 @@ const ROLE_CLASS_TO_BIS_SPECS = {
 // Druids, Paladins, Warriors, Shamans, Priests have spec-specific tier pieces
 const TOKEN_REWARDS = {
   // ── T4 Fallen tokens ─────────────────────────────────────────────────────
-  // Champion = Paladin, Rogue, Shaman | Defender = Warrior, Priest, Druid | Hero = Hunter, Mage, Warlock
+  // Champion = Paladin (Justicar) + Rogue (Netherblade) + Shaman (Cyclone)
+  // Defender = Warrior (Warbringer) + Priest (Incarnate) + Druid (Malorne)
+  // Hero     = Hunter (Demon Stalker) + Mage (Aldor Regalia) + Warlock (Voidheart)
 
-  // Pauldrons of the Fallen Champion (Shoulder)
-  29763: { Heal: 30127, Tank: 30133, Ret: 30138, Rog: 29047, Ele: 29031, Enh: 29031, Resto: 29037 },
-  // Pauldrons of the Fallen Defender (Shoulder)
-  29764: { Bear: 29089, Cat: 29089, Owl: 29095, Tree: 29089, Holy: 29054, Shad: 29060, Prot: 30194, Fury: 30168, Arms: 30168 },
-  // Pauldrons of the Fallen Hero (Shoulder)
-  29762: { BM: 30143, SV: 30143, Arc: 30154, Fire: 30154, Aff: 30163, Dest: 30163 },
-  // Chestguard of the Fallen Champion (Chest)
-  29754: { Heal: 30123, Tank: 30129, Ret: 30134, Rog: 29045, Ele: 29029, Enh: 29038, Resto: 29033 },
-  // Chestguard of the Fallen Defender (Chest)
-  29753: { Bear: 29096, Cat: 29096, Owl: 29091, Tree: 29087, Holy: 29050, Shad: 29056, Prot: 30185, Fury: 30164, Arms: 30164 },
-  // Chestguard of the Fallen Hero (Chest)
-  29755: { BM: 30139, SV: 30139, Arc: 30150, Fire: 30150, Aff: 28964, Dest: 28964 },
-  // Leggings of the Fallen Champion (Legs)
-  29766: { Heal: 30126, Tank: 30132, Ret: 30137, Rog: 29046, Ele: 29030, Enh: 29036, Resto: 29030 },
-  // Leggings of the Fallen Defender (Legs)
-  29767: { Bear: 29088, Cat: 29088, Owl: 29094, Tree: 29088, Holy: 29059, Shad: 29053, Prot: 30192, Fury: 30167, Arms: 30167 },
-  // Leggings of the Fallen Hero (Legs)
-  29765: { BM: 30142, SV: 30142, Arc: 30153, Fire: 30153, Aff: 28966, Dest: 28966 },
-  // Magtheridon's Head (Finger)
-  32385: { Heal: 28790, Tank: 28792, Ret: 28791, Prot: 28792, Fury: 28791, Arms: 28791, Bear: 28791, Cat: 28791, Owl: 28793, Tree: 28790, Holy: 28790, Shad: 28793, Ele: 28793, Enh: 28791, Resto: 28790, Arc: 28793, Fire: 28793, Aff: 28793, Dest: 28793, Rog: 28791, BM: 28791, SV: 28791 },
+  29763: {Heal:29064, Tank:29070, Ret:29075, Rog:29047, Ele:29037, Enh:29043, Resto:29031},  // Shoulder Champion
+  29764: {Prot:29023, Fury:29023, Arms:29023, Holy:29054, Shad:29060, Bear:29100, Cat:29100, Owl:29095, Tree:29089},  // Shoulder Defender
+  29762: {Arc:29079, Fire:29079, Aff:28967, Dest:28967},  // Shoulder Hero
+
+  29754: {Heal:29062, Tank:29066, Ret:29071, Rog:29045, Ele:29033, Enh:29038, Resto:29029},  // Chest Champion
+  29753: {Prot:29012, Fury:29019, Arms:29019, Holy:29050, Shad:29056, Bear:29096, Cat:29096, Owl:29091, Tree:29087},  // Chest Defender
+  29755: {BM:29082, SV:29082, Arc:29077, Fire:29077, Aff:28964, Dest:28964},  // Chest Hero
+
+  29766: {Heal:33518, Tank:29069, Ret:29074, Rog:29046, Ele:29036, Enh:29030, Resto:29030},  // Legs Champion
+  29767: {Prot:29022, Fury:29022, Arms:29022, Holy:29053, Shad:29059, Bear:29099, Cat:29099, Owl:29094, Tree:29088},  // Legs Defender
+  29765: {BM:29083, SV:29083, Arc:29078, Fire:29078, Aff:28966, Dest:28966},  // Legs Hero
+
+  // Magtheridon's Head (Finger) — id:32385
+  32385: {Heal:28790, Tank:28792, Ret:28791, Prot:28792, Fury:28791, Arms:28791, Bear:28791, Cat:28791, Owl:28793, Tree:28790, Holy:28790, Shad:28793, Ele:28793, Enh:28791, Resto:28790, Arc:28793, Fire:28793, Aff:28793, Dest:28793, Rog:28791, BM:28791, SV:28791},
 
   // ── T5 Vanquished tokens ─────────────────────────────────────────────────
-  // Champion = Paladin, Rogue, Shaman | Defender = Warrior, Priest, Druid | Hero = Hunter, Mage, Warlock
+  // Champion = Paladin (Crystalforge) + Rogue (Deathmantle) + Shaman (Cataclysm)
+  // Defender = Warrior (Destroyer) + Priest (Avatar) + Druid (Nordrassil)
+  // Hero     = Hunter (Rift Stalker) + Mage (Tirisfal) + Warlock (Corruptor)
 
-  // Shoulderguards of the Vanquished Champion (Shoulder) — id:30242
-  30242: { Heal: 30998, Tank: 30997, Ret: 30996, Rog: 30149, Ele: 31023, Enh: 31022, Resto: 31024 },
-  // Shoulderguards of the Vanquished Defender (Shoulder) — id:30243
-  30243: { Bear: 30235, Cat: 30235, Owl: 30235, Tree: 30235, Holy: 31069, Shad: 31070, Prot: 30122, Fury: 30122, Arms: 30122 },
-  // Shoulderguards of the Vanquished Hero (Shoulder) — id:30244
-  30244: { BM: 30143, SV: 30143, Arc: 30210, Fire: 30210, Aff: 30215, Dest: 30215 },
-  // Chestguard of the Vanquished Champion (Chest) — id:30236
-  30236: { Heal: 30991, Tank: 30990, Ret: 30992, Rog: 30144, Ele: 31017, Enh: 31016, Resto: 31018 },
-  // Chestguard of the Vanquished Defender (Chest) — id:30237
-  30237: { Bear: 30231, Cat: 30231, Owl: 30231, Tree: 30231, Holy: 31066, Shad: 31065, Prot: 30118, Fury: 30113, Arms: 30113 },
-  // Chestguard of the Vanquished Hero (Chest) — id:30238
-  30238: { BM: 30139, SV: 30139, Arc: 30196, Fire: 30196, Aff: 30214, Dest: 30214 },
-  // Leggings of the Vanquished Champion (Legs) — id:30245
-  30245: { Heal: 30995, Tank: 30993, Ret: 30993, Rog: 30148, Ele: 31020, Enh: 31019, Resto: 31021 },
-  // Leggings of the Vanquished Defender (Legs) — id:30246
-  30246: { Bear: 30229, Cat: 30229, Owl: 30234, Tree: 30234, Holy: 31068, Shad: 31067, Prot: 30116, Fury: 30117, Arms: 30117 },
-  // Leggings of the Vanquished Hero (Legs) — id:30247
-  30247: { BM: 30142, SV: 30142, Arc: 30207, Fire: 30207, Aff: 30213, Dest: 30213 },
-  // Gloves of the Vanquished Champion (Hands) — id:30239
-  30239: { Heal: 30985, Tank: 30982, Ret: 30983, Rog: 30145, Ele: 31008, Enh: 31007, Resto: 31011 },
-  // Gloves of the Vanquished Defender (Hands) — id:30240
-  30240: { Bear: 30233, Cat: 30233, Owl: 30233, Tree: 30233, Holy: 31060, Shad: 31061, Prot: 30119, Fury: 30119, Arms: 30119 },
-  // Gloves of the Vanquished Hero (Hands) — id:30241
-  30241: { BM: 29085, SV: 29085, Arc: 30205, Fire: 30205, Aff: 30211, Dest: 30211 },
-  // Helm of the Vanquished Champion (Head) — id:30248
-  30248: { Heal: 30987, Tank: 30989, Ret: 30988, Rog: 30146, Ele: 31014, Enh: 31012, Resto: 31015 },
-  // Helm of the Vanquished Defender (Head) — id:30249
-  30249: { Bear: 30233, Cat: 30233, Owl: 30233, Tree: 30233, Holy: 31063, Shad: 31064, Prot: 30120, Fury: 30115, Arms: 30115 },
-  // Helm of the Vanquished Hero (Head) — id:30250
-  30250: { BM: 29081, SV: 29081, Arc: 30206, Fire: 30206, Aff: 30212, Dest: 30212 },
+  30242: {Heal:30138, Tank:30127, Ret:30133, Rog:30149, Ele:30173, Enh:30194, Resto:30168},  // Shoulder Champion
+  30243: {Prot:30117, Fury:30122, Arms:30122, Holy:30154, Shad:30163, Bear:30230, Cat:30230, Owl:30235, Tree:30221},  // Shoulder Defender
+  30244: {BM:30143, SV:30143, Arc:30210, Fire:30210, Aff:30215, Dest:30215},  // Shoulder Hero
+
+  30236: {Heal:30134, Tank:30123, Ret:30129, Rog:30144, Ele:30169, Enh:30185, Resto:30164},  // Chest Champion
+  30237: {Prot:30113, Fury:30118, Arms:30118, Holy:30150, Shad:30159, Bear:30222, Cat:30222, Owl:30231, Tree:30216},  // Chest Defender
+  30238: {BM:30139, SV:30139, Arc:30196, Fire:30196, Aff:30214, Dest:30214},  // Chest Hero
+
+  30245: {Heal:30137, Tank:30126, Ret:30132, Rog:30148, Ele:30172, Enh:30192, Resto:30167},  // Legs Champion
+  30246: {Prot:30121, Fury:30121, Arms:30121, Holy:30153, Shad:30162, Bear:30229, Cat:30229, Owl:30234, Tree:30220},  // Legs Defender
+  30247: {BM:30142, SV:30142, Arc:30207, Fire:30207, Aff:30213, Dest:30213},  // Legs Hero
+
+  30239: {Heal:30135, Tank:30124, Ret:30130, Rog:30145, Ele:30170, Enh:30189, Resto:30165},  // Hands Champion
+  30240: {Prot:30114, Fury:30119, Arms:30119, Holy:30151, Shad:30160, Bear:30223, Cat:30223, Owl:30232, Tree:30217},  // Hands Defender
+  30241: {BM:30140, SV:30140, Arc:30205, Fire:30205, Aff:30211, Dest:30211},  // Hands Hero
+
+  30248: {Heal:30136, Tank:30125, Ret:30131, Rog:30146, Ele:30171, Enh:30190, Resto:30166},  // Head Champion
+  30249: {Prot:30120, Fury:30120, Arms:30120, Holy:30152, Shad:30161, Bear:30228, Cat:30228, Owl:30233, Tree:30219},  // Head Defender
+  30250: {BM:30141, SV:30141, Arc:30206, Fire:30206, Aff:30212, Dest:30212},  // Head Hero
 
   // ── T6 Forgotten tokens ───────────────────────────────────────────────────
-  // Conqueror = Paladin, Priest, Warlock | Protector = Warrior, Hunter, Shaman | Vanquisher = Rogue, Mage, Druid
+  // Conqueror = Paladin (Lightbringer) + Priest (Absolution) + Warlock (Malefic)
+  // Protector = Warrior (Onslaught) + Hunter (Gronnstalker) + Shaman (Skyshatter)
+  // Vanquisher = Rogue (Slayer's) + Mage (Tempest) + Druid (Thunderheart)
 
-  // Gloves of the Forgotten Conqueror (Hands) — id:31092, Azgalor
-  31092: { Heal: 30985, Tank: 30982, Ret: 30983, Holy: 31060, Shad: 31061, Aff: 31050, Dest: 31050 },
-  // Gloves of the Forgotten Protector (Hands) — id:31094, Azgalor
-  31094: { Prot: 30119, Fury: 30119, Arms: 30119, BM: 31008, SV: 31008, Ele: 31008, Enh: 31007, Resto: 31011 },
-  // Gloves of the Forgotten Vanquisher (Hands) — id:31093, Azgalor
-  31093: { Rog: 31026, Arc: 31055, Fire: 31055, Bear: 31034, Cat: 31032, Owl: 31032, Tree: 31032 },
-  // Helm of the Forgotten Conqueror (Head) — id:31095, Archimonde
-  31095: { Heal: 30987, Tank: 30989, Ret: 30988, Holy: 31063, Shad: 31064, Aff: 31051, Dest: 31051 },
-  // Helm of the Forgotten Protector (Head) — id:31097, Archimonde
-  31097: { Prot: 30120, Fury: 30115, Arms: 30115, BM: 31014, SV: 31014, Ele: 31014, Enh: 31012, Resto: 31015 },
-  // Helm of the Forgotten Vanquisher (Head) — id:31096, Archimonde
-  31096: { Rog: 31027, Arc: 31056, Fire: 31056, Bear: 31039, Cat: 31039, Owl: 31039, Tree: 31039 },
-  // Shoulderguards of the Forgotten Conqueror (Shoulder) — id:31098, Mother Shahraz
-  31098: { Heal: 30998, Tank: 30997, Ret: 30996, Holy: 31069, Shad: 31070, Aff: 31054, Dest: 31054 },
-  // Shoulderguards of the Forgotten Protector (Shoulder) — id:31100, Mother Shahraz
-  31100: { Prot: 30979, Fury: 30979, Arms: 30979, BM: 31006, SV: 31006, Ele: 31023, Enh: 31022, Resto: 31024 },
-  // Shoulderguards of the Forgotten Vanquisher (Shoulder) — id:31099, Mother Shahraz
-  31099: { Rog: 31030, Arc: 31059, Fire: 31059, Bear: 31049, Cat: 31047, Owl: 31047, Tree: 31047 },
-  // Leggings of the Forgotten Conqueror (Legs) — id:31101, Illidari Council
-  31101: { Heal: 30995, Tank: 30993, Ret: 30993, Holy: 31068, Shad: 31067, Aff: 31053, Dest: 31053 },
-  // Leggings of the Forgotten Protector (Legs) — id:31103, Illidari Council
-  31103: { Prot: 30116, Fury: 30117, Arms: 30117, BM: 31020, SV: 31020, Ele: 31020, Enh: 31019, Resto: 31021 },
-  // Leggings of the Forgotten Vanquisher (Legs) — id:31102, Illidari Council
-  31102: { Rog: 31029, Arc: 31058, Fire: 31058, Bear: 31045, Cat: 31044, Owl: 31044, Tree: 31044 },
-  // Chestguard of the Forgotten Conqueror (Chest) — id:31089, Illidan
-  31089: { Heal: 30991, Tank: 30990, Ret: 30992, Holy: 31066, Shad: 31065, Aff: 31052, Dest: 31052 },
-  // Chestguard of the Forgotten Protector (Chest) — id:31091, Illidan
-  31091: { Prot: 30975, Fury: 30975, Arms: 30975, BM: 31017, SV: 31017, Ele: 31017, Enh: 31016, Resto: 31018 },
-  // Chestguard of the Forgotten Vanquisher (Chest) — id:31090, Illidan
-  31090: { Rog: 31028, Arc: 31057, Fire: 31057, Bear: 31043, Cat: 31041, Owl: 31041, Tree: 31041 },
-  // Bracers of the Forgotten Conqueror (Wrist) — id:34853, Kalecgos/Eredar Twins
-  34853: { Heal: 34435, Tank: 34434, Ret: 34434, Holy: 34436, Shad: 34436, Aff: 34436, Dest: 34436 },
-  // Bracers of the Forgotten Protector (Wrist) — id:34854, Kalecgos/Eredar Twins
-  34854: { Prot: 34444, Fury: 34444, Arms: 34444, BM: 34446, SV: 34446, Ele: 34446, Enh: 34445, Resto: 34445 },
-  // Bracers of the Forgotten Vanquisher (Wrist) — id:34852, Kalecgos/Eredar Twins
-  34852: { Rog: 34448, Arc: 34447, Fire: 34447, Bear: 34444, Cat: 34444, Owl: 34447, Tree: 34444 },
-  // Belt of the Forgotten Conqueror (Waist) — id:34856, Brutallus/Eredar Twins
-  34856: { Heal: 34434, Tank: 34434, Ret: 34434, Holy: 34436, Shad: 34436, Aff: 34541, Dest: 34541 },
-  // Belt of the Forgotten Protector (Waist) — id:34857, Brutallus/Eredar Twins
-  34857: { Prot: 34556, Fury: 34556, Arms: 34556, BM: 34554, SV: 34554, Ele: 34555, Enh: 34555, Resto: 34555 },
-  // Belt of the Forgotten Vanquisher (Waist) — id:34855, Brutallus/Eredar Twins
-  34855: { Rog: 34558, Arc: 34557, Fire: 34557, Bear: 34554, Cat: 34554, Owl: 34557, Tree: 34554 },
-  // Boots of the Forgotten Conqueror (Feet) — id:34859, Felmyst/Eredar Twins
-  34859: { Heal: 34434, Tank: 34434, Ret: 34434, Holy: 34436, Shad: 34436, Aff: 34564, Dest: 34564 },
-  // Boots of the Forgotten Protector (Feet) — id:34860, Felmyst/Eredar Twins
-  34860: { Prot: 34571, Fury: 34571, Arms: 34571, BM: 34572, SV: 34572, Ele: 34573, Enh: 34573, Resto: 34573 },
-  // Boots of the Forgotten Vanquisher (Feet) — id:34858, Felmyst/Eredar Twins
-  34858: { Rog: 34575, Arc: 34574, Fire: 34574, Bear: 34572, Cat: 34572, Owl: 34574, Tree: 34572 },
+  31098: {Heal:30996, Tank:30998, Ret:30997, Holy:31069, Shad:31070, Aff:31054, Dest:31054},  // Shoulder Conqueror
+  31100: {Prot:30979, Fury:30979, Arms:30979, BM:31006, SV:31006, Ele:31023, Enh:31024, Resto:31022},  // Shoulder Protector
+  31099: {Rog:31030, Arc:31059, Fire:31059, Bear:31048, Cat:31048, Owl:31049, Tree:31047},  // Shoulder Vanquisher
+
+  31089: {Heal:30992, Tank:30991, Ret:30990, Holy:31066, Shad:31065, Aff:31052, Dest:31052},  // Chest Conqueror
+  31091: {Prot:30975, Fury:30975, Arms:30975, BM:31004, SV:31004, Ele:31017, Enh:31018, Resto:31016},  // Chest Protector
+  31090: {Rog:31028, Arc:31057, Fire:31057, Bear:31042, Cat:31042, Owl:31043, Tree:31041},  // Chest Vanquisher
+
+  31101: {Heal:30993, Tank:30995, Ret:30993, Holy:31068, Shad:31067, Aff:31053, Dest:31053},  // Legs Conqueror
+  31103: {Prot:30977, Fury:30977, Arms:30977, BM:31005, SV:31005, Ele:31020, Enh:31021, Resto:31019},  // Legs Protector
+  31102: {Rog:31029, Arc:31058, Fire:31058, Bear:31044, Cat:31044, Owl:31046, Tree:31045},  // Legs Vanquisher
+
+  31092: {Heal:30983, Tank:30985, Ret:30982, Holy:31060, Shad:31061, Aff:31050, Dest:31050},  // Hands Conqueror
+  31094: {Prot:30969, Fury:30969, Arms:30969, BM:31001, SV:31001, Ele:31008, Enh:31011, Resto:31007},  // Hands Protector
+  31093: {Rog:31026, Arc:31055, Fire:31055, Bear:31034, Cat:31034, Owl:31035, Tree:31032},  // Hands Vanquisher
+
+  31095: {Heal:30988, Tank:30987, Ret:30989, Holy:31063, Shad:31064, Aff:31051, Dest:31051},  // Head Conqueror
+  31097: {Prot:30972, Fury:30972, Arms:30972, BM:31003, SV:31003, Ele:31014, Enh:31015, Resto:31012},  // Head Protector
+  31096: {Rog:31027, Arc:31056, Fire:31056, Bear:31039, Cat:31039, Owl:31040, Tree:31037},  // Head Vanquisher
+
+  // T6 Sunwell Bracers/Belt/Boots
+  34853: {Heal:34435, Tank:34434, Ret:34434, Holy:34436, Shad:34436, Aff:34436, Dest:34436},  // Bracers Conqueror
+  34854: {Prot:34444, Fury:34444, Arms:34444, BM:34446, SV:34446, Ele:34446, Enh:34445, Resto:34445},  // Bracers Protector
+  34852: {Rog:34448, Arc:34447, Fire:34447, Bear:34444, Cat:34444, Owl:34447, Tree:34444},  // Bracers Vanquisher
+  34856: {Heal:34434, Tank:34434, Ret:34434, Holy:34436, Shad:34436, Aff:34541, Dest:34541},  // Belt Conqueror
+  34857: {Prot:34556, Fury:34556, Arms:34556, BM:34554, SV:34554, Ele:34555, Enh:34555, Resto:34555},  // Belt Protector
+  34855: {Rog:34558, Arc:34557, Fire:34557, Bear:34554, Cat:34554, Owl:34557, Tree:34554},  // Belt Vanquisher
+  34859: {Heal:34434, Tank:34434, Ret:34434, Holy:34436, Shad:34436, Aff:34564, Dest:34564},  // Boots Conqueror
+  34860: {Prot:34571, Fury:34571, Arms:34571, BM:34572, SV:34572, Ele:34573, Enh:34573, Resto:34573},  // Boots Protector
+  34858: {Rog:34575, Arc:34574, Fire:34574, Bear:34572, Cat:34572, Owl:34574, Tree:34572},  // Boots Vanquisher
 };
 
 // Given a token item ID and player name, return the reward item ID for their spec
@@ -4445,17 +4416,17 @@ function onItemChange() {
       const spanStyle = `${iw}font-size:16px;color:${color};text-decoration:none;`;
       if (rewardItemId) {
         // Wrap in a span to preserve color — the <a> is invisible, the span shows the arrow
-        return `<span style="${spanStyle}" title="${title}"><a href="https://www.wowhead.com/tbc/item=${rewardItemId}" data-wowhead="item=${rewardItemId}&dataset=tbc&anchor=top-right" target="_blank" rel="noopener" style="position:absolute;inset:0;"></a>${arrow}</span>`;
+        return `<span style="${spanStyle}" title="${title}"><a href="https://www.wowhead.com/tbc/item=${rewardItemId}" data-wowhead="item=${rewardItemId}&dataset=tbc&anchor=top" target="_blank" rel="noopener" style="position:absolute;inset:0;"></a>${arrow}</span>`;
       }
       return `<span style="${spanStyle}" title="${title}">${arrow}</span>`;
     };
     if (candidateRank === null) {
       return rewardItemId
-        ? `<span style="${iw}font-size:14px;position:relative;" title="Considered item is not on the BiS list for this player's spec"><a href="https://www.wowhead.com/tbc/item=${rewardItemId}" data-wowhead="item=${rewardItemId}&dataset=tbc&anchor=top-right" target="_blank" rel="noopener" style="position:absolute;inset:0;"></a>🛑</span>`
+        ? `<span style="${iw}font-size:14px;position:relative;" title="Considered item is not on the BiS list for this player's spec"><a href="https://www.wowhead.com/tbc/item=${rewardItemId}" data-wowhead="item=${rewardItemId}&dataset=tbc&anchor=top" target="_blank" rel="noopener" style="position:absolute;inset:0;"></a>🛑</span>`
         : `<span style="${iw}font-size:14px;" title="Considered item is not on the BiS list for this player's spec">🛑</span>`;
     } else if (currentRank === null) {
       return rewardItemId
-        ? `<span style="${iw}font-size:14px;color:#d4a017;position:relative;" title="Current item is not on the BiS list for this player's spec"><a href="https://www.wowhead.com/tbc/item=${rewardItemId}" data-wowhead="item=${rewardItemId}&dataset=tbc&anchor=top-right" target="_blank" rel="noopener" style="position:absolute;inset:0;"></a>⚠</span>`
+        ? `<span style="${iw}font-size:14px;color:#d4a017;position:relative;" title="Current item is not on the BiS list for this player's spec"><a href="https://www.wowhead.com/tbc/item=${rewardItemId}" data-wowhead="item=${rewardItemId}&dataset=tbc&anchor=top" target="_blank" rel="noopener" style="position:absolute;inset:0;"></a>⚠</span>`
         : `<span style="${iw}font-size:14px;color:#d4a017;" title="Current item is not on the BiS list for this player's spec">⚠</span>`;
     } else if (candidateEpv !== null && currentEpv !== null) {
       const delta = candidateEpv - currentEpv;
