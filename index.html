@@ -1904,7 +1904,7 @@ async function saveClaSheetsToGitHub() {
   }
 }
 
-const APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbx7c7X9j7p0SiUOgsQmSHZhSP880h747CBdVSzUtO80BRgy0wWbRgYUGROA2Pslc7w/exec';
+const APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbz4PHAAzCBbp7uuprvoeQKhCJGrmjT9Zgszw-EymFI-8vT-fjGgMSdfCzsF2Nt0Gk1A/exec';
 const ICON_SCRIPT = 'https://script.google.com/macros/s/AKfycbyBs6sgRoX6Zy3a3lq9q6fR4o0spLHRfKc-G63Vy8JUBTQa2HFWhnP8MxFGm8JxjNo/exec';
 
 // Fetch a Google Sheet tab via Apps Script proxy
@@ -3240,26 +3240,20 @@ function renderBisPanel() {
     el.innerHTML = '<span style="color:var(--text-dim);font-style:italic;">Select a spec and slot to browse BiS items.</span>';
     return;
   }
-  if (!bisData[spec]?.[slot]) {
-    el.innerHTML = '<span style="color:var(--text-dim);">No BiS data for this spec/slot/phase.</span>';
-    return;
-  }
 
-  const items = bisData[spec][slot]
+  const items = (bisData[spec]?.[slot] || [])
     .filter(([id,rank,p]) => p === phase)
-    .sort((a,b) => a[1]-b[1]);
+    .sort((a,b) => b[3] - a[3]); // sort by EPV descending
 
-  if (!items.length) {
-    el.innerHTML = '<span style="color:var(--text-dim);">No items for this spec/slot in this phase.</span>';
-    return;
-  }
-
-  let html = `<table style="width:100%;border-collapse:collapse;">
+  let html = `<table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
     <thead><tr style="border-bottom:1px solid var(--border);">
-      <th style="text-align:center;padding:6px 12px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;color:var(--text-dim);width:60px;">Rank</th>
       <th style="text-align:left;padding:6px 12px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;color:var(--text-dim);">Item</th>
       <th style="text-align:right;padding:6px 12px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;color:var(--text-dim);width:80px;">EPV</th>
     </tr></thead><tbody>`;
+
+  if (!items.length) {
+    html += `<tr><td colspan="2" style="padding:12px;color:var(--text-dim);font-style:italic;">No items for this spec/slot in this phase.</td></tr>`;
+  }
 
   for (const [id, rank, p, epv100] of items) {
     const entry = Object.values(gearItemIds).find(v => (typeof v === 'object' ? v.id : v) === id);
@@ -3268,11 +3262,8 @@ function renderBisPanel() {
       : '<span style="display:inline-block;width:18px;height:18px;background:var(--border);border-radius:2px;vertical-align:middle;flex-shrink:0;"></span>';
     const displayName = entry?.name || `Item #${id}`;
     const epv = (epv100/100).toFixed(1);
-    const rankColor = rank === 1 ? 'var(--gold)' : rank <= 3 ? '#8abf50' : 'var(--text)';
-    const rankDisplay = rank === 1 ? '★' : rank;
 
     html += `<tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
-      <td style="padding:6px 12px;text-align:center;font-family:'Cinzel',serif;font-size:13px;color:${rankColor};font-weight:${rank===1?'700':'400'};">${rankDisplay}</td>
       <td style="padding:6px 12px;">
         <a href="https://www.wowhead.com/tbc/item=${id}" data-wowhead="item=${id}&dataset=tbc" target="_blank" rel="noopener"
            style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--gold-light);font-size:15px;">
@@ -3283,11 +3274,102 @@ function renderBisPanel() {
     </tr>`;
   }
   html += '</tbody></table>';
+
+  // Add item form (only shown when spec+slot are selected)
+  html += `
+    <div style="border-top:1px solid var(--border);padding-top:16px;">
+      <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.2em;color:var(--text-dim);margin-bottom:10px;">ADD ITEM TO ${spec.toUpperCase()} — ${slot.toUpperCase()} — PHASE ${phase}</div>
+      <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;">
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <label style="font-size:11px;color:var(--text-dim);">Wowhead Item ID</label>
+          <input id="bisAddId" type="number" placeholder="e.g. 28802" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:6px 10px;font-size:14px;width:140px;outline:none;" />
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <label style="font-size:11px;color:var(--text-dim);">EPV</label>
+          <input id="bisAddEpv" type="number" step="0.1" placeholder="e.g. 145.5" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:6px 10px;font-size:14px;width:110px;outline:none;" />
+        </div>
+        <button class="btn primary" onclick="bisAddItem()" style="padding:6px 16px;">+ Add</button>
+        <span id="bisAddHint" style="font-size:12px;color:var(--text-dim);align-self:center;"></span>
+      </div>
+    </div>`;
+
   el.innerHTML = html;
 
   if (typeof $WowheadPower !== 'undefined' && $WowheadPower.refreshLinks) {
     setTimeout(() => $WowheadPower.refreshLinks(), 100);
   }
+}
+
+async function bisAddItem() {
+  const spec  = document.getElementById('bisSpecSelect').value;
+  const phase = parseInt(document.getElementById('bisPhaseSelect').value) || 1;
+  const slot  = document.getElementById('bisSlotSelect').value;
+  const idVal = parseInt(document.getElementById('bisAddId').value);
+  const epvVal= parseFloat(document.getElementById('bisAddEpv').value);
+  const hint  = document.getElementById('bisAddHint');
+
+  if (!spec || !slot) { hint.textContent = 'Select a spec and slot first.'; hint.style.color='#c94c4c'; return; }
+  if (!idVal || isNaN(idVal)) { hint.textContent = 'Enter a valid item ID.'; hint.style.color='#c94c4c'; return; }
+  if (isNaN(epvVal) || epvVal <= 0) { hint.textContent = 'Enter a valid EPV value.'; hint.style.color='#c94c4c'; return; }
+  if (!githubToken) { hint.textContent = 'GitHub token required to save.'; hint.style.color='#c94c4c'; return; }
+
+  hint.textContent = 'Fetching item data...'; hint.style.color='var(--text-dim)';
+
+  try {
+    // Fetch item name, icon, slot from Wowhead
+    const tipRes = await fetch(`https://nether.wowhead.com/tbc/tooltip/item/${idVal}`);
+    if (!tipRes.ok) throw new Error('Wowhead fetch failed');
+    const tipData = await tipRes.json();
+    const itemName = tipData.name || null;
+    const itemIcon = tipData.icon ? tipData.icon.toLowerCase() : null;
+    const slotMatch = tipData.tooltip?.match(/<td>(Back|Chest|Feet|Finger|Hands|Head|Held In Off-hand|Legs|Main Hand|Neck|Off Hand|One-Hand|Ranged|Relic|Shoulder|Trinket|Two-Hand|Waist|Wrist)<\/td>/i);
+    const itemSlot = slotMatch ? slotMatch[1] : null;
+
+    // Add to gearItemIds if not already present
+    const existingKey = Object.entries(gearItemIds).find(([k,v]) => (typeof v === 'object' ? v.id : v) === idVal);
+    if (!existingKey && itemName) {
+      const normKey = normalizeName(itemName);
+      gearItemIds[normKey] = { id: idVal, icon: itemIcon, slot: itemSlot, name: itemName };
+      if (itemIcon) itemIcons[idVal] = itemIcon;
+    }
+
+    // Add to bisData — compute rank as last in sorted list + 1
+    if (!bisData[spec]) bisData[spec] = {};
+    if (!bisData[spec][slot]) bisData[spec][slot] = [];
+    const existing = bisData[spec][slot].find(([id,,p]) => id === idVal && p === phase);
+    if (existing) { hint.textContent = 'Item already in list.'; hint.style.color='#d4a017'; return; }
+    const epv100 = Math.round(epvVal * 100);
+    // Rank: assign based on EPV position among existing phase entries (sorted desc by EPV)
+    const phaseEntries = bisData[spec][slot].filter(([,,p]) => p === phase);
+    const newRank = phaseEntries.filter(([,,,e]) => e >= epv100).length + 1;
+    bisData[spec][slot].push([idVal, newRank, phase, epv100]);
+
+    hint.textContent = 'Saving...'; hint.style.color='var(--text-dim)';
+
+    // Save both JSONs to GitHub
+    await saveJsonToGitHub('gear-item-ids.json', gearItemIds);
+    await saveJsonToGitHub('bis-data.json', bisData);
+
+    hint.textContent = `✓ Added "${itemName || idVal}"!`; hint.style.color='#4caa6e';
+    document.getElementById('bisAddId').value = '';
+    document.getElementById('bisAddEpv').value = '';
+    renderBisPanel();
+  } catch(e) {
+    hint.textContent = 'Error: ' + e.message; hint.style.color='#c94c4c';
+  }
+}
+
+async function saveJsonToGitHub(filename, data) {
+  const apiUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${filename}`;
+  const getRes = await fetch(apiUrl, { headers: { Authorization: `token ${githubToken}`, Accept: 'application/vnd.github.v3+json' }});
+  const sha = getRes.ok ? (await getRes.json()).sha : null;
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+  const putRes = await fetch(apiUrl, {
+    method: 'PUT',
+    headers: { Authorization: `token ${githubToken}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: `Update ${filename}`, content, ...(sha ? { sha } : {}) })
+  });
+  if (!putRes.ok) throw new Error(`GitHub save failed for ${filename}: ${(await putRes.json()).message}`);
 }
 
 // Refresh slot options when phase changes without resetting spec
@@ -3662,6 +3744,16 @@ function onItemChange() {
     'Ranged': ['Weapon'], 'Relic': ['Wand/Idol/Relic etc.'],
   };
 
+  // Map Wowhead BiS slot names back to gear listing column names for EPV lookup
+  const BIS_TO_GEAR_SLOT = {
+    'Main Hand': 'Weapon', 'One Hand': 'Weapon', 'Two Hand': 'Weapon',
+    'Off Hand': 'Off-Hand', 'Held In Off-hand': 'Off-Hand',
+    'Head': 'Head', 'Neck': 'Neck', 'Shoulder': 'Shoulders', 'Back': 'Cloak',
+    'Chest': 'Chest', 'Wrist': 'Bracers', 'Hands': 'Hands', 'Waist': 'Waist',
+    'Legs': 'Legs', 'Feet': 'Feet', 'Finger': 'Ring1', 'Trinket': 'Trinket1',
+    'Ranged': 'Weapon', 'Relic': 'Wand/Idol/Relic etc.',
+  };
+
   function getRelevantSlots(itemName) {
     // Primary: check stored slot in gearItemIds
     const normItem = normalizeName(itemName);
@@ -3701,7 +3793,21 @@ function onItemChange() {
     if (/shield|off.hand|orb|tome|book/.test(n)) return ['Weapon','Off-Hand'];
     if (/idol|totem|libram|rod|wand/.test(n)) return ['Wand/Idol/Relic etc.'];
     // If gear listing data exists but item not found in it, still show column
-    if (Object.keys(gearListingByPlayer).length > 0) return ['__unknown__'];
+    // For weapon/offhand items from BiS data, make sure we show both slots
+    if (Object.keys(gearListingByPlayer).length > 0) {
+      // Check if BiS data indicates this is a weapon type
+      if (candidateItemId) {
+        for (const slots of Object.values(bisData)) {
+          for (const [bisSlot, items] of Object.entries(slots)) {
+            if (items.some(([id]) => id === candidateItemId)) {
+              if (['Main Hand','One Hand','Two Hand','Off Hand'].includes(bisSlot)) return ['Weapon','Off-Hand'];
+              if (bisSlot === 'Ranged') return ['Weapon'];
+            }
+          }
+        }
+      }
+      return ['__unknown__'];
+    }
     return null;
   }
 
@@ -3714,6 +3820,29 @@ function onItemChange() {
     ? Object.values(bisData).some(slots => Object.values(slots).some(items => items.some(([id,,p]) => id === candidateItemId && p === BIS_PHASE)))
     : false;
 
+  // Detect if candidate is a two-handed weapon
+  const candidateIsTwoHand = candidateItemId && Object.values(bisData).some(slots =>
+    (slots['Two Hand'] || []).some(([id]) => id === candidateItemId)
+  );
+
+  function makeBisIndicator(candidateEpv, currentEpv, currentRank, candidateRank) {
+    const iw = 'display:inline-flex;align-items:center;justify-content:center;width:20px;flex-shrink:0;';
+    if (candidateRank === null) {
+      return `<span style="${iw}font-size:14px;" title="This item is not on the BiS list for this player's spec">🛑</span>`;
+    } else if (currentRank === null) {
+      return `<span style="${iw}font-size:14px;color:#d4a017;" title="Current item is not on the BiS list for this player's spec">⚠</span>`;
+    } else if (candidateEpv !== null && currentEpv !== null) {
+      const delta = candidateEpv - currentEpv;
+      const tip = `Candidate EPV: ${candidateEpv.toFixed(1)} | Current EPV: ${currentEpv.toFixed(1)} | Delta: ${delta >= 0 ? '+' : ''}${delta.toFixed(1)}`;
+      if (delta >= 20)      return `<span style="${iw}font-size:16px;color:#4caa6e;" title="${tip}">⇑</span>`;
+      else if (delta >= 5)  return `<span style="${iw}font-size:16px;color:#8abf50;" title="${tip}">↑</span>`;
+      else if (delta <= -20) return `<span style="${iw}font-size:16px;color:#c94c4c;" title="${tip}">⇓</span>`;
+      else if (delta <= -5) return `<span style="${iw}font-size:16px;color:#e07040;" title="${tip}">↓</span>`;
+      else                  return `<span style="${iw}font-size:16px;color:var(--text-dim);" title="${tip}">→</span>`;
+    }
+    return `<span style="${iw}"></span>`; // empty spacer
+  }
+
   function currentItemCellHtml(playerKey, slots) {
     const dimCell = '<td style="text-align:center;color:var(--text-dim);font-style:italic;">—</td>';
     if (!slots || !slots.length) return dimCell;
@@ -3723,42 +3852,43 @@ function onItemChange() {
     const playerName = lastRenderData.roles.flatMap(r => r.players)
       .find(p => normalizeName(p.name) === playerKey)?.name || playerKey;
     const candidateEpv = candidateOnBisForAnyone ? getPlayerItemEpv(playerName, candidateItemId, BIS_PHASE) : null;
+    const candidateRank = candidateOnBisForAnyone ? getPlayerItemBisRank(playerName, candidateItemId, BIS_PHASE) : null;
 
     const items = slots.map(slot => gear[slot]).filter(Boolean);
     if (!items.length) return dimCell;
 
-    const html = items.map(name => {
+    // For two-handed candidates: sum EPV of all current weapon slot items
+    let combinedCurrentEpv = null;
+    let combinedCurrentRank = null;
+    if (candidateIsTwoHand && items.length > 1 && candidateOnBisForAnyone) {
+      const epvs = items.map(name => getPlayerItemEpv(playerName, getItemId(name), BIS_PHASE)).filter(e => e !== null);
+      const ranks = items.map(name => getPlayerItemBisRank(playerName, getItemId(name), BIS_PHASE));
+      combinedCurrentEpv = epvs.length ? epvs.reduce((a,b) => a+b, 0) : null;
+      // For combined rank: use null if any item is off-list (warning), else use best rank found
+      combinedCurrentRank = ranks.some(r => r === null) ? null : Math.min(...ranks.filter(r => r !== null));
+    }
+
+    const html = items.map((name, idx) => {
       const id = getItemId(name);
       const icon = id && itemIcons[id]
         ? `<img src="https://wow.zamimg.com/images/wow/icons/medium/${itemIcons[id]}.jpg" style="width:18px;height:18px;border:1px solid #555;border-radius:2px;vertical-align:middle;flex-shrink:0;" />`
         : '';
 
       let bisIndicator = '';
-      if (candidateOnBisForAnyone && id) {
-        const currentEpv = getPlayerItemEpv(playerName, id, BIS_PHASE);
-        const currentRank = getPlayerItemBisRank(playerName, id, BIS_PHASE);
-
-        if (candidateEpv === null) {
-          // Candidate is on BiS for others but not this player's spec — red stop
-          bisIndicator = `<span style="font-size:15px;flex-shrink:0;" title="This item is not on the BiS list for this player's spec">🛑</span>`;
-        } else if (currentRank === null) {
-          // Candidate is on their BiS, but current item is not — gold warning
-          bisIndicator = `<span style="font-size:13px;color:#d4a017;flex-shrink:0;" title="Current item is not on the BiS list for this player's spec">⚠</span>`;
-        } else if (currentEpv !== null) {
-          // Both on BiS — directional arrow based on EPV delta
-          const delta = candidateEpv - currentEpv;
-          const tip = `Candidate EPV: ${candidateEpv.toFixed(1)} | Current EPV: ${currentEpv.toFixed(1)} | Delta: ${delta >= 0 ? '+' : ''}${delta.toFixed(1)}`;
-          if (delta >= 20) {
-            bisIndicator = `<span style="font-size:16px;color:#4caa6e;flex-shrink:0;" title="${tip}">⇑</span>`;
-          } else if (delta >= 5) {
-            bisIndicator = `<span style="font-size:16px;color:#8abf50;flex-shrink:0;" title="${tip}">↑</span>`;
-          } else if (delta <= -20) {
-            bisIndicator = `<span style="font-size:16px;color:#c94c4c;flex-shrink:0;" title="${tip}">⇓</span>`;
-          } else if (delta <= -5) {
-            bisIndicator = `<span style="font-size:16px;color:#e07040;flex-shrink:0;" title="${tip}">↓</span>`;
+      if (candidateOnBisForAnyone) {
+        if (candidateIsTwoHand && items.length > 1) {
+          // Two-hand vs MH+OH: show combined indicator on first item only, spacer on second
+          if (idx === 0) {
+            bisIndicator = makeBisIndicator(candidateEpv, combinedCurrentEpv, combinedCurrentRank, candidateRank);
           } else {
-            bisIndicator = `<span style="font-size:16px;color:var(--text-dim);flex-shrink:0;" title="${tip}">→</span>`;
+            const iw = 'display:inline-flex;align-items:center;justify-content:center;width:20px;flex-shrink:0;';
+            bisIndicator = `<span style="${iw}"></span>`;
           }
+        } else if (id) {
+          // Normal case: per-item indicator
+          const currentEpv = getPlayerItemEpv(playerName, id, BIS_PHASE);
+          const currentRank = getPlayerItemBisRank(playerName, id, BIS_PHASE);
+          bisIndicator = makeBisIndicator(candidateEpv, currentEpv, currentRank, candidateRank);
         }
       }
 
