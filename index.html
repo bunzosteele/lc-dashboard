@@ -892,6 +892,11 @@
   .loot-select:disabled { opacity: 0.4; cursor: not-allowed; }
   .loot-select option { background: var(--bg2); }
 
+  /* Hide number input spinners on BiS EPV fields */
+  #bisContent input[type=number]::-webkit-outer-spin-button,
+  #bisContent input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  #bisContent input[type=number] { -moz-appearance: textfield; }
+
   /* ── Mobile Responsive ────────────────────────────── */
   @media (max-width: 768px) {
 
