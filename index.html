@@ -3931,13 +3931,11 @@ function onItemChange() {
 
   // Get candidate item id and EPV once for use in all rows
   const candidateItemId = getItemId(item);
-  console.log('[BiS] item:', item, '| candidateItemId:', candidateItemId);
 
   // Check if candidate is on BiS for anyone (any phase) — if not, hide all indicators
   const candidateOnBisForAnyone = candidateItemId
     ? Object.values(bisData).some(slots => Object.values(slots).some(items => items.some(([id]) => id === candidateItemId)))
     : false;
-  console.log('[BiS] candidateOnBisForAnyone:', candidateOnBisForAnyone);
 
   // Detect if candidate is a two-handed weapon
   const candidateIsTwoHand = candidateItemId && Object.values(bisData).some(slots =>
@@ -3972,12 +3970,9 @@ function onItemChange() {
 
     const playerName = lastRenderData.roles.flatMap(r => r.players)
       .find(p => normalizeName(p.name) === playerKey)?.name || playerKey;
-    const _dbgSpecs = getPlayerBisSpecs(playerName);
-    console.log('[BiS] player:', playerName, '| specs:', _dbgSpecs, '| classMap entry:', classMap[normalizeName(playerName)]);
-    const candidateEpv = candidateOnBisForAnyone ? getPlayerItemEpv(playerName, candidateItemId) : null;
+      const candidateEpv = candidateOnBisForAnyone ? getPlayerItemEpv(playerName, candidateItemId) : null;
     const candidateRank = candidateOnBisForAnyone ? getPlayerItemBisRank(playerName, candidateItemId) : null;
-    console.log('[BiS] candidateEpv:', candidateEpv, '| candidateRank:', candidateRank);
-
+  
     const items = slots.map(slot => gear[slot]).filter(Boolean);
     if (!items.length) return dimCell;
 
@@ -3988,8 +3983,9 @@ function onItemChange() {
       const epvs = items.map(name => getPlayerItemEpv(playerName, getItemId(name))).filter(e => e !== null);
       const ranks = items.map(name => getPlayerItemBisRank(playerName, getItemId(name)));
       combinedCurrentEpv = epvs.length ? epvs.reduce((a,b) => a+b, 0) : null;
-      // For combined rank: use null if any item is off-list (warning), else use best rank found
-      combinedCurrentRank = ranks.some(r => r === null) ? null : Math.min(...ranks.filter(r => r !== null));
+      // For combined rank: only warn (null) if the FIRST item (main hand/weapon slot) is off-list.
+      // Off-hand being off-list is expected when a two-hander candidate is being evaluated.
+      combinedCurrentRank = ranks[0] === null ? null : Math.min(...ranks.filter(r => r !== null));
     }
 
     const html = items.map((name, idx) => {
