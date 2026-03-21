@@ -4568,8 +4568,10 @@ function onItemChange() {
           .map(n => getPlayerItemEpv(p.name, getItemId(n, p.name)))
           .filter(e => e !== null);
         if (!currentEpvs.length) return null;
+        // For multi-slot items (rings/trinkets), compare against the LOWEST EPV current item
+        // since the player would replace their weakest piece, not both
         const currentEpv = currentEpvs.length > 1
-          ? currentEpvs.reduce((a, b) => a + b, 0)
+          ? Math.min(...currentEpvs)
           : currentEpvs[0];
         return currentEpv > 0 ? ((candidateEpv - currentEpv) / currentEpv) * 100 : null;
       })(),
