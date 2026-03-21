@@ -4419,14 +4419,20 @@ function onItemChange() {
     const wrapArrow = (arrow, color, title) => {
       const spanStyle = `${iw}font-size:16px;color:${color};text-decoration:none;`;
       if (rewardItemId) {
-        return `<a href="https://www.wowhead.com/tbc/item=${rewardItemId}" data-wowhead="item=${rewardItemId}&dataset=tbc" target="_blank" rel="noopener" style="${spanStyle}" title="${title}">${arrow}</a>`;
+        // color:inherit prevents Wowhead from overriding our arrow color
+        // anchor=cursor positions the tooltip relative to the cursor rather than the element
+        return `<a href="https://www.wowhead.com/tbc/item=${rewardItemId}" data-wowhead="item=${rewardItemId}&dataset=tbc&anchor=cursor" target="_blank" rel="noopener" style="${spanStyle}color:inherit;" title="${title}">${arrow}</a>`;
       }
       return `<span style="${spanStyle}" title="${title}">${arrow}</span>`;
     };
     if (candidateRank === null) {
-      return `<span style="${iw}font-size:14px;" title="This item is not on the BiS list for this player's spec">🛑</span>`;
+      return rewardItemId
+        ? `<a href="https://www.wowhead.com/tbc/item=${rewardItemId}" data-wowhead="item=${rewardItemId}&dataset=tbc&anchor=cursor" target="_blank" rel="noopener" style="${iw}font-size:14px;color:inherit;text-decoration:none;" title="Considered item is not on the BiS list for this player's spec">🛑</a>`
+        : `<span style="${iw}font-size:14px;" title="Considered item is not on the BiS list for this player's spec">🛑</span>`;
     } else if (currentRank === null) {
-      return `<span style="${iw}font-size:14px;color:#d4a017;" title="Current item is not on the BiS list for this player's spec">⚠</span>`;
+      return rewardItemId
+        ? `<a href="https://www.wowhead.com/tbc/item=${rewardItemId}" data-wowhead="item=${rewardItemId}&dataset=tbc&anchor=cursor" target="_blank" rel="noopener" style="${iw}font-size:14px;color:inherit;text-decoration:none;" title="Current item is not on the BiS list for this player's spec">⚠</a>`
+        : `<span style="${iw}font-size:14px;color:#d4a017;" title="Current item is not on the BiS list for this player's spec">⚠</span>`;
     } else if (candidateEpv !== null && currentEpv !== null) {
       const delta = candidateEpv - currentEpv;
       const pct = currentEpv > 0 ? (delta / currentEpv) * 100 : 0;
