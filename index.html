@@ -1152,6 +1152,18 @@
           <div style="margin-top:8px;color:var(--text-dim);">EPV (Equivalence Point Value) quantifies an item's stat contribution relative to the BiS ceiling for that spec. The upgrade percentage is computed against the player's current equipped item in the relevant slot, using the best EPV seen across all phases. Items within ±5% EPV of the current item are treated as sidegrades and receive no modifier. Beyond that threshold the modifier scales continuously at twice the upgrade percentage — a +20% upgrade gives ×1.4, a +50% upgrade gives ×2.0 (the cap). Downgrades scale symmetrically with a floor of ×0.1 at -50% or worse. Using percentage rather than flat EPV ensures the modifier scales correctly across slot types — a 10% upgrade on a weapon and a 10% upgrade on a ring carry equal relative weight.</div>
         </div>
 
+        <div>
+          <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;color:var(--gold-dim);margin-bottom:8px;">ROLL RECOMMENDATION</div>
+          <div style="font-family:monospace;font-size:12px;background:var(--bg2);padding:8px 12px;border-left:2px solid var(--gold-dim);color:var(--text-dim);">
+            Open Roll — no active non-receiver has a &gt;5% EPV upgrade<br>
+            Restricted — at least one active non-receiver has a &gt;5% EPV upgrade<br>
+            &nbsp;&nbsp;→ Sort all eligible non-receivers by priority score<br>
+            &nbsp;&nbsp;→ Find the largest relative gap ≥10% between adjacent scores (top 4)<br>
+            &nbsp;&nbsp;→ Everyone above the cut rolls &nbsp;|&nbsp; Cap at 4 players &nbsp;|&nbsp; ≤2 eligible: all roll
+          </div>
+          <div style="margin-top:8px;color:var(--text-dim);">Open Roll applies when no raider stands to benefit meaningfully from the item — it should go to whoever can use it or wants it for off-spec. When the item is a genuine upgrade for someone, the roll is restricted to players whose priority scores are clustered at the top. The gap detection uses relative difference — (score[i] − score[i+1]) / score[i] — so a 20-point gap means more at the top of the range than at the bottom. If no gap of 10% or more exists within the top 4, all four roll together. A single player standing clearly above the field is awarded the item outright rather than rolling. EPV is only used to determine whether a restricted roll is warranted, not to restrict who participates in the roll itself.</div>
+        </div>
+
       </div>
 </details>
     </div>
@@ -3709,6 +3721,10 @@ function renderBisPanel() {
 
   el.innerHTML = html;
 
+  // Populate recommendation (must be after el.innerHTML so lootRecommendation exists)
+  const _recEl = document.getElementById('lootRecommendation');
+  if (_recEl) _recEl.innerHTML = buildRecommendationHtml(recommendation);
+
   if (typeof $WowheadPower !== 'undefined' && $WowheadPower.refreshLinks) {
     setTimeout(() => $WowheadPower.refreshLinks(), 50);
     setTimeout(() => $WowheadPower.refreshLinks(), 500);
@@ -4113,10 +4129,31 @@ function onItemChange() {
   const itemIconHtml = itemId && itemIcons[itemId]
     ? `<a href="https://www.wowhead.com/tbc/item=${itemId}" data-wowhead="item=${itemId}&dataset=tbc" target="_blank" rel="noopener" style="flex-shrink:0;"><img src="https://wow.zamimg.com/images/wow/icons/large/${itemIcons[itemId]}.jpg" style="width:40px;height:40px;border:2px solid var(--gold-dim);border-radius:4px;display:block;" /></a>`
     : '';
+  // Build recommendation HTML (computed later, placeholder updated after algorithm runs)
+  function buildRecommendationHtml(rec) {
+    if (rec.type === 'open') {
+      return `<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">
+        <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.18em;color:var(--text-dim);text-transform:uppercase;">Recommendation</div>
+        <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold-light);letter-spacing:0.08em;">Open Roll</div>
+        <div style="font-size:11px;color:var(--text-dim);">No active raiders have a &gt;5% upgrade</div>
+      </div>`;
+    }
+    const names = rec.rollers.map(s => `<span style="color:${classColor(s.p.name)||'var(--gold-light)'};">${s.p.name}</span> <span style="color:var(--text-dim);font-size:10px;">(${s.normPr})</span>`);
+    const label = rec.rollers.length === 1 ? 'Awarded To' : 'Roll Off';
+    return `<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">
+      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.18em;color:var(--text-dim);text-transform:uppercase;">Recommendation</div>
+      <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold-light);letter-spacing:0.08em;">${label}</div>
+      <div style="font-size:12px;text-align:right;line-height:1.6;">${names.join('<br>')}</div>
+    </div>`;
+  }
+
   const itemHeaderHtml = itemId
-    ? `<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-        ${itemIconHtml}
-        <a href="https://www.wowhead.com/tbc/item=${itemId}" data-wowhead="item=${itemId}&dataset=tbc" target="_blank" rel="noopener" style="font-family:'Cinzel',serif;font-size:16px;color:var(--gold);text-decoration:none;">${item}</a>
+    ? `<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          ${itemIconHtml}
+          <a href="https://www.wowhead.com/tbc/item=${itemId}" data-wowhead="item=${itemId}&dataset=tbc" target="_blank" rel="noopener" style="font-family:'Cinzel',serif;font-size:16px;color:var(--gold);text-decoration:none;">${item}</a>
+        </div>
+        <div id="lootRecommendation" style="min-width:160px;"></div>
        </div>`
     : `<div style="margin-bottom:16px;font-family:'Cinzel',serif;font-size:16px;color:var(--gold);">${item}</div>`;
 
@@ -4274,6 +4311,62 @@ function onItemChange() {
   const _maxPr = _prScores.filter(s => s > 0).length ? Math.max(..._prScores.filter(s => s > 0)) : 1;
   prNormFactor = _maxPr > 0 ? 100 / _maxPr : 1;
 
+  // ── RECOMMENDATION ─────────────────────────────────────────────────────────
+  // Determine if open roll or restricted, and who should roll
+  function computeRecommendation() {
+    // Score each needIt player
+    const scored = needIt.map(p => ({
+      p,
+      normPr: Math.round(lootPriorityScore(p) * prNormFactor),
+      epvPct: (() => {
+        const candidateEpv = getPlayerItemEpv(p.name, candidateItemId);
+        if (!candidateEpv) return null;
+        // Best current EPV in relevant slot(s)
+        const gear = gearListingByPlayer[normalizeName(p.name)]?.slots;
+        if (!gear || !relevantSlots) return null;
+        const currentNames = relevantSlots.map(slot => gear[slot]).filter(Boolean);
+        if (!currentNames.length) return null;
+        const currentEpvs = currentNames
+          .map(n => getPlayerItemEpv(p.name, getItemId(n, p.name)))
+          .filter(e => e !== null);
+        if (!currentEpvs.length) return null;
+        const currentEpv = currentEpvs.length > 1
+          ? currentEpvs.reduce((a, b) => a + b, 0)
+          : currentEpvs[0];
+        return currentEpv > 0 ? ((candidateEpv - currentEpv) / currentEpv) * 100 : null;
+      })(),
+    }));
+
+    // Open roll check: no active non-receiver has >5% EPV upgrade
+    const hasUpgrade = scored.some(s => s.epvPct !== null && s.epvPct > 5);
+    if (!hasUpgrade) return { type: 'open', rollers: [] };
+
+    // Restricted: apply gap algorithm to ALL needIt sorted by priority (ignore EPV)
+    const byPrio = scored
+      .filter(s => s.normPr > 0)
+      .sort((a, b) => b.normPr - a.normPr);
+
+    if (!byPrio.length) return { type: 'open', rollers: [] };
+    if (byPrio.length <= 2) return { type: 'restricted', rollers: byPrio };
+
+    // Find the largest relative gap >= 10% within the top 4
+    const topN = byPrio.slice(0, 4);
+    let cutIdx = topN.length; // default: all top-N roll
+    let biggestGap = -1;
+
+    for (let i = 0; i < topN.length - 1; i++) {
+      const gap = (topN[i].normPr - topN[i + 1].normPr) / topN[i].normPr;
+      if (gap >= 0.10 && gap > biggestGap) {
+        biggestGap = gap;
+        cutIdx = i + 1;
+      }
+    }
+
+    return { type: 'restricted', rollers: topN.slice(0, cutIdx) };
+  }
+
+  const recommendation = computeRecommendation();
+
   // Sort needIt by selected column
   function getLootSortVal(p, col) {
     if (col === 'priority') return lootPriorityScore(p);
@@ -4424,11 +4517,11 @@ function onItemChange() {
     };
     if (candidateRank === null) {
       return rewardItemId
-        ? `<span style="${iw}font-size:14px;position:relative;" title="Considered item is not on the BiS list for this player's spec"><a href="https://www.wowhead.com/tbc/item=${rewardItemId}" data-wowhead="item=${rewardItemId}&dataset=tbc&anchor=top" target="_blank" rel="noopener" style="position:absolute;inset:0;z-index:1;"></a><span style="pointer-events:none;">🛑</span></span>`
+        ? `<a href="https://www.wowhead.com/tbc/item=${rewardItemId}" data-wowhead="item=${rewardItemId}&dataset=tbc&anchor=top" target="_blank" rel="noopener" style="${iw}font-size:14px;text-decoration:none;color:inherit;" title="Considered item is not on the BiS list for this player's spec">🛑</a>`
         : `<span style="${iw}font-size:14px;" title="Considered item is not on the BiS list for this player's spec">🛑</span>`;
     } else if (currentRank === null) {
       return rewardItemId
-        ? `<span style="${iw}font-size:14px;color:#d4a017;position:relative;" title="Current item is not on the BiS list for this player's spec"><a href="https://www.wowhead.com/tbc/item=${rewardItemId}" data-wowhead="item=${rewardItemId}&dataset=tbc&anchor=top" target="_blank" rel="noopener" style="position:absolute;inset:0;z-index:1;"></a><span style="pointer-events:none;">⚠</span></span>`
+        ? `<a href="https://www.wowhead.com/tbc/item=${rewardItemId}" data-wowhead="item=${rewardItemId}&dataset=tbc&anchor=top" target="_blank" rel="noopener" style="${iw}font-size:14px;color:#d4a017;text-decoration:none;" title="Current item is not on the BiS list for this player's spec">⚠</a>`
         : `<span style="${iw}font-size:14px;color:#d4a017;" title="Current item is not on the BiS list for this player's spec">⚠</span>`;
     } else if (candidateEpv !== null && currentEpv !== null) {
       const delta = candidateEpv - currentEpv;
