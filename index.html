@@ -3972,6 +3972,8 @@ function onItemChange() {
 
     const playerName = lastRenderData.roles.flatMap(r => r.players)
       .find(p => normalizeName(p.name) === playerKey)?.name || playerKey;
+    const _dbgSpecs = getPlayerBisSpecs(playerName);
+    if (_dbgSpecs.length === 0) console.warn('[BiS] no specs for', playerName, '| playerKey:', playerKey, '| classMap:', classMap[playerKey]);
     const candidateEpv = candidateOnBisForAnyone ? getPlayerItemEpv(playerName, candidateItemId) : null;
     const candidateRank = candidateOnBisForAnyone ? getPlayerItemBisRank(playerName, candidateItemId) : null;
 
