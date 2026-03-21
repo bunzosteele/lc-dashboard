@@ -1143,7 +1143,7 @@
         </div>
 
         <div>
-          <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;color:var(--gold-dim);margin-bottom:8px;">BIS UPGRADE MODIFIER <span style="color:var(--text-dim);font-weight:400;">(×0.5 – ×1.4)</span></div>
+          <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;color:var(--gold-dim);margin-bottom:8px;">BIS UPGRADE MODIFIER <span style="color:var(--text-dim);font-weight:400;">(×0.1 – ×2.0)</span></div>
           <div style="font-family:monospace;font-size:12px;background:var(--bg2);padding:8px 12px;border-left:2px solid var(--gold-dim);color:var(--text-dim);">
             Within ±5%: ×1.0 (sidegrade) &nbsp;|&nbsp; Outside ±5%: ×(1.0 + pct×0.02), upgrades capped at +50%<br>
             Examples: +20%→×1.4 &nbsp;|&nbsp; +50%→×2.0 &nbsp;|&nbsp; −20%→×0.6 &nbsp;|&nbsp; −50%→×0.1 (floor)<br>
@@ -1158,10 +1158,11 @@
             Open Roll — no active non-receiver has a &gt;5% EPV upgrade<br>
             Restricted — at least one active non-receiver has a &gt;5% EPV upgrade<br>
             &nbsp;&nbsp;→ Sort all eligible non-receivers by priority score<br>
-            &nbsp;&nbsp;→ Any gap &gt;50% cuts decisively (item awarded outright) &nbsp;|&nbsp; otherwise find largest gap ≥10%<br>
-            &nbsp;&nbsp;→ Everyone above the cut rolls &nbsp;|&nbsp; Cap at 4 players &nbsp;|&nbsp; ≤2 eligible: all roll
+            &nbsp;&nbsp;→ Exclude anyone below priority 50 &nbsp;|&nbsp; 1 eligible: award outright &nbsp;|&nbsp; 2 eligible: roll if gap &lt;20%<br>
+            &nbsp;&nbsp;→ Find the gap ≥10% that is most disproportionate to the gap before it (top 4)<br>
+            &nbsp;&nbsp;→ Trim roll group until spread between top and bottom is ≤30% &nbsp;|&nbsp; Cap at 4 players
           </div>
-          <div style="margin-top:8px;color:var(--text-dim);">Open Roll applies when no raider stands to benefit meaningfully from the item — it should go to whoever can use it or wants it for off-spec. When the item is a genuine upgrade for someone, the roll is restricted to players whose priority scores are clustered at the top. The gap detection uses relative difference — (score[i] − score[i+1]) / score[i] — so a 20-point gap means more at the top of the range than at the bottom. Gaps larger than 50% are considered decisive — the player above the gap is awarded the item outright with no roll needed. Gaps between 10% and 50% trigger a roll-off among the players above the cut. Gaps smaller than 10% are too close to distinguish. If no gap of 10% or more exists within the top 4, all four roll together. EPV is only used to determine whether a restricted roll is warranted, not to restrict who participates in the roll itself.</div>
+          <div style="margin-top:8px;color:var(--text-dim);">Open Roll when no one has a meaningful EPV upgrade; otherwise restricted. The cut point is the gap ≥10% that is most disproportionate relative to the gap before it — e.g. 100, 89, 74, 63 cuts after 89 because 89→74 (17%) jumps relative to 100→89 (11%), while 74→63 (15%) does not. EPV determines open vs restricted only, not who participates in the roll.</div>
         </div>
 
       </div>
@@ -4569,23 +4570,40 @@ function onItemChange() {
     if (!hasUpgrade) return { type: 'open', rollers: [] };
     const byPrio = scored.filter(s => s.normPr > 0).sort((a, b) => b.normPr - a.normPr);
     if (!byPrio.length) return { type: 'open', rollers: [] };
-    if (byPrio.length <= 2) return { type: 'restricted', rollers: byPrio };
-    const topN = byPrio.slice(0, 4);
+    if (byPrio.length === 1) return { type: 'restricted', rollers: byPrio };
+    if (byPrio.length === 2) {
+      // With only 2 eligible, roll together if gap < 20%, otherwise award to top
+      const gap = (byPrio[0].normPr - byPrio[1].normPr) / byPrio[0].normPr;
+      return { type: 'restricted', rollers: gap < 0.20 ? byPrio : [byPrio[0]] };
+    }
+    // Filter out anyone below priority 50, then take top 4
+    const topN = byPrio.filter(s => s.normPr >= 50).slice(0, 4);
+    if (!topN.length) return { type: 'open', rollers: [] };
+    if (topN.length === 1) return { type: 'restricted', rollers: topN };
+
     let cutIdx = topN.length;
-    // Pass 1: decisive gap — any gap > 50% cuts immediately (item awarded outright)
+    // Find cut: the gap that is both >= 10% AND scores highest on (gap * ratio over previous gap)
+    // This finds gaps that are large AND much bigger than the gap that preceded them
+    const gaps = [];
     for (let i = 0; i < topN.length - 1; i++) {
-      const gap = (topN[i].normPr - topN[i + 1].normPr) / topN[i].normPr;
-      if (gap > 0.50) { cutIdx = i + 1; break; }
+      gaps.push((topN[i].normPr - topN[i + 1].normPr) / topN[i].normPr);
     }
-    // Pass 2: if no decisive gap, find the biggest gap >= 10%
-    if (cutIdx === topN.length) {
-      let biggestGap = -1;
-      for (let i = 0; i < topN.length - 1; i++) {
-        const gap = (topN[i].normPr - topN[i + 1].normPr) / topN[i].normPr;
-        if (gap >= 0.10 && gap > biggestGap) { biggestGap = gap; cutIdx = i + 1; }
-      }
+    let bestScore = -1;
+    for (let i = 0; i < gaps.length; i++) {
+      if (gaps[i] < 0.10) continue;
+      const prevGap = i > 0 ? gaps[i - 1] : 0;
+      const ratio = prevGap > 0 ? gaps[i] / prevGap : gaps[i] * 10;
+      const score = gaps[i] * ratio;
+      if (score > bestScore) { bestScore = score; cutIdx = i + 1; }
     }
-    return { type: 'restricted', rollers: topN.slice(0, cutIdx) };
+    // Enforce max 30% spread: trim from the bottom until spread <= 30%
+    let rollers = topN.slice(0, cutIdx);
+    while (rollers.length > 1) {
+      const spread = (rollers[0].normPr - rollers[rollers.length - 1].normPr) / rollers[0].normPr;
+      if (spread <= 0.30) break;
+      rollers = rollers.slice(0, rollers.length - 1);
+    }
+    return { type: 'restricted', rollers };
   }
   recommendation = computeRecommendation();
 
