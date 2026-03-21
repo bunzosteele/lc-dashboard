@@ -4515,8 +4515,8 @@ function onItemChange() {
     const { mult, hard, soft } = prioMultiplier(p);
     const { mult: bisMult, reason: bisReason } = bisMultiplier(p);
     const adjScore = prScore * mult * bisMult;
-    const normPr = Math.round(adjScore * prNormFactor * 10) / 10;
-    const displayPr = normPr % 1 === 0 ? normPr.toFixed(0) : normPr.toFixed(1);
+    const normPr = Math.round(adjScore * prNormFactor);
+    const displayPr = normPr.toFixed(0);
     const prStr = prScore > 0 ? displayPr : '—';
     const prCol = prScore > 0 ? priorityColor(normPr) : 'var(--text-dim)';
     const prioLines = [];
