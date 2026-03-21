@@ -4314,17 +4314,20 @@ function onItemChange() {
   // ── RECOMMENDATION ─────────────────────────────────────────────────────────
   // Determine if open roll or restricted, and who should roll
   function computeRecommendation() {
+    // Resolve these locally since they're declared later in outer scope
+    const _candId = getItemId(item);
+    const _relSlots = getRelevantSlots(item);
+
     // Score each needIt player
     const scored = needIt.map(p => ({
       p,
       normPr: Math.round(lootPriorityScore(p) * prNormFactor),
       epvPct: (() => {
-        const candidateEpv = getPlayerItemEpv(p.name, candidateItemId);
+        const candidateEpv = getPlayerItemEpv(p.name, _candId);
         if (!candidateEpv) return null;
-        // Best current EPV in relevant slot(s)
         const gear = gearListingByPlayer[normalizeName(p.name)]?.slots;
-        if (!gear || !relevantSlots) return null;
-        const currentNames = relevantSlots.map(slot => gear[slot]).filter(Boolean);
+        if (!gear || !_relSlots) return null;
+        const currentNames = _relSlots.map(slot => gear[slot]).filter(Boolean);
         if (!currentNames.length) return null;
         const currentEpvs = currentNames
           .map(n => getPlayerItemEpv(p.name, getItemId(n, p.name)))
