@@ -3373,6 +3373,141 @@ const ROLE_CLASS_TO_BIS_SPECS = {
   'Healers|Druid':        ['Tree'],
 };
 
+// ── Token Item Mapping ──────────────────────────────────────────────────────
+// Maps token item IDs -> spec code -> reward item ID
+// Druids, Paladins, Warriors, Shamans, Priests have spec-specific tier pieces
+const TOKEN_REWARDS = {
+  // ── T4 Fallen tokens ─────────────────────────────────────────────────────
+  // Champion = Paladin, Rogue, Shaman | Defender = Warrior, Priest, Druid | Hero = Hunter, Mage, Warlock
+
+  // Pauldrons of the Fallen Champion (Shoulder)
+  29763: { Heal: 30127, Tank: 30133, Ret: 30138, Rog: 29047, Ele: 29031, Enh: 29031, Resto: 29037 },
+  // Pauldrons of the Fallen Defender (Shoulder)
+  29764: { Bear: 29089, Cat: 29095, Owl: 29095, Tree: 29095, Holy: 29054, Shad: 29060, Prot: 30194, Fury: 30168, Arms: 30168 },
+  // Pauldrons of the Fallen Hero (Shoulder)
+  29762: { BM: 30143, SV: 30143, Arc: 30154, Fire: 30154, Aff: 30163, Dest: 30163 },
+  // Chestguard of the Fallen Champion (Chest)
+  29754: { Heal: 30123, Tank: 30129, Ret: 30134, Rog: 29045, Ele: 29029, Enh: 29038, Resto: 29033 },
+  // Chestguard of the Fallen Defender (Chest)
+  29753: { Bear: 29087, Cat: 29091, Owl: 29091, Tree: 29096, Holy: 29050, Shad: 29056, Prot: 30185, Fury: 30164, Arms: 30164 },
+  // Chestguard of the Fallen Hero (Chest)
+  29755: { BM: 30139, SV: 30139, Arc: 30150, Fire: 30150, Aff: 28964, Dest: 28964 },
+  // Leggings of the Fallen Champion (Legs)
+  29766: { Heal: 30126, Tank: 30132, Ret: 30137, Rog: 29046, Ele: 29030, Enh: 29036, Resto: 29030 },
+  // Leggings of the Fallen Defender (Legs)
+  29767: { Bear: 29088, Cat: 29094, Owl: 29094, Tree: 29099, Holy: 29059, Shad: 29053, Prot: 30192, Fury: 30167, Arms: 30167 },
+  // Leggings of the Fallen Hero (Legs)
+  29765: { BM: 30142, SV: 30142, Arc: 30153, Fire: 30153, Aff: 28966, Dest: 28966 },
+  // Magtheridon's Head (Finger)
+  32385: { Heal: 28790, Tank: 28792, Ret: 28791, Prot: 28792, Fury: 28791, Arms: 28791, Bear: 28791, Cat: 28791, Owl: 28793, Tree: 28790, Holy: 28790, Shad: 28793, Ele: 28793, Enh: 28791, Resto: 28790, Arc: 28793, Fire: 28793, Aff: 28793, Dest: 28793, Rog: 28791, BM: 28791, SV: 28791 },
+
+  // ── T5 Vanquished tokens ─────────────────────────────────────────────────
+  // Champion = Paladin, Rogue, Shaman | Defender = Warrior, Priest, Druid | Hero = Hunter, Mage, Warlock
+
+  // Shoulderguards of the Vanquished Champion (Shoulder) — id:30242
+  30242: { Heal: 30998, Tank: 30997, Ret: 30996, Rog: 30149, Ele: 31023, Enh: 31022, Resto: 31024 },
+  // Shoulderguards of the Vanquished Defender (Shoulder) — id:30243
+  30243: { Bear: 30235, Cat: 30235, Owl: 30235, Tree: 30235, Holy: 31069, Shad: 31070, Prot: 30122, Fury: 30122, Arms: 30122 },
+  // Shoulderguards of the Vanquished Hero (Shoulder) — id:30244
+  30244: { BM: 30143, SV: 30143, Arc: 30210, Fire: 30210, Aff: 30215, Dest: 30215 },
+  // Chestguard of the Vanquished Champion (Chest) — id:30236
+  30236: { Heal: 30991, Tank: 30990, Ret: 30992, Rog: 30144, Ele: 31017, Enh: 31016, Resto: 31018 },
+  // Chestguard of the Vanquished Defender (Chest) — id:30237
+  30237: { Bear: 30231, Cat: 30231, Owl: 30231, Tree: 30231, Holy: 31066, Shad: 31065, Prot: 30118, Fury: 30113, Arms: 30113 },
+  // Chestguard of the Vanquished Hero (Chest) — id:30238
+  30238: { BM: 30139, SV: 30139, Arc: 30196, Fire: 30196, Aff: 30214, Dest: 30214 },
+  // Leggings of the Vanquished Champion (Legs) — id:30245
+  30245: { Heal: 30995, Tank: 30993, Ret: 30993, Rog: 30148, Ele: 31020, Enh: 31019, Resto: 31021 },
+  // Leggings of the Vanquished Defender (Legs) — id:30246
+  30246: { Bear: 30229, Cat: 30229, Owl: 30234, Tree: 30234, Holy: 31068, Shad: 31067, Prot: 30116, Fury: 30117, Arms: 30117 },
+  // Leggings of the Vanquished Hero (Legs) — id:30247
+  30247: { BM: 30142, SV: 30142, Arc: 30207, Fire: 30207, Aff: 30213, Dest: 30213 },
+  // Gloves of the Vanquished Champion (Hands) — id:30239
+  30239: { Heal: 30985, Tank: 30982, Ret: 30983, Rog: 30145, Ele: 31008, Enh: 31007, Resto: 31011 },
+  // Gloves of the Vanquished Defender (Hands) — id:30240
+  30240: { Bear: 30233, Cat: 30233, Owl: 30233, Tree: 30233, Holy: 31060, Shad: 31061, Prot: 30119, Fury: 30119, Arms: 30119 },
+  // Gloves of the Vanquished Hero (Hands) — id:30241
+  30241: { BM: 29085, SV: 29085, Arc: 30205, Fire: 30205, Aff: 30211, Dest: 30211 },
+  // Helm of the Vanquished Champion (Head) — id:30248
+  30248: { Heal: 30987, Tank: 30989, Ret: 30988, Rog: 30146, Ele: 31014, Enh: 31012, Resto: 31015 },
+  // Helm of the Vanquished Defender (Head) — id:30249
+  30249: { Bear: 30233, Cat: 30233, Owl: 30233, Tree: 30233, Holy: 31063, Shad: 31064, Prot: 30120, Fury: 30115, Arms: 30115 },
+  // Helm of the Vanquished Hero (Head) — id:30250
+  30250: { BM: 29081, SV: 29081, Arc: 30206, Fire: 30206, Aff: 30212, Dest: 30212 },
+
+  // ── T6 Forgotten tokens ───────────────────────────────────────────────────
+  // Conqueror = Paladin, Priest, Warlock | Protector = Warrior, Hunter, Shaman | Vanquisher = Rogue, Mage, Druid
+
+  // Gloves of the Forgotten Conqueror (Hands) — id:31092, Azgalor
+  31092: { Heal: 30985, Tank: 30982, Ret: 30983, Holy: 31060, Shad: 31061, Aff: 31050, Dest: 31050 },
+  // Gloves of the Forgotten Protector (Hands) — id:31094, Azgalor
+  31094: { Prot: 30119, Fury: 30119, Arms: 30119, BM: 31008, SV: 31008, Ele: 31008, Enh: 31007, Resto: 31011 },
+  // Gloves of the Forgotten Vanquisher (Hands) — id:31093, Azgalor
+  31093: { Rog: 31026, Arc: 31055, Fire: 31055, Bear: 31034, Cat: 31032, Owl: 31032, Tree: 31032 },
+  // Helm of the Forgotten Conqueror (Head) — id:31095, Archimonde
+  31095: { Heal: 30987, Tank: 30989, Ret: 30988, Holy: 31063, Shad: 31064, Aff: 31051, Dest: 31051 },
+  // Helm of the Forgotten Protector (Head) — id:31097, Archimonde
+  31097: { Prot: 30120, Fury: 30115, Arms: 30115, BM: 31014, SV: 31014, Ele: 31014, Enh: 31012, Resto: 31015 },
+  // Helm of the Forgotten Vanquisher (Head) — id:31096, Archimonde
+  31096: { Rog: 31027, Arc: 31056, Fire: 31056, Bear: 31039, Cat: 31039, Owl: 31039, Tree: 31039 },
+  // Shoulderguards of the Forgotten Conqueror (Shoulder) — id:31098, Mother Shahraz
+  31098: { Heal: 30998, Tank: 30997, Ret: 30996, Holy: 31069, Shad: 31070, Aff: 31054, Dest: 31054 },
+  // Shoulderguards of the Forgotten Protector (Shoulder) — id:31100, Mother Shahraz
+  31100: { Prot: 30979, Fury: 30979, Arms: 30979, BM: 31006, SV: 31006, Ele: 31023, Enh: 31022, Resto: 31024 },
+  // Shoulderguards of the Forgotten Vanquisher (Shoulder) — id:31099, Mother Shahraz
+  31099: { Rog: 31030, Arc: 31059, Fire: 31059, Bear: 31049, Cat: 31047, Owl: 31047, Tree: 31047 },
+  // Leggings of the Forgotten Conqueror (Legs) — id:31101, Illidari Council
+  31101: { Heal: 30995, Tank: 30993, Ret: 30993, Holy: 31068, Shad: 31067, Aff: 31053, Dest: 31053 },
+  // Leggings of the Forgotten Protector (Legs) — id:31103, Illidari Council
+  31103: { Prot: 30116, Fury: 30117, Arms: 30117, BM: 31020, SV: 31020, Ele: 31020, Enh: 31019, Resto: 31021 },
+  // Leggings of the Forgotten Vanquisher (Legs) — id:31102, Illidari Council
+  31102: { Rog: 31029, Arc: 31058, Fire: 31058, Bear: 31045, Cat: 31044, Owl: 31044, Tree: 31044 },
+  // Chestguard of the Forgotten Conqueror (Chest) — id:31089, Illidan
+  31089: { Heal: 30991, Tank: 30990, Ret: 30992, Holy: 31066, Shad: 31065, Aff: 31052, Dest: 31052 },
+  // Chestguard of the Forgotten Protector (Chest) — id:31091, Illidan
+  31091: { Prot: 30975, Fury: 30975, Arms: 30975, BM: 31017, SV: 31017, Ele: 31017, Enh: 31016, Resto: 31018 },
+  // Chestguard of the Forgotten Vanquisher (Chest) — id:31090, Illidan
+  31090: { Rog: 31028, Arc: 31057, Fire: 31057, Bear: 31043, Cat: 31041, Owl: 31041, Tree: 31041 },
+  // Bracers of the Forgotten Conqueror (Wrist) — id:34853, Kalecgos/Eredar Twins
+  34853: { Heal: 34435, Tank: 34434, Ret: 34434, Holy: 34436, Shad: 34436, Aff: 34436, Dest: 34436 },
+  // Bracers of the Forgotten Protector (Wrist) — id:34854, Kalecgos/Eredar Twins
+  34854: { Prot: 34444, Fury: 34444, Arms: 34444, BM: 34446, SV: 34446, Ele: 34446, Enh: 34445, Resto: 34445 },
+  // Bracers of the Forgotten Vanquisher (Wrist) — id:34852, Kalecgos/Eredar Twins
+  34852: { Rog: 34448, Arc: 34447, Fire: 34447, Bear: 34444, Cat: 34444, Owl: 34447, Tree: 34444 },
+  // Belt of the Forgotten Conqueror (Waist) — id:34856, Brutallus/Eredar Twins
+  34856: { Heal: 34434, Tank: 34434, Ret: 34434, Holy: 34436, Shad: 34436, Aff: 34541, Dest: 34541 },
+  // Belt of the Forgotten Protector (Waist) — id:34857, Brutallus/Eredar Twins
+  34857: { Prot: 34556, Fury: 34556, Arms: 34556, BM: 34554, SV: 34554, Ele: 34555, Enh: 34555, Resto: 34555 },
+  // Belt of the Forgotten Vanquisher (Waist) — id:34855, Brutallus/Eredar Twins
+  34855: { Rog: 34558, Arc: 34557, Fire: 34557, Bear: 34554, Cat: 34554, Owl: 34557, Tree: 34554 },
+  // Boots of the Forgotten Conqueror (Feet) — id:34859, Felmyst/Eredar Twins
+  34859: { Heal: 34434, Tank: 34434, Ret: 34434, Holy: 34436, Shad: 34436, Aff: 34564, Dest: 34564 },
+  // Boots of the Forgotten Protector (Feet) — id:34860, Felmyst/Eredar Twins
+  34860: { Prot: 34571, Fury: 34571, Arms: 34571, BM: 34572, SV: 34572, Ele: 34573, Enh: 34573, Resto: 34573 },
+  // Boots of the Forgotten Vanquisher (Feet) — id:34858, Felmyst/Eredar Twins
+  34858: { Rog: 34575, Arc: 34574, Fire: 34574, Bear: 34572, Cat: 34572, Owl: 34574, Tree: 34572 },
+};
+
+// Given a token item ID and player name, return the reward item ID for their spec
+// Returns null if no mapping exists
+function getTokenRewardId(tokenItemId, playerName) {
+  const rewards = TOKEN_REWARDS[tokenItemId];
+  if (!rewards) return null;
+  const specs = getPlayerBisSpecs(playerName);
+  for (const spec of specs) {
+    if (rewards[spec] != null) return rewards[spec];
+  }
+  return null;
+}
+
+// Get the effective item ID for BiS lookups — resolves tokens to their class reward
+function getEffectiveItemId(itemName, playerName) {
+  const id = getItemId(itemName);
+  if (!id) return null;
+  const rewardId = getTokenRewardId(id, playerName);
+  return rewardId || id;
+}
+
 // Get the BiS specs for a player given their role and class
 function getPlayerBisSpecs(playerName) {
   const normName = normalizeName(playerName);
@@ -3390,17 +3525,18 @@ function getPlayerBisSpecs(playerName) {
   return specs;
 }
 
-// Get the best EPV for an item ID for a player across all their applicable specs, for a given phase
 // Get the best EPV for an item across ALL phases for a player's applicable specs
+// Automatically resolves token items (tier tokens, Magtheridon's Head) to class rewards
 function getPlayerItemEpv(playerName, itemId) {
   const specs = getPlayerBisSpecs(playerName);
   if (!specs.length || !itemId) return null;
+  const effectiveId = getTokenRewardId(itemId, playerName) || itemId;
   let best = null;
   for (const spec of specs) {
     if (!bisData[spec]) continue;
     for (const items of Object.values(bisData[spec])) {
       for (const [id, rank, p, epv100] of items) {
-        if (id === itemId) {
+        if (id === effectiveId) {
           const epv = epv100 / 100;
           if (best === null || epv > best) best = epv;
         }
@@ -3411,15 +3547,17 @@ function getPlayerItemEpv(playerName, itemId) {
 }
 
 // Get the best BiS rank for an item across ALL phases for a player's applicable specs
+// Automatically resolves token items to class rewards
 function getPlayerItemBisRank(playerName, itemId) {
   const specs = getPlayerBisSpecs(playerName);
   if (!specs.length || !itemId) return null;
+  const effectiveId = getTokenRewardId(itemId, playerName) || itemId;
   let best = null;
   for (const spec of specs) {
     if (!bisData[spec]) continue;
     for (const items of Object.values(bisData[spec])) {
       for (const [id, rank, p] of items) {
-        if (id === itemId) {
+        if (id === effectiveId) {
           if (best === null || rank < best) best = rank;
         }
       }
@@ -4260,8 +4398,12 @@ function onItemChange() {
   const candidateItemId = getItemId(item);
 
   // Check if candidate is on BiS for anyone (any phase) — if not, hide all indicators
-  const candidateOnBisForAnyone = candidateItemId
-    ? Object.values(bisData).some(slots => Object.values(slots).some(items => items.some(([id]) => id === candidateItemId)))
+  // For token items, check if any class reward is on any BiS list
+  const _tokenRewards = candidateItemId ? Object.values(TOKEN_REWARDS[candidateItemId] || {}) : [];
+  const _checkIds = candidateItemId ? [candidateItemId, ..._tokenRewards] : [];
+  const candidateOnBisForAnyone = _checkIds.length > 0
+    ? Object.values(bisData).some(slots => Object.values(slots).some(items =>
+        items.some(([id]) => _checkIds.includes(id))))
     : false;
 
   // Detect if candidate is a two-handed weapon
