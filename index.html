@@ -1129,7 +1129,7 @@
             LootMod = 1.0 − percentile × 0.667
           </div>
           <div style="margin-top:8px;color:var(--text-dim);">
-            Loot Score = sum of weighted EPV across all items received ÷ raids attended, rounded to the nearest integer. Each item's weighted EPV = player's EPV for that item × the number of BiS lists it appears on across all specs. Items contested by many specs (e.g. a ring on 8 BiS lists) are worth more than items only one spec wants. Items not on any BiS list contribute 0. Dividing by raids attended normalises for tenure.<br><br>
+            Loot Score = sum of weighted EPV across all items received ÷ raids attended, rounded to the nearest integer. Each item's weighted EPV = player's EPV × log(lists+1)/log(3) × avg(1/rank)^1.5. The log scaling gives ~1.63x at 5 lists and ~2.85x at 22 lists. The rank score (average of 1/rank across all lists) is raised to the power of 1.5 to amplify the penalty for items ranked poorly despite being contested — e.g. a weapon appearing near the bottom of many lists scores much lower than a trinket ranking near the top of the same number of lists. Items not on any BiS list contribute 0. Dividing by raids attended normalises for tenure.<br><br>
             The modifier is a continuous curve within each role group. The player at the lowest percentile receives ×1.0 — no penalty. The player at the highest percentile receives ×0.33.
           </div>
         </div>
@@ -1679,11 +1679,63 @@ function getBisListCount(itemId) {
 }
 
 // Get the weighted EPV for an item for a player: player's EPV × number of BiS lists it appears on
+// Log base 3 for list count scaling: gives ~2.85x at 22 lists, ~1.63x at 5 lists
+const BIS_LOG_BASE = 3;
+// Rank score exponent: amplifies penalty for items ranked poorly across their lists
+const BIS_RANK_EXP = 2;
+
+function getBisRankScore(itemId) {
+  // Average of 1/rank across all BiS lists the item (or token rewards) appears on
+  // For token items: compute per-reward then average across rewards
+  const rewardIds = TOKEN_REWARDS[itemId]
+    ? [...new Set(Object.values(TOKEN_REWARDS[itemId]))]
+    : [itemId];
+  const isToken = !!TOKEN_REWARDS[itemId];
+
+  if (isToken) {
+    const rewardScores = rewardIds.map(rid => {
+      const entries = [];
+      for (const slots of Object.values(bisData)) {
+        for (const items of Object.values(slots)) {
+          const matching = items.filter(e => e[0] === rid);
+          if (matching.length) {
+            const best = matching.reduce((a, b) => a[1] < b[1] ? a : b);
+            entries.push(best[1]);
+          }
+        }
+      }
+      return entries.length ? entries.reduce((s, r) => s + 1/r, 0) / entries.length : 0;
+    }).filter(s => s > 0);
+    return rewardScores.length ? rewardScores.reduce((a, b) => a + b, 0) / rewardScores.length : 0;
+  } else {
+    const entries = [];
+    for (const slots of Object.values(bisData)) {
+      for (const items of Object.values(slots)) {
+        const matching = items.filter(e => e[0] === itemId);
+        if (matching.length) {
+          const best = matching.reduce((a, b) => a[1] < b[1] ? a : b);
+          entries.push(best[1]);
+        }
+      }
+    }
+    return entries.length ? entries.reduce((s, r) => s + 1/r, 0) / entries.length : 0;
+  }
+}
+
+function isTwoHandedItem(itemId) {
+  if (!itemId) return false;
+  return Object.values(bisData).some(slots => (slots['Two Hand'] || []).some(([id]) => id === itemId));
+}
+
 function getWeightedItemEpv(playerName, itemId) {
   const epv = getPlayerItemEpv(playerName, itemId);
   if (!epv) return 0;
   const listCount = getBisListCount(itemId);
-  return epv * (listCount || 1);
+  if (!listCount) return 0;
+  const logMult = Math.log(listCount + 1) / Math.log(BIS_LOG_BASE);
+  const rankScore = getBisRankScore(itemId);
+  const twoHandPenalty = isTwoHandedItem(itemId) ? 0.5 : 1.0;
+  return epv * logMult * Math.pow(rankScore, BIS_RANK_EXP) * twoHandPenalty;
 }
 
 function computePointsByPlayer(roles) {
@@ -2865,7 +2917,10 @@ function toggleLoot(td, playerName) {
       const epv = itemId ? getPlayerItemEpv(playerName, itemId) : null;
       const weightedEpv = itemId ? getWeightedItemEpv(playerName, itemId) : 0;
       const listCount = itemId ? getBisListCount(itemId) : 0;
-      const epvTip = ` title="EPV: ${epv ? epv.toFixed(1) : '0'} × ${listCount || 1} lists = ${weightedEpv.toFixed(1)}"`;
+      const logMult = listCount ? (Math.log(listCount + 1) / Math.log(BIS_LOG_BASE)) : 0;
+      const rankScore = itemId ? getBisRankScore(itemId) : 0;
+      const _is2h = itemId ? isTwoHandedItem(itemId) : false;
+      const epvTip = ` title="EPV: ${epv ? epv.toFixed(1) : '0'} × ${logMult.toFixed(2)} (log ${listCount} lists) × ${rankScore.toFixed(3)}^2 (rank)${_is2h ? ' × 0.5 (2H)' : ''} = ${weightedEpv.toFixed(1)}"`;
       return `<span class="loot-item" style="border-color:${col};background:${col}18;"${epvTip}>${itemLink(name, name)}</span>`;
     }).join('')}</div>`;
   }
