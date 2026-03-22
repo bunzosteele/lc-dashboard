@@ -1497,14 +1497,14 @@ function getBisEntriesForItem(itemId) {
   return entries;
 }
 
-// Get best BiS rank for an item across all phases for a given spec
+// Get best EPV-derived rank for an item across all phases for a given spec
 function getBisRank(itemId, spec) {
   if (!bisData[spec]) return null;
   let best = null;
-  for (const items of Object.values(bisData[spec])) {
-    for (const [id, rank] of items) {
-      if (id === itemId && (best === null || rank < best)) best = rank;
-    }
+  for (const slotItems of Object.values(bisData[spec])) {
+    if (!slotItems.some(e => e[0] === itemId)) continue;
+    const r = getEpvDerivedRank(itemId, slotItems);
+    if (r !== null && (best === null || r < best)) best = r;
   }
   return best;
 }
@@ -1524,17 +1524,14 @@ function getBisEpv(itemId, spec) {
   return best;
 }
 
-// Get all specs that consider an item BiS (any phase)
+// Get all specs that consider an item BiS (any phase), sorted by EPV-derived rank
 function getBisSpecsForItem(itemId) {
   const specs = [];
   for (const [spec, slots] of Object.entries(bisData)) {
-    for (const items of Object.values(slots)) {
-      for (const [id, rank] of items) {
-        if (id === itemId) {
-          specs.push({ spec, rank });
-          break;
-        }
-      }
+    for (const slotItems of Object.values(slots)) {
+      if (!slotItems.some(e => e[0] === itemId)) continue;
+      const rank = getEpvDerivedRank(itemId, slotItems);
+      if (rank !== null) { specs.push({ spec, rank }); break; }
     }
   }
   return specs.sort((a, b) => a.rank - b.rank);
@@ -1684,8 +1681,38 @@ const BIS_LOG_BASE = 3;
 // Rank score exponent: amplifies penalty for items ranked poorly across their lists
 const BIS_RANK_EXP = 2;
 
+function getEpvDerivedRank(itemId, slotItems) {
+  // Rank item by EPV within each phase it appears in, return best (lowest) rank across phases
+  // This prevents phase 5 items from depressing the rank of a phase 1 item
+  const itemPhases = new Map();
+  for (const e of slotItems) {
+    if (e[0] === itemId) {
+      const cur = itemPhases.get(e[2]) || 0;
+      if (e[3] > cur) itemPhases.set(e[2], e[3]);
+    }
+  }
+  if (!itemPhases.size) return null;
+  let bestRank = null;
+  for (const [phase, itemEpv] of itemPhases) {
+    const phaseEpvs = new Map();
+    for (const e of slotItems) {
+      if (e[2] === phase) {
+        const cur = phaseEpvs.get(e[0]) || 0;
+        if (e[3] > cur) phaseEpvs.set(e[0], e[3]);
+      }
+    }
+    let rank = 1;
+    for (const [id, epv] of phaseEpvs) {
+      if (id !== itemId && epv > itemEpv) rank++;
+    }
+    if (bestRank === null || rank < bestRank) bestRank = rank;
+  }
+  return bestRank;
+}
+
 function getBisRankScore(itemId) {
-  // Average of 1/rank across all BiS lists the item (or token rewards) appears on
+  // Average of 1/epvRank across all BiS lists the item (or token rewards) appears on
+  // EPV rank = position when items are sorted by EPV descending (ignoring stored rank field)
   // For token items: compute per-reward then average across rewards
   const rewardIds = TOKEN_REWARDS[itemId]
     ? [...new Set(Object.values(TOKEN_REWARDS[itemId]))]
@@ -1694,31 +1721,27 @@ function getBisRankScore(itemId) {
 
   if (isToken) {
     const rewardScores = rewardIds.map(rid => {
-      const entries = [];
+      const ranks = [];
       for (const slots of Object.values(bisData)) {
-        for (const items of Object.values(slots)) {
-          const matching = items.filter(e => e[0] === rid);
-          if (matching.length) {
-            const best = matching.reduce((a, b) => a[1] < b[1] ? a : b);
-            entries.push(best[1]);
-          }
+        for (const slotItems of Object.values(slots)) {
+          if (!slotItems.some(e => e[0] === rid)) continue;
+          const r = getEpvDerivedRank(rid, slotItems);
+          if (r !== null) ranks.push(r);
         }
       }
-      return entries.length ? entries.reduce((s, r) => s + 1/r, 0) / entries.length : 0;
+      return ranks.length ? ranks.reduce((s, r) => s + 1/r, 0) / ranks.length : 0;
     }).filter(s => s > 0);
     return rewardScores.length ? rewardScores.reduce((a, b) => a + b, 0) / rewardScores.length : 0;
   } else {
-    const entries = [];
+    const ranks = [];
     for (const slots of Object.values(bisData)) {
-      for (const items of Object.values(slots)) {
-        const matching = items.filter(e => e[0] === itemId);
-        if (matching.length) {
-          const best = matching.reduce((a, b) => a[1] < b[1] ? a : b);
-          entries.push(best[1]);
-        }
+      for (const slotItems of Object.values(slots)) {
+        if (!slotItems.some(e => e[0] === itemId)) continue;
+        const r = getEpvDerivedRank(itemId, slotItems);
+        if (r !== null) ranks.push(r);
       }
     }
-    return entries.length ? entries.reduce((s, r) => s + 1/r, 0) / entries.length : 0;
+    return ranks.length ? ranks.reduce((s, r) => s + 1/r, 0) / ranks.length : 0;
   }
 }
 
@@ -3696,18 +3719,17 @@ function getPlayerItemEpv(playerName, itemId) {
 // Get the best BiS rank for an item across ALL phases for a player's applicable specs
 // Automatically resolves token items to class rewards
 function getPlayerItemBisRank(playerName, itemId) {
+  // Returns EPV-derived rank: number of items with higher EPV + 1, best across all specs/slots
   const specs = getPlayerBisSpecs(playerName);
   if (!specs.length || !itemId) return null;
   const effectiveId = getTokenRewardId(itemId, playerName) || itemId;
   let best = null;
   for (const spec of specs) {
     if (!bisData[spec]) continue;
-    for (const items of Object.values(bisData[spec])) {
-      for (const [id, rank, p] of items) {
-        if (id === effectiveId) {
-          if (best === null || rank < best) best = rank;
-        }
-      }
+    for (const slotItems of Object.values(bisData[spec])) {
+      if (!slotItems.some(e => e[0] === effectiveId)) continue;
+      const r = getEpvDerivedRank(effectiveId, slotItems);
+      if (r !== null && (best === null || r < best)) best = r;
     }
   }
   return best;
