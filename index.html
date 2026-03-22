@@ -1665,10 +1665,14 @@ function parsePoints(text) {
 // Count how many distinct BiS lists (spec+slot combos, any phase) an item appears on
 function getBisListCount(itemId) {
   if (!itemId) return 0;
+  // For token items, count all reward item IDs across all specs
+  const rewardIds = TOKEN_REWARDS[itemId]
+    ? new Set(Object.values(TOKEN_REWARDS[itemId]))
+    : new Set([itemId]);
   let count = 0;
   for (const slots of Object.values(bisData)) {
     for (const items of Object.values(slots)) {
-      if (items.some(([id]) => id === itemId)) count++;
+      if (items.some(([id]) => rewardIds.has(id))) count++;
     }
   }
   return count;
