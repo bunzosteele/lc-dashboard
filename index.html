@@ -1129,7 +1129,7 @@
             LootMod = 1.0 − percentile × 0.667
           </div>
           <div style="margin-top:8px;color:var(--text-dim);">
-            Loot Score = sum of weighted EPV across all items received ÷ raids attended, rounded to the nearest integer. Each item's weighted EPV = avgEPV × log(N+1)/log(3) × avg(1/rank)^1.5 × best^0.5 × 2H-penalty. For tokens, avgEPV = average of best EPV across all unique reward items; for others, max EPV. N = unique reward count (tokens) or BiS list count (others). EPV rank is derived from EPV values, not stored rank. best = max(0.1, 1.0 − (bestRank − 3) × 0.1): top 3 scores 1.0, decaying by 0.1 per rank beyond 3, floored at 0.1. Two-handed weapons receive a ×0.5 penalty. Items not on any BiS list contribute 0. Dividing by raids attended normalises for tenure.<br><br>
+            Loot Score = sum of weighted EPV across all items received ÷ raids attended, rounded to the nearest integer. Each item's weighted EPV = avgEPV × log(N+1)/log(3) × avg(1/rank)^1.5 × best^0.5 × 2H-penalty. For tokens, avgEPV = average of best EPV across all unique reward items; for others, max EPV. N = active roster players who can use the item (each player counted once regardless of spec count); for tokens, capped at unique reward count to reflect rarity. EPV rank is derived from EPV values, not stored rank. best = max(0.1, 1.0 − (bestRank − 3) × 0.1): top 3 scores 1.0, decaying by 0.1 per rank beyond 3, floored at 0.1. Two-handed weapons receive a ×0.5 penalty. Items not on any BiS list contribute 0. Dividing by raids attended normalises for tenure.<br><br>
             The modifier is a continuous curve within each role group. The player at the lowest percentile receives ×1.0 — no penalty. The player at the highest percentile receives ×0.33.
           </div>
         </div>
@@ -1679,10 +1679,11 @@ function getBisListCount(itemId) {
 // Must be called after lastRenderData is populated
 function getEffectiveListCount(itemId) {
   if (!itemId) return 0;
-  if (!TOKEN_REWARDS[itemId]) return getBisListCount(itemId);
 
-  // Determine which specs can use this token's rewards
-  const rewardIds = new Set(Object.values(TOKEN_REWARDS[itemId]));
+  // Determine which specs have this item (or any token reward) on their BiS list
+  const rewardIds = TOKEN_REWARDS[itemId]
+    ? new Set(Object.values(TOKEN_REWARDS[itemId]))
+    : new Set([itemId]);
   const eligibleSpecs = new Set();
   for (const [spec, slots] of Object.entries(bisData)) {
     for (const items of Object.values(slots)) {
@@ -1693,16 +1694,22 @@ function getEffectiveListCount(itemId) {
     }
   }
 
-  // Count active players whose spec is eligible
+  // Count active roster players who have at least one eligible spec
+  // Each player counted at most once regardless of how many specs qualify
+  const roles = lastRenderData.roles || [];
+  if (!roles.length) return getBisListCount(itemId); // fallback before roster loaded
+
+  // For tokens, cap at unique reward count to reflect rarity
+  const isToken = !!TOKEN_REWARDS[itemId];
   let count = 0;
-  for (const role of (lastRenderData.roles || [])) {
+  for (const role of roles) {
     for (const p of role.players) {
       if (p.inactive) continue;
       const specs = getPlayerBisSpecs(p.name);
       if (specs.some(s => eligibleSpecs.has(s))) count++;
     }
   }
-  // Fall back to BiS list count if roster data isn't loaded yet
+  if (isToken) count = Math.min(count, new Set(Object.values(TOKEN_REWARDS[itemId])).size);
   return count || getBisListCount(itemId);
 }
 
@@ -3012,12 +3019,13 @@ function toggleLoot(td, playerName) {
       const epv = itemId ? getAvgRewardEpv(itemId) : null;
       const weightedEpv = itemId ? getWeightedItemEpv(playerName, itemId) : 0;
       const col = lootValueColor(weightedEpv);
-      const listCount = itemId ? getBisListCount(itemId) : 0;
       const effListCount = itemId ? getEffectiveListCount(itemId) : 0;
       const logMult = effListCount ? (Math.log(effListCount + 1) / Math.log(BIS_LOG_BASE)) : 0;
       const { avg: rankAvg, best: rankBest } = itemId ? getBisRankScoreComponents(itemId) : { avg: 0, best: 0 };
       const _is2h = itemId ? isTwoHandedItem(itemId) : false;
-      const epvTip = ` title="avgEPV: ${epv ? epv.toFixed(1) : '0'} × ${logMult.toFixed(2)} (log ${effListCount} lists) × avg^1.5(${rankAvg.toFixed(3)}) × best(${rankBest.toFixed(2)})^0.5${_is2h ? ' × 0.5 (2H)' : ''} = ${weightedEpv.toFixed(1)}"`;
+      const _isToken = itemId ? !!TOKEN_REWARDS[itemId] : false;
+      const _nLabel = _isToken ? `${effListCount} rewards (capped)` : `${effListCount} players`;
+      const epvTip = ` title="avgEPV: ${epv ? epv.toFixed(1) : '0'} × ${logMult.toFixed(2)} (log ${_nLabel}) × avg^1.5(${rankAvg.toFixed(3)}) × best(${rankBest.toFixed(2)})^0.5${_is2h ? ' × 0.5 (2H)' : ''} = ${weightedEpv.toFixed(1)}"`;
       return `<span class="loot-item" style="border-color:${col};background:${col}18;"${epvTip}>${itemLink(name, name)}</span>`;
     }).join('')}</div>`;
   }
