@@ -99,11 +99,16 @@
           ],
           "prioritization": [
             {
+              "multiplier": 1.75,
               "conditions": [
-                "Ranged DPS",
+                "Ranged DPS"
+              ]
+            },
+            {
+              "multiplier": 1.25,
+              "conditions": [
                 "Priest"
-              ],
-              "multiplier": 2
+              ]
             }
           ],
           "roleValues": {
@@ -885,6 +890,1774 @@
             "Paladin",
             "Hunter"
           ]
+        }
+      ]
+    },
+    "Serpentshrine Cavern": {
+      "Hydross the Unstable": [
+        {
+          "item": "Brighthelm of Justice",
+          "notes": "Holy Paladin>OS",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Ring of Lethality",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Scarab of Displacement",
+          "notes": "Tanks",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Fathomstone",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Band of Vile Aggression",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Boots of the Shifting Nightmare",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Living Root of the Wildheart",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Pauldrons of the Wardancer",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Ranger-General's Chestguard",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Robe of Hateful Echoes",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Shoulderpads of the Stranger",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Wraps of Purification",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Idol of the Crescent Goddess",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Blackfathom Warbands",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Band of Vile Agression",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "The Lurker Below": [
+        {
+          "item": "Choker of Animalistic Fury",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Velvet Boots of the Guardian",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Cord of Screaming Terrors",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Boots of Effortless Striking",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Grove-Bands of Remulos",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Tempest-Strider Boots",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Mallet of the Tides",
+          "notes": "Warrior Tank> Warrior Offtank > Paladin Tank",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Glowing Breastplate of Truth",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Bracers of Eradication",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Ancestral Ring of Conquest",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "The Seal of Danzalar",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Earring of Soulful Meditation",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Libram of Absolute Truth",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Leotheras the Blind": [
+        {
+          "item": "Gloves of the Vanquished Champion",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Gloves of the Vanquished Defender",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Gloves of the Vanquished Hero",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Orca-Hide Boots",
+          "notes": "Druid Heals> Shaman Heals",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Coral-Barbed Shoulderpads",
+          "notes": "Shamans",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "True-Aim Stalker Bands",
+          "notes": "Hunters & Hance Shaman",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Fang of the Leviathan",
+          "notes": "Mages & Warlocks>Paladin Tank",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Girdle of the Invulnerable",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Tsunami Talisman",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Fathom-Lord Karathress": [
+        {
+          "item": "Leggings of the Vanquished Champion",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Leggings of the Vanquished Defender",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Leggings of the Vanquished Hero",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Frayed Tether of the Drowned",
+          "notes": "Tanks",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Soul-Strider Boots",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Bloodsea Brigand's Vest",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Fathom-Brooch of the Tidewalker",
+          "notes": "Shamans",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Sextant of Unstable Currents",
+          "notes": "Mages",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "World Breaker",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Morogrim Tidewalker": [
+        {
+          "item": "Pendant of the Lost Ages",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Razor-Scale Battlecloak",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Illidari Shoulderpads",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Gnarled Chestpiece of the Ancients",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Mantle of the Tireless Tracker",
+          "notes": "Enhance Shaman & Hunter",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Girdle of the Tidal Call",
+          "notes": "Enhance Shaman & Hunter",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Talon of Azshara",
+          "notes": "Rogue>Fury Warrior>Tank Warrior",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Warboots of Obliteration",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Pauldrons of the Argent Sentinel",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Band of the Vigilant",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Ring of Sundered Souls",
+          "notes": "Tanks",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Serpent-Coil Braid",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Luminescent Rod of the Naaru",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Lady Vashj": [
+        {
+          "item": "Helm of the Vanquished Champion",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Helm of the Vanquished Defender",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Helm of the Vanquished Hero",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Serpent Spine Longbow",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Vestments of the Sea-Witch",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Fang of Vashj",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Runetotem's Mantle",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Belt of One-Hundred Deaths",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Cobra-Lash Boots",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Lightfathom Scepter",
+          "notes": "Priest, Shaman, Druid, Paladin Equal Prio",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Krakken-Heart Breastplate",
+          "notes": "Warrior DPS & Ret Paladins",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Glorious Gauntlets of Crestfall",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Coral Band of the Revived",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Ring of Endless Coils",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Prism of Inner Calm",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Trash": [
+        {
+          "item": "Pendant of the Perilous",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Boots of Courage Unending",
+          "notes": "Paladin Tank",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Totem of the Maelstrom",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Wildfury Greatstaff",
+          "notes": "Feral Tank> Feral DPS",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Spyglass of the Hidden Fleet",
+          "notes": "Tanks",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ]
+    },
+    "Tempest Keep": {
+      "Al'ar": [
+        {
+          "item": "Phoenix-Wing Cloak",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Mindstorm Wristbands",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Claw of the Phoenix",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Talon of the Phoenix",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Arcanite Steam-Pistol",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Gloves of the Searing Grip",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Fire Crest Breastplate",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Talisman of the Sun King",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Netherbane",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Band of Al'ar",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Phoenix-Ring of Rebirth",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Talon of Al'ar",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Tome of Fiery Redemption",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Void Reaver": [
+        {
+          "item": "Pauldrons of the Vanquished Champion",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Pauldrons of the Vanquished Defender",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Pauldrons of the Vanquished Hero",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Cowl of the Grand Engineer",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Girdle of Zaetar",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Void Reaver Greaves",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Fel-Steel Warhelm",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Wristguards of Determination",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Warp-Spring Coil",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Fel Reaver's Piston",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "High Astromancer Solarian": [
+        {
+          "item": "Trousers of the Astromancer",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Star-Soul Breeches",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Heartrazor",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Vambraces of Ending",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Star-Strider Boots",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Worldstorm Gauntlets",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Boots of the Resilient",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Greaves of the Bloodwarder",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Girdle of the Righteous Path",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Ethereum Life-Staff",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Solarian's Sapphire",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Void Star Talisman",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Wand of the Forgotten Star",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Kael'thas Sunstrider": [
+        {
+          "item": "Chestguard of the Vanquished Champion",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Chestguard of the Vanquished Defender",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Chestguard of the Vanquished Hero",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Sunshower Light Cloak",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Royal Cloak of the Sunstriders",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Thalassian Wildercloak",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Gauntlets of the Sun King",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Crown of the Sun",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Leggings of Murderous Intent",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Sunhawk Leggings",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Rod of the Sun King",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Royal Gauntlets of Silvermoon",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Band of the Ranger-General",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "The Nexus Key",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Twinblade of the Phoenix",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "The Verdant Sphere",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Trash": [
+        {
+          "item": "Seventh Ring of the Tirisfalen",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Mantle of the Elven Kings",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Fire-Cord of the Magus",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Bark-Gloves of Ancient Wisdom",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Girdle of Fallen Stars",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Bands of the Celestial Archer",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ]
+    },
+    "Mount Hyjal": {
+      "Rage Winterchill": [
+        {
+          "item": "Cuffs of Devastation",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Bracers of Martyrdom",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Rejuvenating Bracers",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Deadly Cuffs",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Bracers of the Pathfinder",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Howling Wind Bracers",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Stillwater Boots",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Blessed Adamantite Bracers",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Furious Shackles",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Blood-Stained Pauldrons",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Chronicle of Dark Secrets",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Tracker's Blade",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Anetheron": [
+        {
+          "item": "Anetheron's Noose",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Archbishop's Slippers",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Hatefury Mantle",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Don Alejandro's Money Belt",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Enchanted Leather Sandals",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Golden Links of Restoration",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Quickstrider Moccasins",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Glimmering Steel Mantle",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Bastion of Light",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "The Unbreakable Will",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Blade of Infamy",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Pillar of Ferocity",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Kaz'Rogal": [
+        {
+          "item": "Leggings of Channeled Elements",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Angelista's Sash",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Blue Suede Shoes",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Razorfury Mantle",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Black Featherlight Boots",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Belt of the Crescent Moon",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Valestalker Girdle",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Beast-tamer's Shoulders",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Sun-touched Chain Leggings",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Belt of Seething Fury",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Kaz'rogal's Hardened Heart",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Hammer of Atonement",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Azgalor": [
+        {
+          "item": "Gloves of the Forgotten Conqueror",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Gloves of the Forgotten Vanquisher",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Gloves of the Forgotten Protector",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Don Rodrigo's Poncho",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Shady Dealer's Pantaloons",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Bow-stitched Leggings",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Girdle of Hope",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Glory of the Defender",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Boundless Agony",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Archimonde": [
+        {
+          "item": "Helm of the Forgotten Protector",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Helm of the Forgotten Vanquisher",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Helm of the Forgotten Conqueror",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Robes of Rhonin",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Leggings of Eternity",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Midnight Chestguard",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Mail of Fevered Pursuit",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Savior's Grasp",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Legguards of Endless Rage",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Tempest of Chaos",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Apostle of Argus",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Cataclysm's Edge",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Antonidas's Aegis of Rapt Concentration",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Bristleblitz Striker",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Scepter of Purification",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Trash": [
+        {
+          "item": "Claw of Molten Fury",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Fist of Molten Fury",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Hammer of Judgement",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Boots of the Divine Light",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Chestguard of Relentless Storms",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Nethervoid Cloak",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Pepe's Shroud of Pacification",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Choker of Serrated Blades",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Hellfire-Encased Pendant",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ]
+    },
+    "Black Temple": {
+      "High Warlord Naj'entus": [
+        {
+          "item": "Slippers of the Seacaller",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Mantle of Darkness",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Guise of the Tidal Lurker",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Fists of Mukoa",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Helm of Soothing Currents",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Boots of Oceanic Fury",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Eternium Shell Bracers",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Pearl Inlaid Boots",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Tide-stomper's Greaves",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Ring of Captured Storms",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Ring of Calming Waves",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "The Maelstrom's Fury",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Rising Tide",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Halberd of Desolation",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Supremus": [
+        {
+          "item": "Waistwrap of Infinity",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Nether Shadow Tunic",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Wraps of Precise Flight",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Naturalist's Preserving Cinch",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Bands of the Coming Storm",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Pauldrons of Abyssal Fury",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Band of the Abyssal Lord",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Choker of Endless Nightmares",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "The Brutalizer",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Syphon of the Nathrezim",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Legionkiller",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Felstone Bulwark",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Idol of the White Stag",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Shade of Akama": [
+        {
+          "item": "Amice of Brilliant Light",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Focused Mana Bindings",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Wristbands of Divine Influence",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Kilt of Immortal Nature",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Shadow-walker's Cord",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Shoulders of the Hidden Predator",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Spiritwalker Gauntlets",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Flashfire Girdle",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Grips of Silent Justice",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Praetorian's Legguards",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Myrmidon's Treads",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "The Seeker's Wristguards",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Ring of Deceitful Intent",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Blind-Seers Icon",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Teron Gorefiend": [
+        {
+          "item": "Cowl of Benevolence",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Robe of the Shadow Council",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Botanist's Gloves of Growth",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Insidious Bands",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Softstep Boots of Tracking",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Girdle of Lordaeron's Fallen",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Gauntlets of Enforcement",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Shadowmoon Destroyer's Drape",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Rifle of the Stoic Guardian",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Twisted Blades of Zarak",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Totem of Ancestral Guidance",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Soul Cleaver",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Gurtogg Bloodboil": [
+        {
+          "item": "Garments of Temperance",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Blood-cursed Shoulderpads",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Belt of Primal Majesty",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Vest of Mounting Assault",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Girdle of Stability",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Leggings of Divine Retribution",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Girdle of Mighty Resolve",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Shroud of Forgiveness",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Messenger of Fate",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Staff of Immaculate Recovery",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Unstoppable Aggressor's Ring",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Shadowmoon Insignia",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Wand of Prismatic Focus",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Reliquary of Souls": [
+        {
+          "item": "Gloves of Unfailing Faith",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Elunite Empowered Bracers",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Grips of Damnation",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Naturewarden's Treads",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Boneweave Girdle",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "The Wavemender's Mantle",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Crown of Empowered Fate",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Dreadboots of the Legion",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Naaru-Blessed Life Rod",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Touch of Inspiration",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Torch of the Damned",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Pendant of Titans",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Translucent Spellthread Necklace",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Mother Shahraz": [
+        {
+          "item": "Pauldrons of the Forgotten Conqueror",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Pauldrons of the Forgotten Protector",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Pauldrons of the Forgotten Vanquisher",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Leggings of Devastation",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Shadowmaster's Boots",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Heartshatter Breastplate",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Blade of Savagery",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Nadina's Pendant of Purity",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Tome of the Lightbringer",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "The Illidari Council": [
+        {
+          "item": "Leggings of the Forgotten Conqueror",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Leggings of the Forgotten Vanquisher",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Leggings of the Forgotten Protector",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Belt of Divine Guidance",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Veil of Turning Leaves",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Forest Prowler's Helm",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Helm of the Illidari Shatterer",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Madness of the Betrayer",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Cloak of the Illidari Council",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Illidan Stormrage": [
+        {
+          "item": "Chestguard of the Forgotten Champion",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Chestguard of the Forgotten Vanquisher",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Chestguard of the Forgotten Protector",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Cowl of the Illidari High Lord",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Cursed Vision of Sargeras",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Faceplate of the Impenetrable",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "The Skull of Gul'dan",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Memento of Tyrande",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Shroud of the Highborne",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Bulwark of Azzinoth",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Stormrage Signet Ring",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Crystal Spire of Karabor",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Zhar'doom, Greatstaff of the Devourer",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Shard of Azzinoth",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Black Bow of the Betrayer",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Warglaive of Azzinoth",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Warglaive of Azzinoth (Off-Hand)",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Chestguard of the Forgotten Conqueror",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Off-Hand Warglaive of Azzinoth",
+          "eligibleClasses": [],
+          "prioritization": []
+        }
+      ],
+      "Trash": [
+        {
+          "item": "Illidari Runeshield",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Swiftsteel Bludgeon",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Hammer of Judgement",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Boots of the Divine Light",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Treads of the Den Mother",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Chestguard of Relentless Storms",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Girdle of the Lightbearer",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Pillager's Gauntlets",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Nethervoid Cloak",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Shroud of the Final Stand",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Band of Devastation",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Blessed Band of Karabor",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Choker of Serrated Blades",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Hellfire-Encased Pendant",
+          "eligibleClasses": [],
+          "prioritization": []
+        },
+        {
+          "item": "Ring of Ancient Knowledge",
+          "eligibleClasses": [],
+          "prioritization": []
         }
       ]
     }
