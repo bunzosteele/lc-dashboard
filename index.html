@@ -1035,6 +1035,7 @@
     <button class="group-btn" data-mode="cla" onclick="setGrouping('cla')">CLA</button>
     <button class="group-btn" data-mode="bis" onclick="setGrouping('bis')">BiS</button>
     <button class="group-btn" data-mode="roster" onclick="setGrouping('roster')">Roster</button>
+    <button class="group-btn" data-mode="glossary" onclick="setGrouping('glossary')">Loot Glossary</button>
   </div>
 
   <div class="controls">
@@ -1076,6 +1077,7 @@
         <div id="lootItemDropdown" class="loot-item-dropdown" style="display:none;"></div>
       </div>
     </div>
+    <div id="lootItemNote" style="display:none;text-align:center;padding:10px 16px;font-size:13px;color:var(--text-dim);font-style:italic;border-bottom:1px solid var(--border);margin-bottom:4px;"></div>
     <div id="lootEligible" style="overflow-x:auto;width:100%;"></div>
 
     <div id="lootFormulaPanel" style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px;">
@@ -1148,7 +1150,7 @@
           <div style="font-family:monospace;font-size:12px;background:var(--bg2);padding:8px 12px;border-left:2px solid var(--gold-dim);color:var(--text-dim);">
             Hard Prio: ×1.75 &nbsp;|&nbsp; Soft Prio: ×1.25 &nbsp;|&nbsp; Both: ×2.1875
           </div>
-          <div style="margin-top:8px;color:var(--text-dim);">Set by the loot council to reflect class or spec alignment with a specific item. Hard priority indicates the item is strongly intended for that spec. Soft priority indicates a preference without exclusivity. Both multipliers stack if assigned together.</div>
+          <div style="margin-top:8px;color:var(--text-dim);">Set per item in the Loot Glossary. Multipliers can be assigned to a role, class, or specific raider. Multiple matching multipliers stack multiplicatively — e.g. if Physical DPS receives ×1.75 and Hunter also receives ×1.25, an Enhancement Shaman qualifying for Physical DPS would receive ×1.75 × 1.25 = ×2.1875.</div>
         </div>
 
         <div>
@@ -1342,12 +1344,14 @@ function setGrouping(mode) {
   const isLoot = mode === 'loot';
   const isCla  = mode === 'cla';
   const isBis  = mode === 'bis';
-  const isRoster = mode === 'roster';
+  const isRoster  = mode === 'roster';
+  const isGlossary = mode === 'glossary';
   document.getElementById('lootPanel').style.display   = isLoot   ? 'block' : 'none';
   document.getElementById('claPanel').style.display    = isCla    ? 'block' : 'none';
   document.getElementById('bisPanel').style.display    = isBis    ? 'block' : 'none';
-  document.getElementById('rosterPanel').style.display = isRoster ? 'block' : 'none';
-  document.getElementById('output').style.display      = (!isLoot && !isCla && !isBis && !isRoster) ? 'block' : 'none';
+  document.getElementById('rosterPanel').style.display   = isRoster   ? 'block' : 'none';
+  document.getElementById('glossaryPanel').style.display = isGlossary ? 'block' : 'none';
+  document.getElementById('output').style.display      = (!isLoot && !isCla && !isBis && !isRoster && !isGlossary) ? 'block' : 'none';
   if (isLoot) {
     renderLootDropdowns();
   } else if (isCla) {
@@ -1356,6 +1360,8 @@ function setGrouping(mode) {
     initBisPanel();
   } else if (isRoster) {
     renderRosterPanel();
+  } else if (isGlossary) {
+    renderGlossaryPanel();
   } else if (lastRenderData.roles.length) {
     render(lastRenderData);
   }
@@ -1423,14 +1429,51 @@ const C4 = '#e07830'; // orange
 const C5 = '#c94c4c'; // red    (worst)
 let groupingMode = 'role'; // 'role' | 't45' | 't6'
 
-async function fetchGlossary() {
+let lootGlossary = { raids: {}, valueOverrides: {} }; // loaded from loot-glossary.json
+
+async function loadLootGlossaryFromRepo() {
   try {
-    const text = await fetchSheet(SHEET_ID, '917147935');
-    glossaryData = parseGlossary(text);
-    if (typeof renderLootDropdowns === 'function') renderLootDropdowns();
+    const res = await fetch('./loot-glossary.json?t=' + Date.now());
+    if (!res.ok) { console.warn('loot-glossary.json fetch failed:', res.status); return; }
+    const data = await res.json();
+    if (data && data.raids) {
+      lootGlossary = data;
+      rebuildGlossaryData();
+      console.log('Loaded loot-glossary.json');
+    }
   } catch(e) {
-    addError('Loot Glossary Sheet (gid: 917147935)', e.message);
+    console.warn('loot-glossary.json load error:', e.message);
+    addError('loot-glossary.json', e.message);
   }
+}
+
+function rebuildGlossaryData() {
+  // Rebuild flat glossaryData array from lootGlossary for backward compat
+  const data = [];
+  for (const [raid, bosses] of Object.entries(lootGlossary.raids || {})) {
+    for (const [boss, items] of Object.entries(bosses)) {
+      for (const entry of items) {
+        data.push({
+          raid, boss,
+          item: entry.item,
+          notes: entry.notes || '',
+          eligibleClasses: entry.eligibleClasses || [],
+          eligibleRoles: [], // derived from roleValues keys
+          hardPrio: [], // legacy — replaced by prioritization
+          softPrio: [], // legacy — replaced by prioritization
+          prioritization: entry.prioritization || [],
+          roleValues: entry.roleValues || {},
+        });
+      }
+    }
+  }
+  glossaryData = data;
+  if (typeof renderLootDropdowns === 'function') renderLootDropdowns();
+}
+
+// Legacy stub — no longer fetches from sheet
+async function fetchGlossary() {
+  // Glossary data now comes from loot-glossary.json loaded at startup
 }
 
 function parseCsvRows(text) {
@@ -1866,6 +1909,26 @@ function getWeightedItemEpv(playerName, itemId) {
   return epv * logMult * rankScore * twoHandPenalty;
 }
 
+// Returns the loot value used for loot score calculation:
+// if an override exists in loot-glossary.json, use that; otherwise formula value
+function getItemLootValue(playerName, itemId) {
+  const itemName = getItemNameById(itemId);
+  if (itemName && lootGlossary.valueOverrides?.[itemName] !== undefined) {
+    return lootGlossary.valueOverrides[itemName];
+  }
+  return getWeightedItemEpv(playerName, itemId);
+}
+
+function getItemNameById(itemId) {
+  if (!itemId) return null;
+  for (const v of Object.values(gearItemIds)) {
+    const id   = typeof v === 'object' ? v.id   : v;
+    const name = typeof v === 'object' ? v.name : null;
+    if (id === itemId && name) return name;
+  }
+  return null;
+}
+
 function computePointsByPlayer(roles) {
   const computed = {};
   for (const role of roles) {
@@ -1877,7 +1940,7 @@ function computePointsByPlayer(roles) {
         const itemName = typeof entry === 'object' ? entry.name : entry;
         const itemId = getItemId(itemName, p.name);
         if (!itemId) continue;
-        totalEpv += getWeightedItemEpv(p.name, itemId);
+        totalEpv += getItemLootValue(p.name, itemId);
       }
       const attended = p.attended || 1;
       computed[key] = Math.round(totalEpv / attended);
@@ -2374,7 +2437,7 @@ async function fetchData() {
       fetchSheet(SHEET_ID, '2077814587').catch(e => { throw new Error(`Attendance: ${e.message}`); }),
       fetchLoot(),
       fetchPoints(),
-      fetchGlossary(),
+
       fetchAllClaData(),
     ]);
 
@@ -3041,8 +3104,10 @@ function toggleLoot(td, playerName) {
     html += `<div class="loot-list">${items.map(({name, value}) => {
       const itemId = getItemId(name, playerName);
       const epv = itemId ? getAvgRewardEpv(itemId) : null;
-      const weightedEpv = itemId ? getWeightedItemEpv(playerName, itemId) : 0;
-      const col = lootValueColor(weightedEpv);
+      const formulaEpv = itemId ? getWeightedItemEpv(playerName, itemId) : 0;
+      const lootValue  = itemId ? getItemLootValue(playerName, itemId) : 0;
+      const isOverridden = lootValue !== formulaEpv;
+      const col = lootValueColor(lootValue);
       const effListCount = itemId ? getEffectiveListCount(itemId) : 0;
       const logMult = effListCount ? (Math.log(effListCount + 1) / Math.log(BIS_LOG_BASE)) : 0;
       const { avg: rankAvg, best: rankBest } = itemId ? getBisRankScoreComponents(itemId) : { avg: 0, best: 0 };
@@ -3050,8 +3115,12 @@ function toggleLoot(td, playerName) {
       const _isToken = itemId ? !!TOKEN_REWARDS[itemId] : false;
       const _nLabel = _isToken ? `${effListCount} rewards (capped)` : `${effListCount} players`;
       const _epvLabel = _isToken ? 'avgEPV' : 'maxEPV';
-      const epvTip = ` title="${_epvLabel}: ${epv ? epv.toFixed(1) : '0'} × ${logMult.toFixed(2)} (log ${_nLabel}) × avg^1.5(${rankAvg.toFixed(3)}) × best(${rankBest.toFixed(2)})^0.5${_is2h ? ' × 0.5 (2H)' : ''} = ${weightedEpv.toFixed(1)}"`;
-      return `<span class="loot-item" style="border-color:${col};background:${col}18;"${epvTip}>${itemLink(name, name)}</span>`;
+      const _formulaStr = `${_epvLabel}: ${epv ? epv.toFixed(1) : '0'} × ${logMult.toFixed(2)} (log ${_nLabel}) × avg^1.5(${rankAvg.toFixed(3)}) × best(${rankBest.toFixed(2)})^0.5${_is2h ? ' × 0.5 (2H)' : ''} = ${formulaEpv.toFixed(1)}`;
+      const epvTip = isOverridden
+        ? ` title="Loot Value: ${lootValue.toFixed(1)} (override)&#10;Formula: ${_formulaStr}"`
+        : ` title="${_formulaStr}"`;
+      const _overrideTag = isOverridden ? '<span style="font-size:9px;color:var(--gold-dim);vertical-align:super;">✎</span>' : '';
+      return `<span class="loot-item" style="border-color:${col};background:${col}18;"${epvTip}>${itemLink(name, name)}${_overrideTag}</span>`;
     }).join('')}</div>`;
   }
 
@@ -3168,7 +3237,7 @@ function clearGithubToken() {
   githubToken = '';
   try { localStorage.removeItem('ghToken'); } catch(e) {}
   // If currently in CLA mode, switch back to role view
-  if (['cla','bis','roster'].includes(groupingMode)) setGrouping('role');
+  if (['cla','bis','roster','glossary'].includes(groupingMode)) setGrouping('role');
   updateAuthState();
 }
 
@@ -3614,7 +3683,7 @@ async function loadGearItemIdsFromRepo() {
 }
 
 loadClaSheetsFromRepo().then(async () => {
-  await Promise.all([loadGearItemIdsFromRepo(), loadBisDataFromRepo(), loadRosterFromRepo()]);
+  await Promise.all([loadGearItemIdsFromRepo(), loadBisDataFromRepo(), loadRosterFromRepo(), loadLootGlossaryFromRepo()]);
   // Handle PKCE callback first (page may have been redirected back from WarcraftLogs)
   const wasCallback = await handleWclCallback();
   await fetchData();
@@ -3625,6 +3694,282 @@ loadClaSheetsFromRepo().then(async () => {
   }
 });
 
+
+
+// ── Loot Glossary Panel ──────────────────────────────────────────
+
+async function saveGlossaryToGitHub() {
+  await saveJsonToGitHub('loot-glossary.json', lootGlossary);
+}
+
+function getGlossaryEntry(raid, boss, item) {
+  return (lootGlossary.raids?.[raid]?.[boss] || []).find(e => e.item === item) || null;
+}
+
+function glossaryRaidList() {
+  return Object.keys(lootGlossary.raids || {}).sort();
+}
+function glossaryBossList(raid) {
+  return Object.keys(lootGlossary.raids?.[raid] || {});
+}
+function glossaryItemList(raid, boss) {
+  return (lootGlossary.raids?.[raid]?.[boss] || []).map(e => e.item);
+}
+
+let _glossaryState = { raid: '', boss: '', item: '' };
+
+function renderGlossaryPanel() {
+  const panel = document.getElementById('glossaryPanel');
+  if (!panel) return;
+
+  const { raid, boss, item } = _glossaryState;
+  const raids = glossaryRaidList();
+  const bosses = raid ? glossaryBossList(raid) : [];
+  const items  = (raid && boss) ? glossaryItemList(raid, boss) : [];
+  const entry  = (raid && boss && item) ? getGlossaryEntry(raid, boss, item) : null;
+
+  const ROLES = ['Tanks','Physical DPS','Ranged DPS','Healers'];
+  const CLASSES = ['Druid','Hunter','Mage','Paladin','Priest','Rogue','Shaman','Warlock','Warrior'];
+  const MULTS = [0.5,0.75,1.0,1.25,1.5,1.75,2.0,2.25,2.5];
+
+  const formulaEpv = entry ? (() => {
+    const id = getItemId(entry.item);
+    return id ? getWeightedItemEpv('', id) : 0;
+  })() : 0;
+  const overrideVal = entry ? (lootGlossary.valueOverrides?.[entry.item] ?? null) : null;
+  const displayVal  = overrideVal !== null ? overrideVal : formulaEpv;
+
+  function sel(id, opts, val, onch, extra='') {
+    return `<select id="${id}" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:13px;" onchange="${onch}" ${extra}>
+      ${opts.map(o => typeof o === 'string'
+        ? `<option value="${o}" ${val===o?'selected':''}>${o}</option>`
+        : `<option value="${o.v}" ${val===o.v?'selected':''}>${o.l}</option>`
+      ).join('')}
+    </select>`;
+  }
+
+  panel.innerHTML = `
+    <div style="max-width:900px;margin:0 auto;padding:0 16px;">
+
+      <!-- Header -->
+      <div style="font-family:'Cinzel',serif;font-size:16px;letter-spacing:0.15em;color:var(--gold);margin-bottom:16px;">LOOT GLOSSARY</div>
+
+      <!-- Dropdowns -->
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
+        ${sel('glRaid',  [{v:'',l:'— Raid —'}, ...raids], raid,  'glossarySelectRaid()')}
+        ${sel('glBoss',  [{v:'',l:'— Boss —'}, ...bosses], boss, 'glossarySelectBoss()', !raid?'disabled':'')}
+        ${sel('glItem',  [{v:'',l:'— Item —'}, ...items], item,  'glossarySelectItem()', !(raid&&boss)?'disabled':'')}
+      </div>
+
+      ${entry ? `
+      <!-- Item detail -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+
+        <!-- Loot Value -->
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px;">
+          <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;color:var(--gold-dim);margin-bottom:10px;">LOOT VALUE</div>
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+            <span style="font-size:22px;font-weight:700;color:var(--gold);">${displayVal.toFixed(1)}</span>
+            ${overrideVal !== null ? `<span style="font-size:13px;color:var(--text-dim);">(formula: ${formulaEpv.toFixed(1)})</span>` : `<span style="font-size:13px;color:var(--text-dim);">(formula)</span>`}
+            <div style="display:flex;align-items:center;gap:8px;margin-left:auto;">
+              <input id="glValueInput" type="number" step="0.1" value="${overrideVal !== null ? overrideVal : ''}" placeholder="${formulaEpv.toFixed(1)}"
+                style="width:100px;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:13px;">
+              <button onclick="glossarySaveValue()" style="background:var(--gold-dim);border:none;color:var(--bg);padding:6px 14px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.1em;">SAVE</button>
+              ${overrideVal !== null ? `<button onclick="glossaryClearValue()" style="background:none;border:1px solid var(--border);color:var(--text-dim);padding:6px 10px;border-radius:4px;cursor:pointer;font-size:12px;">Clear override</button>` : ''}
+            </div>
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px;">
+          <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;color:var(--gold-dim);margin-bottom:10px;">NOTES</div>
+          <div style="display:flex;gap:8px;">
+            <input id="glNotesInput" type="text" value="${(entry.notes||'').replace(/"/g,'&quot;')}" placeholder="Prioritization notes shown above loot table…"
+              style="flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:13px;">
+            <button onclick="glossarySaveNotes()" style="background:var(--gold-dim);border:none;color:var(--bg);padding:6px 14px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.1em;">SAVE</button>
+          </div>
+        </div>
+
+        <!-- Prioritization -->
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px;">
+          <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;color:var(--gold-dim);margin-bottom:10px;">PRIORITIZATION</div>
+          ${(entry.prioritization||[]).length ? `
+          <table style="width:100%;border-collapse:collapse;margin-bottom:12px;">
+            <thead><tr style="border-bottom:1px solid var(--border);">
+              <th style="text-align:left;padding:4px 10px;font-size:11px;color:var(--text-dim);">TARGET</th>
+              <th style="text-align:left;padding:4px 10px;font-size:11px;color:var(--text-dim);">MULTIPLIER</th>
+              <th style="padding:4px;"></th>
+            </tr></thead>
+            <tbody>
+              ${(entry.prioritization||[]).map((pr,i) => `
+              <tr style="border-bottom:1px solid var(--border)20;">
+                <td style="padding:6px 10px;color:var(--text);">${pr.target}</td>
+                <td style="padding:6px 10px;">
+                  <select onchange="glossaryUpdatePrioMult(${i}, this.value)" style="background:var(--bg);border:1px solid var(--border);color:var(--gold);padding:3px 6px;border-radius:4px;font-size:13px;">
+                    ${MULTS.map(m => `<option value="${m}" ${pr.multiplier==m?'selected':''}>×${m}</option>`).join('')}
+                  </select>
+                </td>
+                <td style="padding:6px 4px;text-align:right;">
+                  <button onclick="glossaryRemovePrio(${i})" style="background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:13px;padding:2px 6px;">✕</button>
+                </td>
+              </tr>`).join('')}
+            </tbody>
+          </table>` : `<p style="font-size:13px;color:var(--text-dim);margin:0 0 12px;">No prioritization set.</p>`}
+          <!-- Add prio -->
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <select id="glPrioType" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:13px;" onchange="glossaryUpdatePrioTargetOptions()">
+              <option value="role">Role</option>
+              <option value="class">Class</option>
+              <option value="player">Player</option>
+            </select>
+            <select id="glPrioTarget" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:13px;">
+              ${ROLES.map(r => `<option value="${r}">${r}</option>`).join('')}
+            </select>
+            <select id="glPrioMult" style="background:var(--bg);border:1px solid var(--border);color:var(--gold);padding:6px 10px;border-radius:4px;font-size:13px;">
+              ${MULTS.map(m => `<option value="${m}" ${m===1.75?'selected':''}>×${m}</option>`).join('')}
+            </select>
+            <button onclick="glossaryAddPrio()" style="background:var(--gold-dim);border:none;color:var(--bg);padding:7px 14px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.1em;">ADD</button>
+          </div>
+        </div>
+
+        <!-- Eligible Classes -->
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px;">
+          <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;color:var(--gold-dim);margin-bottom:10px;">ELIGIBLE CLASSES</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+            ${CLASSES.map(c => {
+              const has = (entry.eligibleClasses||[]).includes(c);
+              return `<button onclick="glossaryToggleClass('${c}')"
+                style="padding:5px 12px;border-radius:4px;border:1px solid var(--border);cursor:pointer;font-size:13px;
+                  background:${has?'var(--gold-dim)':'var(--bg)'};color:${has?'var(--bg)':'var(--text-dim)'};">
+                ${c}</button>`;
+            }).join('')}
+          </div>
+          <button onclick="glossarySaveClasses()" style="background:var(--gold-dim);border:none;color:var(--bg);padding:6px 14px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.1em;">SAVE</button>
+        </div>
+
+      </div>
+      ` : `<p style="color:var(--text-dim);font-size:13px;">Select a raid, boss, and item to view and edit its settings.</p>`}
+    </div>
+  `;
+}
+
+function glossarySelectRaid() {
+  _glossaryState.raid = document.getElementById('glRaid').value;
+  _glossaryState.boss = '';
+  _glossaryState.item = '';
+  renderGlossaryPanel();
+}
+function glossarySelectBoss() {
+  _glossaryState.boss = document.getElementById('glBoss').value;
+  _glossaryState.item = '';
+  renderGlossaryPanel();
+}
+function glossarySelectItem() {
+  _glossaryState.item = document.getElementById('glItem').value;
+  renderGlossaryPanel();
+}
+
+function _currentGlossaryEntry() {
+  const { raid, boss, item } = _glossaryState;
+  if (!raid || !boss || !item) return null;
+  const list = lootGlossary.raids?.[raid]?.[boss];
+  if (!list) return null;
+  return list.find(e => e.item === item) || null;
+}
+
+function glossarySaveValue() {
+  const val = parseFloat(document.getElementById('glValueInput')?.value);
+  const { item } = _glossaryState;
+  if (!item) return;
+  if (!lootGlossary.valueOverrides) lootGlossary.valueOverrides = {};
+  if (isNaN(val)) {
+    delete lootGlossary.valueOverrides[item];
+  } else {
+    lootGlossary.valueOverrides[item] = val;
+  }
+  saveGlossaryToGitHub();
+  renderGlossaryPanel();
+}
+
+function glossaryClearValue() {
+  const { item } = _glossaryState;
+  if (!item || !lootGlossary.valueOverrides) return;
+  delete lootGlossary.valueOverrides[item];
+  saveGlossaryToGitHub();
+  renderGlossaryPanel();
+}
+
+function glossarySaveNotes() {
+  const entry = _currentGlossaryEntry();
+  if (!entry) return;
+  entry.notes = document.getElementById('glNotesInput')?.value?.trim() || '';
+  rebuildGlossaryData();
+  saveGlossaryToGitHub();
+  renderGlossaryPanel();
+}
+
+function glossaryUpdatePrioTargetOptions() {
+  const type = document.getElementById('glPrioType')?.value;
+  const sel  = document.getElementById('glPrioTarget');
+  if (!sel) return;
+  const ROLES   = ['Tanks','Physical DPS','Ranged DPS','Healers'];
+  const CLASSES = ['Druid','Hunter','Mage','Paladin','Priest','Rogue','Shaman','Warlock','Warrior'];
+  const players = rosterData.players.map(p => p.name).sort();
+  const opts = type === 'role' ? ROLES : type === 'class' ? CLASSES : players;
+  sel.innerHTML = opts.map(o => `<option value="${o}">${o}</option>`).join('');
+}
+
+function glossaryAddPrio() {
+  const entry = _currentGlossaryEntry();
+  if (!entry) return;
+  const target = document.getElementById('glPrioTarget')?.value;
+  const mult   = parseFloat(document.getElementById('glPrioMult')?.value);
+  if (!target || isNaN(mult)) return;
+  if (!entry.prioritization) entry.prioritization = [];
+  // Stack with existing if same target
+  const existing = entry.prioritization.find(p => p.target === target);
+  if (existing) {
+    existing.multiplier = Math.round(existing.multiplier * mult * 10000) / 10000;
+  } else {
+    entry.prioritization.push({ target, multiplier: mult });
+  }
+  rebuildGlossaryData();
+  saveGlossaryToGitHub();
+  renderGlossaryPanel();
+}
+
+function glossaryUpdatePrioMult(idx, val) {
+  const entry = _currentGlossaryEntry();
+  if (!entry || !entry.prioritization?.[idx]) return;
+  entry.prioritization[idx].multiplier = parseFloat(val);
+  rebuildGlossaryData();
+  saveGlossaryToGitHub();
+}
+
+function glossaryRemovePrio(idx) {
+  const entry = _currentGlossaryEntry();
+  if (!entry) return;
+  entry.prioritization.splice(idx, 1);
+  rebuildGlossaryData();
+  saveGlossaryToGitHub();
+  renderGlossaryPanel();
+}
+
+function glossaryToggleClass(cls) {
+  const entry = _currentGlossaryEntry();
+  if (!entry) return;
+  if (!entry.eligibleClasses) entry.eligibleClasses = [];
+  const idx = entry.eligibleClasses.indexOf(cls);
+  if (idx >= 0) entry.eligibleClasses.splice(idx, 1);
+  else entry.eligibleClasses.push(cls);
+  rebuildGlossaryData();
+  renderGlossaryPanel(); // don't save until SAVE clicked
+}
+
+function glossarySaveClasses() {
+  saveGlossaryToGitHub();
+  renderGlossaryPanel();
+}
 
 // ── Roster Panel ─────────────────────────────────────────────────
 
@@ -3693,7 +4038,7 @@ function renderRosterPanel() {
         </select>
         <select id="rosterFilterClass" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:4px 8px;border-radius:4px;font-size:13px;" onchange="rosterApplyFilter()">
           <option value="">All Classes</option>
-          ${allClasses.map(c => `<option value="${c}" ${filterClass===c?'selected':''}>${c}</option>`).join('')}
+          ${(filterRole ? (ROLE_CLASSES[filterRole] || allClasses) : allClasses).map(c => `<option value="${c}" ${filterClass===c?'selected':''}>${c}</option>`).join('')}
         </select>
         <span style="color:var(--text-dim);font-size:13px;margin-left:auto;">${filtered.length} of ${rosterData.players.length} raiders</span>
       </div>
@@ -3766,8 +4111,12 @@ function renderRosterPanel() {
 
 function rosterApplyFilter() {
   const panel = document.getElementById('rosterPanel');
-  panel._filterRole  = document.getElementById('rosterFilterRole')?.value  || '';
-  panel._filterClass = document.getElementById('rosterFilterClass')?.value || '';
+  const newRole  = document.getElementById('rosterFilterRole')?.value  || '';
+  const newClass = document.getElementById('rosterFilterClass')?.value || '';
+  // Clear class filter if it's not valid for the newly selected role
+  const validClasses = newRole ? (ROLE_CLASSES[newRole] || []) : null;
+  panel._filterRole  = newRole;
+  panel._filterClass = (validClasses && newClass && !validClasses.includes(newClass)) ? '' : newClass;
   renderRosterPanel();
 }
 
@@ -4563,6 +4912,14 @@ function onItemChange() {
   const boss = document.getElementById('lootBoss').value;
   const item = selectedItem;
   const el = document.getElementById('lootEligible');
+  // Update note display
+  const _noteEl = document.getElementById('lootItemNote');
+  if (_noteEl) {
+    const _glossEntry = glossaryData.find(r => r.raid === raid && r.boss === boss && r.item === item);
+    const _note = _glossEntry?.notes || '';
+    _noteEl.textContent = _note;
+    _noteEl.style.display = _note ? 'block' : 'none';
+  }
   if (!item) { el.innerHTML = ''; return; }
 
   // Show item icon + link above the table
@@ -4645,14 +5002,25 @@ function onItemChange() {
   // prScores and normFactor computed after bisMultiplier is defined below
   let prNormFactor = 1; // will be set after bisMultiplier definition
 
-  // Prio multiplier helper
+  // Prio multiplier helper — uses new prioritization array from loot-glossary.json
   function prioMultiplier(p) {
-    const cls = classMap[normalizeName(p.name)] || '';
+    const cls  = classMap[normalizeName(p.name)] || '';
     const role = lastRenderData.roles.find(r => r.players.some(rp => normalizeName(rp.name) === normalizeName(p.name)))?.name || '';
-    const inList = (list) => list.some(v => v.toLowerCase() === cls.toLowerCase() || v.toLowerCase() === role.toLowerCase());
-    const hard = entry.hardPrio && inList(entry.hardPrio);
-    const soft = entry.softPrio && inList(entry.softPrio);
-    return { mult: (hard ? 1.75 : 1) * (soft ? 1.25 : 1), hard, soft };
+    const prios = entry.prioritization || [];
+    if (!prios.length) return { mult: 1, labels: [] };
+    let mult = 1;
+    const labels = [];
+    for (const pr of prios) {
+      const t = pr.target?.trim() || '';
+      const matches = t.toLowerCase() === cls.toLowerCase() ||
+                      t.toLowerCase() === role.toLowerCase() ||
+                      normalizeName(t) === normalizeName(p.name);
+      if (matches) {
+        mult *= pr.multiplier;
+        labels.push(`${t}×${pr.multiplier}`);
+      }
+    }
+    return { mult, labels };
   }
 
   // BiS upgrade multiplier — applied after hard/soft prio, before normalization
@@ -5061,7 +5429,7 @@ function onItemChange() {
 
     // Priority
     const { score: prScore, tooltip: prTooltip } = calculatePriority(p, eligBottom20, eligTop20, eligThreshPts);
-    const { mult, hard, soft } = prioMultiplier(p);
+    const { mult, labels: prioLabels } = prioMultiplier(p);
     const { mult: bisMult, reason: bisReason } = bisMultiplier(p);
     const adjScore = prScore * mult * bisMult;
     const normPr = Math.round(adjScore * prNormFactor);
@@ -5069,8 +5437,7 @@ function onItemChange() {
     const prStr = prScore > 0 ? displayPr : '—';
     const prCol = prScore > 0 ? priorityColor(normPr) : 'var(--text-dim)';
     const prioLines = [];
-    if (hard) prioLines.push('Hard Prio (×1.75)');
-    if (soft) prioLines.push('Soft Prio (×1.25)');
+    if (prioLabels && prioLabels.length) prioLines.push('Prio: ' + prioLabels.join(', ') + ' → ×' + mult.toFixed(4));
     if (bisReason) prioLines.push(bisReason);
     const fullTooltip = prTooltip + (prioLines.length ? '&#10;' + prioLines.join('&#10;') : '') + `&#10;Score: ${adjScore.toFixed(2)}`;
 
