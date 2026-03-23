@@ -1171,7 +1171,7 @@
             AltMod = 1 / (1 + log2(alts + 1) × 0.124)<br>
             0 alts → ×1.0 &nbsp;|&nbsp; 3 alts → ×0.80 &nbsp;|&nbsp; 10 alts → ×0.70 (soft cap)
           </div>
-          <div style="margin-top:8px;color:var(--text-dim);">Counts unique items within 95% of the considered item's EPV in the same slot, across all phases of the player's BiS list. Players with fewer competitive alternatives receive a smaller penalty — someone for whom this is truly their best option is prioritised over someone who has several comparable upgrades available. For tier tokens, the comparison uses the player's spec-specific reward item.</div>
+          <div style="margin-top:8px;color:var(--text-dim);">Counts unique items on the player's BiS list in the same slot with EPV more than 5% above their currently equipped item. Players with fewer meaningful upgrade options receive a smaller penalty — someone who is already near BiS in a slot is prioritised over someone who has many upgrades still available. If no gear listing data is available for the player, no penalty is applied. For tier tokens, the slot is determined by the player's spec-specific reward item.</div>
         </div>
 
         <div>
@@ -2428,11 +2428,12 @@ async function fetchData() {
     fetchItemMap(); // instant — populates from static map
 
     // Fire all fetches in parallel
-    const [attendanceText] = await Promise.all([
+    const [attendanceText, lootText] = await Promise.all([
       fetchSheet(SHEET_ID, '2077814587').catch(e => { throw new Error(`Attendance: ${e.message}`); }),
-
+      fetchSheet(SHEET_ID, '964257878').catch(e => { addError('Loot Sheet (gid: 964257878)', e.message); return ''; }),
       fetchAllClaData(),
     ]);
+    if (lootText) lootByPlayer = parseLoot(lootText);
 
     let data;
     try {
@@ -5692,32 +5693,56 @@ function onItemChange() {
     const specs = getPlayerBisSpecs(p.name);
     if (!specs.length || !_candidateItemId) return { mult: 1, alts: 0 };
 
-    // Resolve token to this player's reward item for comparison
+    // Resolve token to this player's reward item for slot/EPV lookup
     const effectiveId = getTokenRewardId(_candidateItemId, p.name) || _candidateItemId;
 
-    // Find the item's EPV and slot for this player's best spec
-    let itemEpv = 0;
+    // Find the candidate item's slot for this player's best spec
     let itemSlot = null;
     for (const spec of specs) {
       for (const [slot, items] of Object.entries(bisData[spec] || {})) {
-        for (const e of items) {
-          if (e[0] === effectiveId && e[3]/100 > itemEpv) {
-            itemEpv = e[3]/100;
-            itemSlot = slot;
-          }
-        }
+        if (items.some(e => e[0] === effectiveId)) { itemSlot = slot; break; }
       }
+      if (itemSlot) break;
     }
-    if (!itemEpv || !itemSlot) return { mult: 1, alts: 0 };
+    if (!itemSlot) return { mult: 1, alts: 0 };
 
-    // Count unique alternative items with EPV >= 95% of this item's EPV in the same slot
-    const threshold = itemEpv * 0.95;
+    // Get EPV of the player's currently equipped item in that slot
+    const _bisToGearSlot = {
+      Head:'Head', Shoulders:'Shoulders', Chest:'Chest', Bracers:'Bracers',
+      Hands:'Hands', Waist:'Waist', Legs:'Legs', Feet:'Feet', Neck:'Neck',
+      Cloak:'Cloak', 'Main Hand':'Weapon', 'One Hand':'Weapon', 'Two Hand':'Weapon',
+      'Off Hand':'Off-Hand', Trinket:'Trinket1', Ring:'Ring1',
+    };
+    const gearSlotName = _bisToGearSlot[itemSlot] || itemSlot;
+    const gearSlots = gearListingByPlayer[normalizeName(p.name)]?.slots || {};
+    // For ring/trinket slots check both
+    const equippedNames = gearSlotName === 'Ring1'
+      ? [gearSlots['Ring1'], gearSlots['Ring2']].filter(Boolean)
+      : gearSlotName === 'Trinket1'
+      ? [gearSlots['Trinket1'], gearSlots['Trinket2']].filter(Boolean)
+      : [gearSlots[gearSlotName]].filter(Boolean);
+
+    // Get best EPV of currently equipped items in this slot
+    let currentEpv = 0;
+    for (const equippedName of equippedNames) {
+      const equippedId = getItemId(equippedName, p.name);
+      if (!equippedId) continue;
+      const epv = getPlayerItemEpv(p.name, equippedId);
+      if (epv && epv > currentEpv) currentEpv = epv;
+    }
+
+    // Count items on this player's BiS list in this slot with EPV > current * 1.05
+    // (i.e. how many meaningful upgrades exist for this player in this slot)
+    const threshold = currentEpv * 1.05;
     const altIds = new Set();
     for (const spec of specs) {
       for (const e of (bisData[spec]?.[itemSlot] || [])) {
-        if (e[0] !== effectiveId && e[3]/100 >= threshold) altIds.add(e[0]);
+        if (e[3]/100 > threshold) altIds.add(e[0]);
       }
     }
+    // Exclude the candidate itself — we're counting other options
+    altIds.delete(effectiveId);
+
     const alts = altIds.size;
     const mult = 1 / (1 + Math.log2(alts + 1) * 0.124);
     return { mult, alts };
@@ -6063,7 +6088,7 @@ function onItemChange() {
     if (prioLabels && prioLabels.length) prioLines.push('Prio: ' + prioLabels.join(', ') + ' → ×' + mult.toFixed(4));
     if (setBonusLabels && setBonusLabels.length) prioLines.push(...setBonusLabels);
     if (bisReason) prioLines.push(bisReason);
-    if (altCount > 0) prioLines.push(`${altCount} similar alt${altCount === 1 ? '' : 's'} → ×${altMult.toFixed(3)}`);
+    if (altCount > 0) prioLines.push(`${altCount} upgrade${altCount === 1 ? '' : 's'} available → ×${altMult.toFixed(3)}`);
     const fullTooltip = prTooltip + (prioLines.length ? '&#10;' + prioLines.join('&#10;') : '') + `&#10;Score: ${adjScore.toFixed(2)}`;
 
     // Gear flag
