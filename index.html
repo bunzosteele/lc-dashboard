@@ -4943,7 +4943,10 @@ function onItemChange() {
     </div>`;
   }
 
-  const _glossNote = entry?.notes || '';
+  const entry = glossaryData.find(r => r.raid === raid && r.boss === boss && r.item === item);
+  if (!entry) { el.innerHTML = '<p style="color:var(--text-dim);font-style:italic;">No data found for this item.</p>'; return; }
+
+  const _glossNote = entry.notes || '';
   const itemHeaderHtml = itemId
     ? `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
         <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
@@ -4954,9 +4957,6 @@ function onItemChange() {
         <div id="lootRecommendation" style="width:320px;flex-shrink:0;"></div>
        </div>`
     : `<div style="margin-bottom:16px;font-family:'Cinzel',serif;font-size:16px;color:var(--gold);">${item}</div>`;
-
-  const entry = glossaryData.find(r => r.raid === raid && r.boss === boss && r.item === item);
-  if (!entry) { el.innerHTML = '<p style="color:var(--text-dim);font-style:italic;">No data found for this item.</p>'; return; }
 
   // Get all players across all roles
   const allPlayers = lastRenderData.roles.flatMap(r => r.players);
