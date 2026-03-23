@@ -1079,7 +1079,6 @@
         <div id="lootItemDropdown" class="loot-item-dropdown" style="display:none;"></div>
       </div>
     </div>
-    <div id="lootItemNote" style="display:none;text-align:center;padding:10px 16px;font-size:13px;color:var(--text-dim);font-style:italic;border-bottom:1px solid var(--border);margin-bottom:4px;"></div>
     <div id="lootEligible" style="overflow-x:auto;width:100%;"></div>
 
     <div id="lootFormulaPanel" style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px;">
@@ -3742,7 +3741,7 @@ function renderGlossaryPanel() {
   const displayVal  = overrideVal !== null ? overrideVal : formulaEpv;
 
   function sel(id, opts, val, onch, extra='') {
-    return `<select id="${id}" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:13px;" onchange="${onch}" ${extra}>
+    return `<select id="${id}" class="loot-select" onchange="${onch}" ${extra}>
       ${opts.map(o => typeof o === 'string'
         ? `<option value="${o}" ${val===o?'selected':''}>${o}</option>`
         : `<option value="${o.v}" ${val===o.v?'selected':''}>${o.l}</option>`
@@ -3751,17 +3750,21 @@ function renderGlossaryPanel() {
   }
 
   panel.innerHTML = `
-    <div style="max-width:900px;margin:0 auto;padding:0 16px;">
-
-      <!-- Header -->
-      <div style="font-family:'Cinzel',serif;font-size:16px;letter-spacing:0.15em;color:var(--gold);margin-bottom:16px;">LOOT GLOSSARY</div>
-
-      <!-- Dropdowns -->
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
-        ${sel('glRaid',  [{v:'',l:'— Raid —'}, ...raids], raid,  'glossarySelectRaid()')}
-        ${sel('glBoss',  [{v:'',l:'— Boss —'}, ...bosses], boss, 'glossarySelectBoss()', !raid?'disabled':'')}
-        ${sel('glItem',  [{v:'',l:'— Item —'}, ...items], item,  'glossarySelectItem()', !(raid&&boss)?'disabled':'')}
+    <div class="loot-selectors">
+      <div class="loot-select-group">
+        <label class="loot-select-label">Raid</label>
+        ${sel('glRaid', [{v:'',l:'— Select Raid —'}, ...raids], raid, 'glossarySelectRaid()')}
       </div>
+      <div class="loot-select-group">
+        <label class="loot-select-label">Boss</label>
+        ${sel('glBoss', [{v:'',l:'— Select Boss —'}, ...bosses], boss, 'glossarySelectBoss()', !raid?'disabled':'')}
+      </div>
+      <div class="loot-select-group">
+        <label class="loot-select-label">Item</label>
+        ${sel('glItem', [{v:'',l:'— Select Item —'}, ...items], item, 'glossarySelectItem()', !(raid&&boss)?'disabled':'')}
+      </div>
+    </div>
+    <div style="padding:0 0 16px;">
 
       ${entry ? `
       <!-- Item detail -->
@@ -3851,6 +3854,7 @@ function renderGlossaryPanel() {
 
       </div>
       ` : `<p style="color:var(--text-dim);font-size:13px;">Select a raid, boss, and item to view and edit its settings.</p>`}
+    </div>
     </div>
   `;
 }
@@ -4914,14 +4918,7 @@ function onItemChange() {
   const boss = document.getElementById('lootBoss').value;
   const item = selectedItem;
   const el = document.getElementById('lootEligible');
-  // Update note display
-  const _noteEl = document.getElementById('lootItemNote');
-  if (_noteEl) {
-    const _glossEntry = glossaryData.find(r => r.raid === raid && r.boss === boss && r.item === item);
-    const _note = _glossEntry?.notes || '';
-    _noteEl.textContent = _note;
-    _noteEl.style.display = _note ? 'block' : 'none';
-  }
+
   if (!item) { el.innerHTML = ''; return; }
 
   // Show item icon + link above the table
@@ -4946,12 +4943,14 @@ function onItemChange() {
     </div>`;
   }
 
+  const _glossNote = entry?.notes || '';
   const itemHeaderHtml = itemId
     ? `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
         <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
           ${itemIconHtml}
           <a href="https://www.wowhead.com/tbc/item=${itemId}" data-wowhead="item=${itemId}&dataset=tbc" target="_blank" rel="noopener" style="font-family:'Cinzel',serif;font-size:16px;color:var(--gold);text-decoration:none;">${item}</a>
         </div>
+        ${_glossNote ? `<div style="flex:1;text-align:center;padding:0 16px;font-size:13px;color:var(--text-dim);font-style:italic;">${_glossNote}</div>` : '<div style="flex:1;"></div>'}
         <div id="lootRecommendation" style="width:320px;flex-shrink:0;"></div>
        </div>`
     : `<div style="margin-bottom:16px;font-family:'Cinzel',serif;font-size:16px;color:var(--gold);">${item}</div>`;
