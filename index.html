@@ -1154,7 +1154,7 @@
           <div style="font-family:monospace;font-size:12px;background:var(--bg2);padding:8px 12px;border-left:2px solid var(--gold-dim);color:var(--text-dim);">
             Multipliers stack: ×1.75 × ×1.25 = ×2.1875
           </div>
-          <div style="margin-top:8px;color:var(--text-dim);">Configured per item in the Loot Glossary. Each entry targets a role, class, spec combination, or specific raider — all conditions in an entry must match. Multiple matching entries stack multiplicatively.</div>
+          <div style="margin-top:8px;color:var(--text-dim);">Configured per item by the Loot Council. Prioritizations can target roles, classes and individuals.</div>
         </div>
 
         <div>
@@ -1162,7 +1162,16 @@
           <div style="font-family:monospace;font-size:12px;background:var(--bg2);padding:8px 12px;border-left:2px solid var(--gold-dim);color:var(--text-dim);">
             Only applies to tier tokens &nbsp;|&nbsp; Only when player is exactly one piece away from 2pc or 4pc
           </div>
-          <div style="margin-top:8px;color:var(--text-dim);">Configured per tier set in the Loot Glossary when a token is selected. Piece count is checked against both the loot distribution log and the player's currently equipped gear from the CLA, so items obtained outside of raids are counted. Stacks with item prioritization.</div>
+          <div style="margin-top:8px;color:var(--text-dim);">Configured per tier set by the Loot Council. Piece count is checked against loot distribution and currently equipped gear.</div>
+        </div>
+
+        <div>
+          <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;color:var(--gold-dim);margin-bottom:8px;">ALTERNATIVES MODIFIER <span style="color:var(--text-dim);font-weight:400;">(×0.70 – ×1.0)</span></div>
+          <div style="font-family:monospace;font-size:12px;background:var(--bg2);padding:8px 12px;border-left:2px solid var(--gold-dim);color:var(--text-dim);">
+            AltMod = 1 / (1 + log2(alts + 1) × 0.124)<br>
+            0 alts → ×1.0 &nbsp;|&nbsp; 3 alts → ×0.80 &nbsp;|&nbsp; 10 alts → ×0.70 (soft cap)
+          </div>
+          <div style="margin-top:8px;color:var(--text-dim);">Counts unique items within 95% of the considered item's EPV in the same slot, across all phases of the player's BiS list. Players with fewer competitive alternatives receive a smaller penalty — someone for whom this is truly their best option is prioritised over someone who has several comparable upgrades available. For tier tokens, the comparison uses the player's spec-specific reward item.</div>
         </div>
 
         <div>
@@ -1519,10 +1528,6 @@ function rebuildGlossaryData() {
 }
 
 // Legacy stub — no longer fetches from sheet
-async function fetchGlossary() {
-  // Glossary data now comes from loot-glossary.json loaded at startup
-}
-
 function parseCsvRows(text) {
   const lines = text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').trim().split('\n');
   return lines.map(line => {
@@ -1536,35 +1541,6 @@ function parseCsvRows(text) {
     result.push(cur.trim());
     return result;
   });
-}
-
-function parseGlossary(text) {
-  const rows = parseCsvRows(text);
-  const data = [];
-  for (let i = 1; i < rows.length; i++) { // skip header row
-    const row = rows[i];
-    const raid = row[0]?.trim();
-    const boss = row[1]?.trim();
-    const item = row[2]?.trim();
-    const eligibleStr = row[9]?.trim(); // col J (index 9)
-    if (!raid || !boss || !item) continue;
-    const eligibleClasses = eligibleStr ? eligibleStr.split(',').map(c => c.trim()).filter(Boolean) : [];
-    const hardPrioStr = row[12]?.trim(); // col M
-    const softPrioStr = row[13]?.trim(); // col N
-    const hardPrio = hardPrioStr ? hardPrioStr.split(',').map(c => c.trim()).filter(Boolean) : [];
-    const softPrio = softPrioStr ? softPrioStr.split(',').map(c => c.trim()).filter(Boolean) : [];
-    // Cols E-H (indices 4-7): Tank, Physical DPS, Ranged DPS, Healer
-    // If cell is non-empty, that role is eligible. Empty means no restriction if all 4 are empty.
-    const roleColMap = [
-      { idx: 4, role: 'Tanks' },
-      { idx: 5, role: 'Physical DPS' },
-      { idx: 6, role: 'Ranged DPS' },
-      { idx: 7, role: 'Healers' },
-    ];
-    const eligibleRoles = roleColMap.filter(r => row[r.idx]?.trim()).map(r => r.role);
-    data.push({ raid, boss, item, eligibleClasses, eligibleRoles, hardPrio, softPrio });
-  }
-  return data;
 }
 
 let setBonusData = { setThresholds: {} }; // loaded from set-bonuses.json
@@ -1608,11 +1584,6 @@ function rebuildClassMap() {
   for (const p of rosterData.players) {
     if (p.name && p.class) classMap[normalizeName(p.name)] = p.class;
   }
-}
-
-// Legacy stub — no longer fetches from sheet
-async function fetchClasses() {
-  // Class data now comes from roster.json loaded at startup
 }
 
 // Item IDs loaded from gear-item-ids.json into gearItemIds map
@@ -1747,49 +1718,6 @@ function itemLink(itemName, linkText) {
     return `<a href="https://www.wowhead.com/tbc/item=${id}" data-wowhead="item=${id}&dataset=tbc" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;text-decoration:none;color:inherit;">${icon}${linkText}</a>`;
   }
   return `<a href="https://www.wowhead.com/tbc/search?q=${encodeURIComponent(itemName)}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">${linkText}</a>`;
-}
-
-async function fetchLoot() {
-  try {
-    const text = await fetchSheet(SHEET_ID, '964257878');
-    lootByPlayer = parseLoot(text);
-  } catch(e) {
-    addError('Loot Sheet (gid: 964257878)', e.message);
-  }
-}
-
-async function fetchPoints() {
-  try {
-    const text = await fetchSheet(SHEET_ID, '678080595');
-    pointsByPlayer = parsePoints(text);
-  } catch(e) {
-    addError('Loot Summary Sheet (gid: 678080595)', e.message);
-  }
-}
-
-function parsePoints(text) {
-  const lines = text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').trim().split('\n');
-  function parseRow(line) {
-    const result = []; let cur = '', inQ = false;
-    for (let i = 0; i < line.length; i++) {
-      const ch = line[i];
-      if (ch === '"') { inQ = !inQ; }
-      else if (ch === ',' && !inQ) { result.push(cur.trim()); cur = ''; }
-      else { cur += ch; }
-    }
-    result.push(cur.trim());
-    return result;
-  }
-  const points = {};
-  for (let i = 1; i < lines.length; i++) {
-    const row = parseRow(lines[i]);
-    const name = row[0]?.trim();
-    const pts = row[3]?.trim(); // col D = index 3
-    if (!name) continue;
-    const val = parseFloat(pts);
-    points[normalizeName(name)] = isNaN(val) ? 0 : val;
-  }
-  return points;
 }
 
 // Compute loot score points from loot received + BiS EPV + raids attended
@@ -2502,8 +2430,6 @@ async function fetchData() {
     // Fire all fetches in parallel
     const [attendanceText] = await Promise.all([
       fetchSheet(SHEET_ID, '2077814587').catch(e => { throw new Error(`Attendance: ${e.message}`); }),
-      fetchLoot(),
-      fetchPoints(),
 
       fetchAllClaData(),
     ]);
@@ -5760,12 +5686,49 @@ function onItemChange() {
     }
   }
 
+  // Alternatives modifier: reduces priority for players with many similarly-valued options
+  // Formula: 1 / (1 + log2(alts+1) * 0.124) — ×1.0 at 0 alts, ~×0.70 at 10 alts (soft cap ~30%)
+  function altModifier(p) {
+    const specs = getPlayerBisSpecs(p.name);
+    if (!specs.length || !_candidateItemId) return { mult: 1, alts: 0 };
+
+    // Resolve token to this player's reward item for comparison
+    const effectiveId = getTokenRewardId(_candidateItemId, p.name) || _candidateItemId;
+
+    // Find the item's EPV and slot for this player's best spec
+    let itemEpv = 0;
+    let itemSlot = null;
+    for (const spec of specs) {
+      for (const [slot, items] of Object.entries(bisData[spec] || {})) {
+        for (const e of items) {
+          if (e[0] === effectiveId && e[3]/100 > itemEpv) {
+            itemEpv = e[3]/100;
+            itemSlot = slot;
+          }
+        }
+      }
+    }
+    if (!itemEpv || !itemSlot) return { mult: 1, alts: 0 };
+
+    // Count unique alternative items with EPV >= 95% of this item's EPV in the same slot
+    const threshold = itemEpv * 0.95;
+    const altIds = new Set();
+    for (const spec of specs) {
+      for (const e of (bisData[spec]?.[itemSlot] || [])) {
+        if (e[0] !== effectiveId && e[3]/100 >= threshold) altIds.add(e[0]);
+      }
+    }
+    const alts = altIds.size;
+    const mult = 1 / (1 + Math.log2(alts + 1) * 0.124);
+    return { mult, alts };
+  }
+
   function lootPriorityScore(p) {
     const base = calculatePriority(p, eligBottom20, eligTop20, eligThreshPts).score;
     const setBonusMult = TOKEN_TIER_META[_candidateItemId]
       ? getSetBonusMultiplier(p.name, _candidateItemId).mult
       : 1;
-    return base * prioMultiplier(p).mult * bisMultiplier(p).mult * setBonusMult;
+    return base * prioMultiplier(p).mult * bisMultiplier(p).mult * setBonusMult * altModifier(p).mult;
   }
 
   // Now that bisMultiplier is defined, compute normalization factor
@@ -6090,7 +6053,8 @@ function onItemChange() {
     const { mult: setBonusMult, labels: setBonusLabels } = TOKEN_TIER_META[_candidateTokenId]
       ? getSetBonusMultiplier(p.name, _candidateTokenId)
       : { mult: 1, labels: [] };
-    const adjScore = prScore * mult * bisMult * setBonusMult;
+    const { mult: altMult, alts: altCount } = altModifier(p);
+    const adjScore = prScore * mult * bisMult * setBonusMult * altMult;
     const normPr = Math.round(adjScore * prNormFactor);
     const displayPr = normPr.toFixed(0);
     const prStr = prScore > 0 ? displayPr : '—';
@@ -6099,6 +6063,7 @@ function onItemChange() {
     if (prioLabels && prioLabels.length) prioLines.push('Prio: ' + prioLabels.join(', ') + ' → ×' + mult.toFixed(4));
     if (setBonusLabels && setBonusLabels.length) prioLines.push(...setBonusLabels);
     if (bisReason) prioLines.push(bisReason);
+    if (altCount > 0) prioLines.push(`${altCount} similar alt${altCount === 1 ? '' : 's'} → ×${altMult.toFixed(3)}`);
     const fullTooltip = prTooltip + (prioLines.length ? '&#10;' + prioLines.join('&#10;') : '') + `&#10;Score: ${adjScore.toFixed(2)}`;
 
     // Gear flag
