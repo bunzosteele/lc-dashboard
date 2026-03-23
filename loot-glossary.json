@@ -3934,7 +3934,8 @@
         {
           "item": "Warglaive of Azzinoth (Off-Hand)",
           "eligibleClasses": [
-            "Rogue"
+            "Rogue",
+            "Warrior"
           ],
           "prioritization": []
         },
