@@ -3927,7 +3927,8 @@
         {
           "item": "Warglaive of Azzinoth",
           "eligibleClasses": [
-            "Rogue"
+            "Rogue",
+            "Warrior"
           ],
           "prioritization": []
         },
