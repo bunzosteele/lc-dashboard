@@ -51,7 +51,7 @@
       "class": "Rogue"
     },
     {
-      "name": "K\u00e6lstorm",
+      "name": "Kælstorm",
       "role": "Physical DPS",
       "class": "Shaman"
     },
@@ -66,7 +66,7 @@
       "class": "Hunter"
     },
     {
-      "name": "Fizzl\u00e9",
+      "name": "Fizzlé",
       "role": "Ranged DPS",
       "class": "Mage"
     },
@@ -121,7 +121,7 @@
       "class": "Hunter"
     },
     {
-      "name": "Shad\u00f6whe\u00e2rt",
+      "name": "Shadöwheârt",
       "role": "Ranged DPS",
       "class": "Warlock"
     },
@@ -156,7 +156,7 @@
       "class": "Shaman"
     },
     {
-      "name": "D\u00eamz",
+      "name": "Dêmz",
       "role": "Healers",
       "class": "Shaman"
     },
@@ -184,6 +184,7 @@
   "excluded": [
     "Forrestpump",
     "Qualify",
-    "Manepoo"
+    "Manepoo",
+    "listplayerswithnoissues"
   ]
 }
