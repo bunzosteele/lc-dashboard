@@ -12,8 +12,10 @@
           ],
           "prioritization": [
             {
-              "target": "Tank",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Tank"
+              ]
             }
           ],
           "roleValues": {
@@ -33,12 +35,22 @@
           ],
           "prioritization": [
             {
-              "target": "Tank",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Tank"
+              ]
             },
             {
-              "target": "Healers",
-              "multiplier": 0.75
+              "multiplier": 1.25,
+              "conditions": [
+                "Physical DPS"
+              ]
+            },
+            {
+              "multiplier": 1.25,
+              "conditions": [
+                "Ranged DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -58,12 +70,16 @@
           ],
           "prioritization": [
             {
-              "target": "Mage",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Mage"
+              ]
             },
             {
-              "target": "Warlock",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Warlock"
+              ]
             }
           ],
           "roleValues": {
@@ -83,8 +99,16 @@
           ],
           "prioritization": [
             {
-              "target": "Manedic",
-              "multiplier": 2
+              "multiplier": 1.75,
+              "conditions": [
+                "Ranged DPS"
+              ]
+            },
+            {
+              "multiplier": 1.25,
+              "conditions": [
+                "Priest"
+              ]
             }
           ],
           "roleValues": {
@@ -104,12 +128,16 @@
           ],
           "prioritization": [
             {
-              "target": "Physical DPS",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Physical DPS"
+              ]
             },
             {
-              "target": "Shaman",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Shaman"
+              ]
             }
           ],
           "roleValues": {
@@ -136,8 +164,10 @@
           ],
           "prioritization": [
             {
-              "target": "Physical DPS",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Physical DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -158,8 +188,10 @@
           ],
           "prioritization": [
             {
-              "target": "Ranged DPS",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Ranged DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -175,8 +207,10 @@
           ],
           "prioritization": [
             {
-              "target": "Physical DPS",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Physical DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -195,12 +229,16 @@
           ],
           "prioritization": [
             {
-              "target": "Tank",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Tank"
+              ]
             },
             {
-              "target": "Druid",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Druid"
+              ]
             }
           ],
           "roleValues": {
@@ -217,16 +255,22 @@
           ],
           "prioritization": [
             {
-              "target": "Tank",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Tank"
+              ]
             },
             {
-              "target": "Physical DPS",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Physical DPS"
+              ]
             },
             {
-              "target": "Ranged DPS",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Ranged DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -245,12 +289,16 @@
           ],
           "prioritization": [
             {
-              "target": "Mage",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Mage"
+              ]
             },
             {
-              "target": "Warlock",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Warlock"
+              ]
             }
           ],
           "roleValues": {
@@ -270,8 +318,10 @@
           ],
           "prioritization": [
             {
-              "target": "Priest",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Priest"
+              ]
             }
           ],
           "roleValues": {
@@ -301,20 +351,28 @@
           ],
           "prioritization": [
             {
-              "target": "Hunter",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Hunter"
+              ]
             },
             {
-              "target": "Shaman",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Shaman"
+              ]
             },
             {
-              "target": "Physical DPS",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Physical DPS"
+              ]
             },
             {
-              "target": "Ranged DPS",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Ranged DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -341,8 +399,10 @@
           ],
           "prioritization": [
             {
-              "target": "Ranged DPS",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Ranged DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -358,12 +418,16 @@
           ],
           "prioritization": [
             {
-              "target": "Warrior",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Warrior"
+              ]
             },
             {
-              "target": "Physical DPS",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Physical DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -442,12 +506,16 @@
           ],
           "prioritization": [
             {
-              "target": "Hunter",
-              "multiplier": 2.1875
+              "multiplier": 2.1875,
+              "conditions": [
+                "Hunter"
+              ]
             },
             {
-              "target": "Physical DPS",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Physical DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -465,8 +533,10 @@
           ],
           "prioritization": [
             {
-              "target": "Physical DPS",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Physical DPS"
+              ]
             }
           ]
         }
@@ -484,16 +554,22 @@
           ],
           "prioritization": [
             {
-              "target": "Tank",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Tank"
+              ]
             },
             {
-              "target": "Physical DPS",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Physical DPS"
+              ]
             },
             {
-              "target": "Ranged DPS",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Ranged DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -513,12 +589,16 @@
           ],
           "prioritization": [
             {
-              "target": "Tank",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Tank"
+              ]
             },
             {
-              "target": "Physical DPS",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Physical DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -538,8 +618,10 @@
           ],
           "prioritization": [
             {
-              "target": "Warlock",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Warlock"
+              ]
             }
           ],
           "roleValues": {
@@ -562,12 +644,16 @@
           ],
           "prioritization": [
             {
-              "target": "Physical DPS",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Physical DPS"
+              ]
             },
             {
-              "target": "Ranged DPS",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Ranged DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -602,12 +688,16 @@
           ],
           "prioritization": [
             {
-              "target": "Shaman",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Shaman"
+              ]
             },
             {
-              "target": "Ranged DPS",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Ranged DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -624,8 +714,10 @@
           ],
           "prioritization": [
             {
-              "target": "Physical DPS",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Physical DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -645,12 +737,16 @@
           ],
           "prioritization": [
             {
-              "target": "Physical DPS",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Physical DPS"
+              ]
             },
             {
-              "target": "Ranged DPS",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Ranged DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -684,12 +780,16 @@
           ],
           "prioritization": [
             {
-              "target": "Physical DPS",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Physical DPS"
+              ]
             },
             {
-              "target": "Shaman",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Shaman"
+              ]
             }
           ],
           "roleValues": {
@@ -717,12 +817,16 @@
           ],
           "prioritization": [
             {
-              "target": "Mage",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Mage"
+              ]
             },
             {
-              "target": "Warlock",
-              "multiplier": 1.25
+              "multiplier": 1.25,
+              "conditions": [
+                "Warlock"
+              ]
             }
           ],
           "roleValues": {
@@ -745,8 +849,10 @@
           ],
           "prioritization": [
             {
-              "target": "Physical DPS",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Physical DPS"
+              ]
             }
           ],
           "roleValues": {
@@ -766,8 +872,10 @@
           ],
           "prioritization": [
             {
-              "target": "Paladin",
-              "multiplier": 1.75
+              "multiplier": 1.75,
+              "conditions": [
+                "Paladin"
+              ]
             }
           ],
           "roleValues": {
