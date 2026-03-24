@@ -1485,6 +1485,26 @@ let groupingMode = 'role'; // 'role' | 't45' | 't6'
 
 let lootGlossary = { raids: {}, valueOverrides: {} }; // loaded from loot-glossary.json
 
+const RAID_ORDER = [
+  "Gruul's Lair",
+  "Magtheridon's Lair",
+  "Serpentshrine Cavern",
+  "Tempest Keep",
+  "Mount Hyjal",
+  "Black Temple",
+];
+
+function sortRaids(raids) {
+  return [...raids].sort((a, b) => {
+    const ai = RAID_ORDER.indexOf(a);
+    const bi = RAID_ORDER.indexOf(b);
+    if (ai === -1 && bi === -1) return a.localeCompare(b);
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+}
+
 async function loadLootGlossaryFromRepo() {
   try {
     const res = await fetch('./loot-glossary.json?t=' + Date.now());
@@ -3919,7 +3939,7 @@ function getGlossaryEntry(raid, boss, item) {
 }
 
 function glossaryRaidList() {
-  return Object.keys(lootGlossary.raids || {}).sort();
+  return sortRaids(Object.keys(lootGlossary.raids || {}));
 }
 function glossaryBossList(raid) {
   return Object.keys(lootGlossary.raids?.[raid] || {});
@@ -5333,7 +5353,7 @@ function renderLootDropdowns() {
   if (groupingMode !== 'loot') return;
   const raidSel = document.getElementById('lootRaid');
   const cur = raidSel.value;
-  const raids = [...new Set(glossaryData.map(r => r.raid))].sort();
+  const raids = sortRaids([...new Set(glossaryData.map(r => r.raid))]);
   raidSel.innerHTML = '<option value="">— Select Raid —</option>' +
     raids.map(r => `<option value="${r}" ${r === cur ? 'selected' : ''}>${r}</option>`).join('');
   if (cur) onRaidChange(true);
