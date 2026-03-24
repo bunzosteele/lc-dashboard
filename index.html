@@ -5527,10 +5527,10 @@ function onItemChange() {
     const factors = [
       { key: 'attScore',   label: 'Attendance' },
       { key: 'consumeMod', label: 'Consumable Usage' },
-      { key: 'gearMod',    label: 'Gear Issues' },
-      { key: 'lootMod',    label: 'Loot Score' },
-      { key: 'prioMult',   label: 'Item Prioritization' },
-      { key: 'bisMult',    label: 'Item Upgrade' },
+      { key: 'gearMod',    label: 'Lack of Gear Issues' },
+      { key: 'lootMod',    label: 'Low Loot Score' },
+      { key: 'prioMult',   label: 'LC Prioritization' },
+      { key: 'bisMult',    label: 'Upgrade Amount' },
       { key: 'setBMult',   label: 'Set Bonus' },
       { key: 'altMult',    label: 'Fewer Alternatives' },
     ];
@@ -5573,8 +5573,7 @@ function onItemChange() {
     return `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
       <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.18em;color:var(--text-dim);text-transform:uppercase;">Recommendation</div>
       <div style="font-family:'Cinzel',serif;font-size:16px;color:var(--gold-light);letter-spacing:0.08em;">${label}</div>
-      <div style="font-size:15px;text-align:center;white-space:nowrap;">${names.join(' &nbsp;·&nbsp; ')}</div>
-      ${reasonHtml}
+      <div style="font-size:15px;text-align:center;white-space:nowrap;">${names.join(' &nbsp;·&nbsp; ')}${reasonHtml}</div>
     </div>`;
   }
 
