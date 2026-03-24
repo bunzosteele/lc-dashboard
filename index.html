@@ -6155,8 +6155,10 @@ function onItemChange() {
     if (!hasUpgrade) return { type: 'open', rollers: [] };
     // Only consider players who actually have an upgrade — don't recommend to sidegrades/downgrades
     const byPrio = scored.filter(s => s.normPr > 0 && s.epvPct !== null && s.epvPct > 5).sort((a, b) => b.normPr - a.normPr);
+    // All eligible players by priority (for runner-up reason, even if they lack an upgrade)
+    const allByPrio = scored.filter(s => s.normPr > 0).sort((a, b) => b.normPr - a.normPr);
     if (!byPrio.length) return { type: 'open', rollers: [] };
-    if (byPrio.length === 1) return { type: 'restricted', rollers: byPrio, runnerUp: null };
+    if (byPrio.length === 1) return { type: 'restricted', rollers: byPrio, runnerUp: allByPrio.find(s => s !== byPrio[0]) || null };
     if (byPrio.length === 2) {
       // With only 2 eligible, roll together if gap < 20%, otherwise award to top
       const gap = (byPrio[0].normPr - byPrio[1].normPr) / byPrio[0].normPr;
