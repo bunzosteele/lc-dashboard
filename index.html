@@ -4256,7 +4256,6 @@ function renderAttendancePanel() {
       tbody.appendChild(sepRow);
     }
 
-    const inactive = isInactive(p);
     const tr = document.createElement('tr');
     tr.style.borderBottom = '1px solid rgba(255,255,255,0.04)';
     if (inactive) tr.classList.add('inactive-row');
