@@ -1640,6 +1640,8 @@ function rebuildAttendanceFromCla() {
   }
   // Keep raids sorted chronologically
   attendanceData.raids.sort((a, b) => a.date.localeCompare(b.date));
+  // Persist new raids to attendance.json so we retain data even if CLA is lost
+  if (changed) saveAttendanceToGitHub();
 
   // Build CLA-derived presence from claPlayersByLabel (every player seen in any CLA sheet)
   const claPresence = {}; // playerKey -> Set of dateStr
@@ -1662,6 +1664,29 @@ function rebuildAttendanceFromCla() {
 
   // Store CLA-derived presence separately so UI can show it vs overrides
   window._claPresence = claPresence;
+
+  // Bake CLA presence into attendance.json as baseline — stored in raids[].players
+  // This ensures data survives if CLA sheets are later removed
+  for (const raid of attendanceData.raids) {
+    if (!raid.players) raid.players = {};
+    for (const [key, dates] of Object.entries(claPresence)) {
+      // Only set if not already recorded (don't overwrite manual overrides context)
+      if (dates.has(raid.date) && raid.players[key] === undefined) {
+        raid.players[key] = true;
+      }
+    }
+    // Mark absent players (in roster but not in CLA for this date)
+    for (const p of rosterData.players) {
+      const key = normalizeName(p.name);
+      if (raid.players[key] === undefined) {
+        const inCla = claPresence[key]?.has(raid.date) ?? false;
+        if (Object.keys(claPresence).length > 0) {
+          // We have CLA data for this raid — explicitly mark absent
+          raid.players[key] = inCla;
+        }
+      }
+    }
+  }
 }
 
 // Returns true/false for a player on a raid date, applying overrides over CLA data
@@ -1671,8 +1696,12 @@ function getPlayerAttendance(playerName, dateStr) {
   if (attendanceData.overrides[key]?.[dateStr] !== undefined) {
     return attendanceData.overrides[key][dateStr];
   }
-  // Fall back to CLA-derived presence
-  return window._claPresence?.[key]?.has(dateStr) ?? false;
+  // Check live CLA presence (if CLA still loaded)
+  if (window._claPresence?.[key]?.has(dateStr)) return true;
+  // Fall back to baked-in raid.players baseline (survives CLA loss)
+  const raid = attendanceData.raids.find(r => r.date === dateStr);
+  if (raid?.players?.[key] !== undefined) return raid.players[key];
+  return false;
 }
 
 function setPlayerAttendanceOverride(playerName, dateStr, value) {
@@ -4111,14 +4140,12 @@ function renderAttendancePanel() {
   const ROLE_ORDER = ['Tanks', 'Physical DPS', 'Ranged DPS', 'Healers'];
   const CLASSES = ['Druid','Hunter','Mage','Paladin','Priest','Rogue','Shaman','Warlock','Warrior'];
 
-  // Filter options
   const filteredPlayers = players.filter(p => {
     if (_attendanceFilter.role && p.role !== _attendanceFilter.role) return false;
     if (_attendanceFilter.cls && p.class !== _attendanceFilter.cls) return false;
     return true;
   });
 
-  // Sort: role order first, then class, then name
   filteredPlayers.sort((a, b) => {
     const ri = ROLE_ORDER.indexOf(a.role) - ROLE_ORDER.indexOf(b.role);
     if (ri !== 0) return ri;
@@ -4128,10 +4155,11 @@ function renderAttendancePanel() {
   });
 
   const selStyle = 'background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:13px;';
+  const thStyle = 'text-align:center;padding:6px 4px;font-family:\'Cinzel\',serif;font-size:10px;color:var(--text-dim);white-space:nowrap;min-width:52px;';
 
   panel.innerHTML = `
-    <div style="max-width:100%;overflow-x:auto;">
-      <!-- Filters -->
+    <div style="max-width:100%;">
+      <!-- Filters + Add Raid -->
       <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
         <select style="${selStyle}" onchange="attendanceFilterRole(this.value)">
           <option value="">All Roles</option>
@@ -4141,7 +4169,11 @@ function renderAttendancePanel() {
           <option value="">All Classes</option>
           ${CLASSES.map(c => `<option value="${c}" ${_attendanceFilter.cls===c?'selected':''}>${c}</option>`).join('')}
         </select>
-        <span style="font-size:12px;color:var(--text-dim);margin-left:auto;">${filteredPlayers.length} players · ${raids.length} raids</span>
+        <div style="display:flex;gap:6px;align-items:center;margin-left:auto;">
+          <input type="date" id="newRaidDateInput" style="${selStyle}padding:5px 8px;" />
+          <button onclick="attendanceAddRaid()" style="background:var(--gold-dim);border:none;color:var(--bg);padding:6px 14px;border-radius:4px;cursor:pointer;font-family:\'Cinzel\',serif;font-size:11px;letter-spacing:0.1em;">+ ADD RAID</button>
+        </div>
+        <span style="font-size:12px;color:var(--text-dim);">${filteredPlayers.length} players · ${raids.length} raids</span>
       </div>
 
       <!-- Table -->
@@ -4149,58 +4181,60 @@ function renderAttendancePanel() {
         <table style="border-collapse:collapse;min-width:100%;">
           <thead>
             <tr style="border-bottom:2px solid var(--border);">
-              <th style="text-align:left;padding:6px 12px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;color:var(--text-dim);white-space:nowrap;position:sticky;left:0;background:var(--bg);z-index:2;min-width:140px;">PLAYER</th>
-              <th style="text-align:left;padding:6px 8px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;color:var(--text-dim);white-space:nowrap;">ROLE</th>
-              ${raids.map(r => `
-                <th style="text-align:center;padding:6px 4px;font-family:'Cinzel',serif;font-size:10px;color:var(--text-dim);white-space:nowrap;min-width:52px;">
-                  <div>${r.label}</div>
-                  <div id="att-count-${r.date}" style="color:var(--gold-dim);font-size:11px;"></div>
-                </th>`).join('')}
+              <th style="text-align:left;padding:6px 12px;font-family:\'Cinzel\',serif;font-size:10px;letter-spacing:0.2em;color:var(--text-dim);white-space:nowrap;position:sticky;left:0;background:var(--bg);z-index:2;min-width:140px;">PLAYER</th>
+              <th style="text-align:right;padding:6px 12px 6px 4px;font-family:\'Cinzel\',serif;font-size:10px;letter-spacing:0.2em;color:var(--text-dim);white-space:nowrap;">CLASS</th>
+              ${raids.map(r => `<th style="${thStyle}"><div>${r.label}</div><div id="att-count-${r.date}" style="color:var(--gold-dim);font-size:11px;"></div></th>`).join('')}
             </tr>
           </thead>
-          <tbody id="attendanceTableBody">
-          </tbody>
+          <tbody id="attendanceTableBody"></tbody>
         </table>
       </div>
     </div>
   `;
 
-  // Build rows imperatively to avoid escaping issues with player names
   const tbody = document.getElementById('attendanceTableBody');
   if (!tbody) return;
 
   let lastRole = null;
   for (const p of filteredPlayers) {
-    // Role separator row
+    // Role separator — matches main tab style
     if (p.role !== lastRole) {
       lastRole = p.role;
       const sepRow = document.createElement('tr');
-      sepRow.innerHTML = `<td colspan="${2 + raids.length}" style="padding:6px 12px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.2em;color:var(--gold-dim);background:var(--bg2);border-top:1px solid var(--border);">${p.role.toUpperCase()}</td>`;
+      const sepTd = document.createElement('td');
+      sepTd.colSpan = 2 + raids.length;
+      sepTd.style.cssText = 'padding:0;';
+      sepTd.innerHTML = `<div class="role-header" style="margin:12px 0 6px;padding:0 4px;">
+        <span class="role-title">${p.role}</span>
+        <div class="role-line"></div>
+      </div>`;
+      sepRow.appendChild(sepTd);
       tbody.appendChild(sepRow);
     }
 
     const tr = document.createElement('tr');
     tr.style.borderBottom = '1px solid rgba(255,255,255,0.04)';
 
-    // Name cell
+    // Name cell with class color
     const nameTd = document.createElement('td');
     nameTd.style.cssText = 'padding:5px 12px;white-space:nowrap;position:sticky;left:0;background:var(--bg);z-index:1;';
-    nameTd.textContent = p.name;
+    const col = classColor(p.name) || 'var(--text)';
+    nameTd.innerHTML = `<span style="color:${col};">${p.name}</span>`;
     tr.appendChild(nameTd);
 
-    // Role/Class cell
-    const roleTd = document.createElement('td');
-    roleTd.style.cssText = 'padding:5px 8px;font-size:12px;color:var(--text-dim);white-space:nowrap;';
-    roleTd.textContent = p.class || '';
-    tr.appendChild(roleTd);
+    // Class cell — right-aligned
+    const clsTd = document.createElement('td');
+    clsTd.style.cssText = 'padding:5px 12px 5px 4px;font-size:12px;color:var(--text-dim);white-space:nowrap;text-align:right;';
+    clsTd.textContent = p.class || '';
+    tr.appendChild(clsTd);
 
     // Attendance checkboxes
     for (const raid of raids) {
       const td = document.createElement('td');
       td.style.cssText = 'text-align:center;padding:4px;';
       const present = getPlayerAttendance(p.name, raid.date);
-      const hasCla = window._claPresence?.[normalizeName(p.name)]?.has(raid.date) ?? false;
       const hasOverride = attendanceData.overrides[normalizeName(p.name)]?.[raid.date] !== undefined;
+      const hasCla = window._claPresence?.[normalizeName(p.name)]?.has(raid.date) ?? false;
 
       const cb = document.createElement('input');
       cb.type = 'checkbox';
@@ -4217,12 +4251,25 @@ function renderAttendancePanel() {
     tbody.appendChild(tr);
   }
 
-  // Update per-raid attendance counts
+  // Per-raid counts
   for (const raid of raids) {
     const count = players.filter(p => getPlayerAttendance(p.name, raid.date)).length;
     const el = document.getElementById('att-count-' + raid.date);
     if (el) el.textContent = count;
   }
+}
+
+function attendanceAddRaid() {
+  const input = document.getElementById('newRaidDateInput');
+  if (!input?.value) return;
+  const dateStr = input.value; // YYYY-MM-DD
+  if (attendanceData.raids.find(r => r.date === dateStr)) return; // already exists
+  const date = new Date(dateStr + 'T12:00:00'); // noon to avoid TZ issues
+  attendanceData.raids.push({ date: dateStr, label: formatRaidLabel(date) });
+  attendanceData.raids.sort((a, b) => a.date.localeCompare(b.date));
+  input.value = '';
+  saveAttendanceToGitHub();
+  renderAttendancePanel();
 }
 
 function attendanceFilterRole(val) {
