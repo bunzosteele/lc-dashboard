@@ -103,7 +103,7 @@
                 "Ranged DPS",
                 "Priest"
               ],
-              "multiplier": 1.25
+              "multiplier": 2
             }
           ],
           "roleValues": {
