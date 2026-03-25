@@ -1178,30 +1178,23 @@
         <button class="group-btn" data-mode="t6" onclick="setGrouping('t6')">T6</button>
       </div>
     </div>
-    <div style="display:flex;gap:16px;align-items:flex-start;justify-content:center;">
-      <div class="nav-dropdown" id="navDdGuildMgmt">
-        <button class="nav-dropdown-btn" id="navDdGuildMgmtBtn" onclick="navDropdownToggle('navDdGuildMgmt')">
-          Guild Management <span class="nav-dd-arrow">▾</span>
-        </button>
-        <div class="nav-dropdown-menu" id="navDdGuildMgmtMenu">
-          <button class="group-btn" data-mode="attendance" onclick="navDropdownSelect('navDdGuildMgmt','attendance')">Attendance</button>
-          <button class="group-btn" data-mode="cla" onclick="navDropdownSelect('navDdGuildMgmt','cla')">CLA</button>
-        </div>
-      </div>
-      <div class="nav-dropdown" id="navDdLootMgmt">
-        <button class="nav-dropdown-btn" id="navDdLootMgmtBtn" onclick="navDropdownToggle('navDdLootMgmt')">
-          Loot Management <span class="nav-dd-arrow">▾</span>
-        </button>
-        <div class="nav-dropdown-menu" id="navDdLootMgmtMenu">
-          <button class="group-btn" data-mode="lootlog" onclick="navDropdownSelect('navDdLootMgmt','lootlog')">Loot Log</button>
-          <button class="group-btn" data-mode="glossary" onclick="navDropdownSelect('navDdLootMgmt','glossary')">Item Glossary</button>
-          <button class="group-btn" data-mode="bis" onclick="navDropdownSelect('navDdLootMgmt','bis')">BiS Lists</button>
-        </div>
-      </div>
-    </div>
     <div class="nav-segment">
       <div class="nav-segment-btns">
         <button class="group-btn group-btn-large" data-mode="loot" onclick="setGrouping('loot')">Loot Distribution</button>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;">
+      <div class="nav-dropdown" id="navDdGuildMgmt">
+        <button class="nav-dropdown-btn" id="navDdGuildMgmtBtn" onclick="navDropdownToggle('navDdGuildMgmt')">
+          Management <span class="nav-dd-arrow">▾</span>
+        </button>
+        <div class="nav-dropdown-menu" id="navDdGuildMgmtMenu">
+          <button class="group-btn" data-mode="attendance" onclick="navDropdownSelect('navDdGuildMgmt','attendance')">Roster</button>
+          <button class="group-btn" data-mode="cla" onclick="navDropdownSelect('navDdGuildMgmt','cla')">CLA</button>
+          <button class="group-btn" data-mode="lootlog" onclick="navDropdownSelect('navDdGuildMgmt','lootlog')">Loot Log</button>
+          <button class="group-btn" data-mode="glossary" onclick="navDropdownSelect('navDdGuildMgmt','glossary')">Item Glossary</button>
+          <button class="group-btn" data-mode="bis" onclick="navDropdownSelect('navDdGuildMgmt','bis')">BiS Lists</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1532,10 +1525,9 @@ const GROUPING_SUBTITLES = {
 
 
 // ── Nav dropdowns ─────────────────────────────────────────────────
-const _navDropdowns = ['navDdGuildMgmt', 'navDdLootMgmt'];
+const _navDropdowns = ['navDdGuildMgmt'];
 const _navDropdownModes = {
-  navDdGuildMgmt: ['attendance','cla'],
-  navDdLootMgmt:  ['glossary','bis','lootlog'],
+  navDdGuildMgmt: ['attendance','cla','glossary','bis','lootlog'],
 };
 
 function navDropdownToggle(id) {
