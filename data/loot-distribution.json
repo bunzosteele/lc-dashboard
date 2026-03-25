@@ -1,0 +1,109 @@
+{
+  "raids": [
+    {
+      "date": "2026-03-04",
+      "label": "Mar 4",
+      "items": [
+        {
+          "item": "Pauldrons of the Fallen Defender",
+          "recipient": "DruidOwl"
+        },
+        {
+          "item": "Pauldrons of the Fallen Defender",
+          "recipient": "PriestShad"
+        },
+        {
+          "item": "Bladespire Warbands",
+          "recipient": "WarriorFury"
+        },
+        {
+          "item": "Windshear Boots",
+          "recipient": "ShamanEle"
+        },
+        {
+          "item": "Shuriken of Negation",
+          "recipient": "WarriorArms"
+        },
+        {
+          "item": "Leggings of the Fallen Defender",
+          "recipient": "DruidTank"
+        },
+        {
+          "item": "Leggings of the Fallen Champion",
+          "recipient": "PaladinRet"
+        },
+        {
+          "item": "Liar's Tongue Gloves",
+          "recipient": "ShamanEnh"
+        },
+        {
+          "item": "Leggings of the Fallen Hero",
+          "recipient": "MageArc"
+        },
+        {
+          "item": "Leggings of the Fallen Defender",
+          "recipient": "WarriorTank"
+        },
+        {
+          "item": "Eye of Magtheridon",
+          "recipient": "PriestShad"
+        },
+        {
+          "item": "Magtheridon's Head",
+          "recipient": "WarlockAff"
+        }
+      ]
+    },
+    {
+      "date": "2026-03-11",
+      "label": "Mar 11",
+      "items": [
+        {
+          "item": "Shuriken of Negation",
+          "recipient": "Rogue"
+        },
+        {
+          "item": "Leggings of the Fallen Hero",
+          "recipient": "WarlockAff"
+        },
+        {
+          "item": "Teeth of Gruul",
+          "recipient": "PaladinHeal"
+        },
+        {
+          "item": "Eye of Magtheridon",
+          "recipient": "MageFire"
+        },
+        {
+          "item": "Leggings of the Fallen Champion",
+          "recipient": "PaladinTank"
+        },
+        {
+          "item": "Pauldrons of the Fallen Champion",
+          "recipient": "PaladinTank"
+        },
+        {
+          "item": "Pauldrons of the Fallen Hero",
+          "recipient": "WarlockDes"
+        },
+        {
+          "item": "Thundering Greathelm",
+          "recipient": "WarriorFury"
+        },
+        {
+          "item": "Magtheridon's Head",
+          "recipient": "HunterBM"
+        },
+        {
+          "item": "Chestguard of the Fallen Champion",
+          "recipient": "PaladinTank"
+        },
+        {
+          "item": "Chestguard of the Fallen Defender",
+          "recipient": "DruidTank"
+        }
+      ]
+    }
+  ],
+  "_v": 0
+}
