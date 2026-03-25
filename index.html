@@ -2305,33 +2305,20 @@ const GITHUB_FILE = 'cla-sheets.json';
 const GEAR_IDS_FILE = 'gear-item-ids.json';
 let gearItemIds = {}; // item name (lowercase) -> wowhead item ID
 let bisData = {};    // spec -> slot -> [[id, rank, phase, epv*100], ...]
-let githubToken = localStorage.getItem('ghToken') || '';
+let githubToken = ''; // legacy — only used if WCL OAuth requires it
 let writeToken = localStorage.getItem('writeToken') || ''; // Cloudflare Worker write token
 
 async function saveWclConfigToGitHub(password, clientId, clientSecret, realm) {
-  if (!githubToken) { setWclStatus('GitHub token required to save credentials.', 'error'); return; }
+  if (!writeToken) { setWclStatus('Write token required to save credentials.', 'error'); return; }
   try {
     const encrypted = await encryptData(password, { clientId, clientSecret, realm });
-    const apiUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${WCL_CONFIG_FILE}`;
-    let sha = null;
-    try {
-      const getRes = await fetch(apiUrl, {
-        headers: { Authorization: `token ${githubToken}`, Accept: 'application/vnd.github.v3+json' }
-      });
-      if (getRes.ok) sha = (await getRes.json()).sha;
-    } catch(e) {}
-    const body = {
-      message: 'Update WCL config',
-      content: btoa(JSON.stringify(encrypted, null, 2)),
-      ...(sha ? { sha } : {})
-    };
-    const putRes = await fetch(apiUrl, {
+    const putRes = await fetch(`${CF_WORKER_URL}/${WCL_CONFIG_FILE}`, {
       method: 'PUT',
-      headers: { Authorization: `token ${githubToken}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+      headers: { 'Content-Type': 'application/json', 'X-Token': writeToken },
+      body: JSON.stringify(encrypted, null, 2),
     });
     if (putRes.ok) {
-      setWclStatus('✓ Credentials encrypted and saved to repo!', 'success');
+      setWclStatus('✓ Credentials encrypted and saved!', 'success');
     } else {
       setWclStatus('Failed to save to GitHub — check your GitHub token.', 'error');
     }
@@ -2342,9 +2329,8 @@ async function saveWclConfigToGitHub(password, clientId, clientSecret, realm) {
 
 async function loadWclConfigFromRepo(password) {
   try {
-    const res = await fetch(`./wcl-config.json?t=${Date.now()}`);
-    if (!res.ok) return false;
-    const encrypted = await res.json();
+    let encrypted;
+    try { encrypted = await fetchFromWorker('wcl-config.json'); } catch(e) { return false; }
     const config = await decryptData(password, encrypted);
     if (!config.clientId || !config.clientSecret || !config.realm) return false;
     sessionStorage.setItem('wclClientId', config.clientId);
@@ -2506,32 +2492,13 @@ async function saveClaSheetsToGitHub() {
   await new Promise(resolve => { _githubSaveTimer = setTimeout(resolve, 600); });
   _githubSaveTimer = null;
   try {
-    const apiUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
-    // Always fetch fresh SHA immediately before PUT to avoid conflicts
-    let sha = null;
-    const getRes = await fetch(apiUrl, {
-      headers: { Authorization: `token ${githubToken}`, Accept: 'application/vnd.github.v3+json' }
-    });
-    if (getRes.ok) sha = (await getRes.json()).sha;
-
-    const body = {
-      message: `Update CLA sheets - ${new Date().toLocaleDateString()}`,
-      content: btoa(JSON.stringify(claSheets, null, 2)),
-      ...(sha ? { sha } : {})
-    };
-
-    const putRes = await fetch(apiUrl, {
+    const res = await fetch(`${CF_WORKER_URL}/cla-sheets.json`, {
       method: 'PUT',
-      headers: {
-        Authorization: `token ${githubToken}`,
-        Accept: 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
+      headers: { 'Content-Type': 'application/json', 'X-Token': writeToken },
+      body: JSON.stringify(claSheets, null, 2),
     });
-
-    if (putRes.ok) {
-      setHint('✓ Saved to GitHub!', 'success');
+    if (res.ok) {
+      setHint('✓ Saved!', 'success');
     } else {
       const err = await putRes.json();
       setHint(`GitHub save failed: ${err.message}`, 'error');
@@ -3510,9 +3477,7 @@ function saveGithubToken() {
   const token = document.getElementById('claToken').value.trim();
   if (!token) return;
   writeToken = token;
-  githubToken = token; // kept for WCL OAuth which still uses github
   try { localStorage.setItem('writeToken', token); } catch(e) {}
-  try { localStorage.setItem('ghToken', token); } catch(e) {}
   document.getElementById('claToken').value = '';
   updateAuthState();
 }
@@ -3564,7 +3529,6 @@ function setHint(msg, type) {
 }
 
 function clearGithubToken() {
-  githubToken = '';
   writeToken = '';
   try { localStorage.removeItem('writeToken'); } catch(e) {}
   try { localStorage.removeItem('ghToken'); } catch(e) {}
@@ -3574,7 +3538,7 @@ function clearGithubToken() {
 }
 
 function updateAuthState() {
-  const authed = !!githubToken;
+  const authed = !!writeToken;
   const adminNav = document.getElementById('adminNav');
   const authFooter = document.getElementById('githubAuthFooter');
   const authBar = document.getElementById('githubAuthBar');
@@ -3666,26 +3630,12 @@ async function lookupItemId(itemName) {
 async function saveGearItemIdsToGitHub() {
   if (!writeToken) return;
   try {
-    const apiUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/${GEAR_IDS_FILE}`;
-    let sha = null;
-    try {
-      const getRes = await fetch(apiUrl, {
-        headers: { Authorization: `token ${githubToken}`, Accept: 'application/vnd.github.v3+json' }
-      });
-      if (getRes.ok) sha = (await getRes.json()).sha;
-    } catch(e) {}
-
-    const body = {
-      message: `Update gear item IDs - ${new Date().toLocaleDateString()}`,
-      content: btoa(unescape(encodeURIComponent(JSON.stringify(gearItemIds, null, 2)))),
-      ...(sha ? { sha } : {})
-    };
-    await fetch(apiUrl, {
+    await fetch(`${CF_WORKER_URL}/gear-item-ids.json`, {
       method: 'PUT',
-      headers: { Authorization: `token ${githubToken}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+      headers: { 'Content-Type': 'application/json', 'X-Token': writeToken },
+      body: JSON.stringify(gearItemIds, null, 2),
     });
-    console.log('Saved gear-item-ids.json to GitHub');
+    console.log('Saved gear-item-ids.json to Worker');
   } catch(e) {
     console.warn('Failed to save gear-item-ids.json:', e.message);
   }
@@ -3764,7 +3714,7 @@ function addCla() {
   saveClaSheetsToGitHub();
 
   // If gear listing GID + GitHub token provided, gap-fill item ID map
-  if (gearListingGid && githubToken) {
+  if (gearListingGid && writeToken) {
     processGearListingForItemIds(sheetId, gearListingGid);
   }
 
