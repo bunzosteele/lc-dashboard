@@ -1649,8 +1649,8 @@ function rebuildAttendanceFromCla() {
   }
   // Keep raids sorted chronologically
   attendanceData.raids.sort((a, b) => a.date.localeCompare(b.date));
-  // Persist new raids to attendance.json so we retain data even if CLA is lost
-  if (changed) saveAttendanceToGitHub();
+  // Persist new raids to attendance.json — only if write token available
+  if (changed && writeToken) saveAttendanceToGitHub();
 
   // Build CLA-derived presence from claPlayersByLabel (every player seen in any CLA sheet)
   const claPresence = {}; // playerKey -> Set of dateStr
@@ -2300,7 +2300,7 @@ let wclData = {}; // normalized name -> { points, rank, outOf }
 const GITHUB_REPO = 'bunzosteele/dbs-lc'; // kept for WCL OAuth only
 // Cloudflare Worker URL — set this to your deployed Worker URL
 // e.g. 'https://dbs-lc.yourname.workers.dev'
-const CF_WORKER_URL = 'dbs-lc.steelead24.workers.dev';  // ← fill in after deploying the Worker
+const CF_WORKER_URL = '';  // ← fill in after deploying the Worker
 const GITHUB_FILE = 'cla-sheets.json';
 const GEAR_IDS_FILE = 'gear-item-ids.json';
 let gearItemIds = {}; // item name (lowercase) -> wowhead item ID
@@ -2311,7 +2311,8 @@ async function saveWclConfigToGitHub(password, clientId, clientSecret, realm) {
   if (!writeToken) { setWclStatus('Write token required to save credentials.', 'error'); return; }
   try {
     const encrypted = await encryptData(password, { clientId, clientSecret, realm });
-    const putRes = await fetch(`${CF_WORKER_URL}/${WCL_CONFIG_FILE}`, {
+    const _wbase = (u => u.startsWith('http') ? u : 'https://' + u)(CF_WORKER_URL.trim().replace(/\/+$/, ''));
+    const putRes = await fetch(`${_wbase}/${WCL_CONFIG_FILE}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-Token': writeToken },
       body: JSON.stringify(encrypted, null, 2),
@@ -2491,7 +2492,8 @@ async function saveClaSheetsToGitHub() {
   await new Promise(resolve => { _githubSaveTimer = setTimeout(resolve, 600); });
   _githubSaveTimer = null;
   try {
-    const res = await fetch(`${CF_WORKER_URL}/cla-sheets.json`, {
+    const _wbase = (u => u.startsWith('http') ? u : 'https://' + u)(CF_WORKER_URL.trim().replace(/\/+$/, ''));
+    const res = await fetch(`${_wbase}/cla-sheets.json`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-Token': writeToken },
       body: JSON.stringify(claSheets, null, 2),
@@ -3628,7 +3630,8 @@ async function lookupItemId(itemName) {
 async function saveGearItemIdsToGitHub() {
   if (!writeToken) return;
   try {
-    await fetch(`${CF_WORKER_URL}/gear-item-ids.json`, {
+    const _giBase = (u => u.startsWith('http') ? u : 'https://' + u)(CF_WORKER_URL.trim().replace(/\/+$/, ''));
+    await fetch(`${_giBase}/gear-item-ids.json`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-Token': writeToken },
       body: JSON.stringify(gearItemIds, null, 2),
@@ -5632,7 +5635,10 @@ async function migrateFromGitHub() {
 
 async function fetchFromWorker(filename) {
   if (!CF_WORKER_URL) throw new Error('CF_WORKER_URL not configured');
-  const res = await fetch(`${CF_WORKER_URL}/${filename}`, { cache: 'no-store' });
+  // Normalise: ensure absolute URL with https:// and no trailing slash
+  let base = CF_WORKER_URL.trim().replace(/\/+$/, '');
+  if (!base.startsWith('http://') && !base.startsWith('https://')) base = 'https://' + base;
+  const res = await fetch(`${base}/${filename}`, { cache: 'no-store' });
   if (!res.ok) throw new Error(`Worker fetch failed for ${filename}: ${res.status}`);
   return res.json();
 }
@@ -5640,7 +5646,9 @@ async function fetchFromWorker(filename) {
 async function saveJsonToGitHub(filename, data) {
   if (!CF_WORKER_URL) throw new Error('CF_WORKER_URL not configured — set it in the dashboard source');
   if (!writeToken) throw new Error('Write token required — enter it in the auth panel');
-  const res = await fetch(`${CF_WORKER_URL}/${filename}`, {
+  let _base = CF_WORKER_URL.trim().replace(/\/+$/, '');
+  if (!_base.startsWith('http://') && !_base.startsWith('https://')) _base = 'https://' + _base;
+  const res = await fetch(`${_base}/${filename}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', 'X-Token': writeToken },
     body: JSON.stringify(data, null, 2),
