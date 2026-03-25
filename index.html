@@ -1298,7 +1298,7 @@
 </div>
 
 <script>
-const SHEET_ID = '1jWVKqBCSwf9yaGMSAYywDH178Dr__fQQQiJmu0EEBDM';
+let SHEET_ID = '';
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=2077814587`;
 const LOOT_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=964257878`;
 const CLASSES_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=139934655`;
@@ -2297,10 +2297,8 @@ let wclToken = null;
 let wclTokenExpiry = 0;
 let wclData = {}; // normalized name -> { points, rank, outOf }
 
-const GITHUB_REPO = 'bunzosteele/dbs-lc'; // kept for WCL OAuth only
-// Cloudflare Worker URL — set this to your deployed Worker URL
-// e.g. 'https://dbs-lc.yourname.workers.dev'
-const CF_WORKER_URL = '';  // ← fill in after deploying the Worker
+let GITHUB_REPO = '';
+let CF_WORKER_URL = '';
 const GITHUB_FILE = 'cla-sheets.json';
 const GEAR_IDS_FILE = 'gear-item-ids.json';
 let gearItemIds = {}; // item name (lowercase) -> wowhead item ID
@@ -2509,8 +2507,8 @@ async function saveClaSheetsToGitHub() {
   }
 }
 
-const APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbz4PHAAzCBbp7uuprvoeQKhCJGrmjT9Zgszw-EymFI-8vT-fjGgMSdfCzsF2Nt0Gk1A/exec';
-const ICON_SCRIPT = 'https://script.google.com/macros/s/AKfycbyBs6sgRoX6Zy3a3lq9q6fR4o0spLHRfKc-G63Vy8JUBTQa2HFWhnP8MxFGm8JxjNo/exec';
+let APPS_SCRIPT = '';
+let ICON_SCRIPT = '';
 
 // Fetch a Google Sheet tab via Apps Script proxy
 async function proxyFetch(targetUrl) {
@@ -3970,6 +3968,23 @@ async function loadGearItemIdsFromRepo() {
   }
 }
 
+// ── Load config.json first, then boot ────────────────────────────
+(async () => {
+  try {
+    const cfg = await fetch('./config.json?t=' + Date.now()).then(r => r.json());
+    if (cfg.cf_worker_url) CF_WORKER_URL  = cfg.cf_worker_url.trim().replace(/\/+$/, '');
+    if (cfg.github_repo)   GITHUB_REPO   = cfg.github_repo;
+    if (cfg.sheet_id)      SHEET_ID      = cfg.sheet_id;
+    if (cfg.apps_script)   APPS_SCRIPT   = cfg.apps_script;
+    if (cfg.icon_script)   ICON_SCRIPT   = cfg.icon_script;
+    console.log('config.json loaded — worker:', CF_WORKER_URL);
+  } catch(e) {
+    console.warn('config.json not found or invalid — using defaults:', e.message);
+  }
+  boot();
+})();
+
+function boot() {
 loadClaSheetsFromRepo().then(async () => {
   await Promise.all([loadGearItemIdsFromRepo(), loadBisDataFromRepo(), loadRosterFromRepo(), loadLootGlossaryFromRepo(), loadSetBonusesFromRepo(), loadAttendanceFromRepo()]);
   // Handle PKCE callback first (page may have been redirected back from WarcraftLogs)
@@ -3981,6 +3996,7 @@ loadClaSheetsFromRepo().then(async () => {
     fetchWclAllStars(WCL_REALM);
   }
 });
+} // end boot()
 
 
 
