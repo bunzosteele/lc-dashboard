@@ -1054,12 +1054,8 @@
   </div>
 
   <div class="controls">
-    <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start;">
-      <button class="btn primary" onclick="fetchData()" style="width:100%;">⟳ Fetch Data</button>
-      <button class="btn" id="wclConnectTopBtn" onclick="connectWcl()" style="display:none;width:100%;">⚡ WarcraftLogs</button>
-    </div>
     <div style="margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:2px;">
-      <span class="status" id="status">Click Fetch Data to load the latest raid summary</span>
+      <span class="status" id="status"></span>
       <span id="wclStatus" style="font-size:12px;color:var(--text-dim);font-style:italic;"></span>
     </div>
   </div>
@@ -1218,7 +1214,7 @@
   <div id="output">
     <div class="empty">
       <div class="icon">⚔</div>
-      <div>No data loaded yet.<br>Click <strong>Fetch Data</strong> to load the latest raid summary.</div>
+      <div>Loading data&hellip;</div>
     </div>
   </div>
 
@@ -1278,6 +1274,12 @@
       </div>
     </div>
     <div id="bisContent" style="color:var(--text-dim);font-style:italic;font-size:13px;">Select a spec and slot to browse BiS items.</div>
+  </div>
+
+  <!-- WarcraftLogs connect section -->
+  <div id="wclSection" style="padding:16px 0 8px;border-top:1px solid var(--border);margin-top:8px;">
+    <button class="btn" id="wclConnectTopBtn" onclick="connectWcl()" style="display:none;">⚡ Connect WarcraftLogs</button>
+    <span id="wclConnectedLabel" style="display:none;font-size:13px;color:#4caa6e;">⚡ Connected to WarcraftLogs</span>
   </div>
 
   <!-- GitHub auth footer (shown when not authenticated) -->
@@ -2392,8 +2394,11 @@ function setWclStatus(msg, type = '') {
   const el = document.getElementById('wclStatus');
   if (el) { el.textContent = msg; el.style.color = type === 'error' ? 'var(--red)' : type === 'success' ? '#4caa6e' : 'var(--text-dim)'; }
   const topBtn = document.getElementById('wclConnectTopBtn');
-  if (topBtn) topBtn.style.display = (type === 'success') ? 'none' : '';
-  document.body.classList.toggle('wcl-hidden', type !== 'success');
+  const connectedLabel = document.getElementById('wclConnectedLabel');
+  const connected = type === 'success';
+  if (topBtn) topBtn.style.display = connected ? 'none' : '';
+  if (connectedLabel) connectedLabel.style.display = connected ? '' : 'none';
+  document.body.classList.toggle('wcl-hidden', !connected);
 }
 
 async function getWclToken() {
@@ -2629,7 +2634,7 @@ function showErrors() {
       </thead>
       <tbody>${rows}</tbody>
     </table>
-    <div style="margin-top:16px;font-size:13px;color:var(--text-dim);font-style:italic;">Check that the spreadsheet is public and GIDs are correct. Then click Fetch Data to retry.</div>
+    <div style="margin-top:16px;font-size:13px;color:var(--text-dim);font-style:italic;">Check that your CLA sheets are configured correctly.</div>
   `;
   out.parentNode.insertBefore(panel, out);
 }
@@ -2660,17 +2665,9 @@ async function fetchData() {
     fetchItemMap(); // instant — populates from static map
 
     // Fire all fetches in parallel
-    await Promise.all([
-      fetchAllClaData(),
-      // Legacy loot sheet kept as fallback — will be removed once loot-distribution.json is seeded
-      fetchSheet(SHEET_ID, '964257878')
-        .then(text => { if (text && !lootDistribution.raids.length) lootByPlayer = parseLoot(text); })
-        .catch(() => {}),
-    ]);
-    // Build lootByPlayer from loot-distribution.json if it has data
-    if (lootDistribution.raids.length) {
-      lootByPlayer = buildLootByPlayerFromDistribution();
-    }
+    await fetchAllClaData();
+    // Build lootByPlayer from loot-distribution.json
+    lootByPlayer = buildLootByPlayerFromDistribution();
 
     // Build attendance from CLA data
     rebuildAttendanceFromCla();
@@ -2678,15 +2675,8 @@ async function fetchData() {
 
     let data = buildAttendanceRenderData();
     if (!data || !data.dates.length || !data.roles.length) {
-      // Fallback: try legacy attendance sheet
-      try {
-        const attendanceText = await fetchSheet(SHEET_ID, '2077814587');
-        data = parseCSV(attendanceText);
-        if (!data.dates.length) throw new Error('No raid dates found');
-      } catch(e) {
-        addError('Attendance', 'No CLA dates found and legacy sheet failed: ' + e.message);
-        throw e;
-      }
+      addError('Attendance', 'No CLA data found — ensure CLA sheets are configured.');
+      data = { dates: [], roles: [] };
     }
 
     if (fetchErrors.length) {
@@ -3579,6 +3569,8 @@ function initWclIfSaved() {
     document.body.classList.add('wcl-hidden');
     const topBtn = document.getElementById('wclConnectTopBtn');
     if (topBtn) topBtn.style.display = '';
+    const connectedLabel = document.getElementById('wclConnectedLabel');
+    if (connectedLabel) connectedLabel.style.display = 'none';
   }
 }
 
