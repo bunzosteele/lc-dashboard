@@ -1442,7 +1442,6 @@
   <div id="githubAuthBar" style="display:none;padding:8px 12px;display:none;align-items:center;justify-content:space-between;">
     <span style="font-size:12px;color:var(--text-dim);">&#128273; Write access enabled</span>
     <div style="display:flex;gap:8px;align-items:center;">
-      <button class="btn" id="migrateBtn" class="write-gated-hide" onclick="migrateFromGitHub()" style="font-size:11px;padding:3px 10px;" title="One-time: seed Worker KV from current GitHub Pages JSON files">Seed from GitHub</button>
       <button class="btn" onclick="clearGithubToken()" style="font-size:11px;padding:3px 10px;">Disconnect</button>
     </div>
   </div>
@@ -4347,34 +4346,67 @@ function _urlClearLootParams() {
 }
 
 function _urlRestoreState() {
-  const tab  = _urlGetParam('tab');
-  const raid = _urlGetParam('raid');
-  const boss = _urlGetParam('boss');
-  const item = _urlGetParam('item');
+  const tab      = _urlGetParam('tab');
+  const raid     = _urlGetParam('raid');
+  const boss     = _urlGetParam('boss');
+  const item     = _urlGetParam('item');
+  const glRaid   = _urlGetParam('gl_raid');
+  const glBoss   = _urlGetParam('gl_boss');
+  const glItem   = _urlGetParam('gl_item');
+  const bisSpec  = _urlGetParam('bis_spec');
+  const bisPhase = _urlGetParam('bis_phase');
+  const bisSlot  = _urlGetParam('bis_slot');
 
   if (tab) setGrouping(tab);
 
+  // Restore Loot Distribution dropdowns
   if (tab === 'loot' && raid) {
-    // Restore loot dropdown selections after a short delay to ensure glossary is ready
     setTimeout(() => {
       const raidSel = document.getElementById('lootRaid');
       if (!raidSel) return;
       raidSel.value = raid;
-      onRaidChange(true); // populate boss dropdown
+      onRaidChange(true);
       if (boss) {
         setTimeout(() => {
           const bossSel = document.getElementById('lootBoss');
           if (bossSel) {
             bossSel.value = boss;
-            onBossChange(); // populate item dropdown
+            onBossChange();
             if (item) {
               setTimeout(() => {
                 const itemId = getItemId(item);
-                const iconName = itemId ? itemIcons[itemId] : null;
-                selectItem(item, itemId, iconName);
+                selectItem(item, itemId, itemId ? itemIcons[itemId] : null);
               }, 50);
             }
           }
+        }, 50);
+      }
+    }, 100);
+  }
+
+  // Restore Item Glossary state
+  if (tab === 'glossary' && glRaid) {
+    setTimeout(() => {
+      _glossaryState.raid = glRaid;
+      _glossaryState.boss = glBoss || (glossaryBossList(glRaid)[0] || '');
+      _glossaryState.item = glItem || '';
+      renderGlossaryPanel();
+    }, 100);
+  }
+
+  // Restore BiS Lists state
+  if (tab === 'bis' && bisSpec) {
+    setTimeout(() => {
+      initBisPanel(); // ensure spec options populated
+      const specSel  = document.getElementById('bisSpecSelect');
+      const phaseSel = document.getElementById('bisPhaseSelect');
+      if (specSel)  specSel.value  = bisSpec;
+      if (phaseSel && bisPhase !== '') phaseSel.value = bisPhase;
+      onBisSpecChange(); // populate slot dropdown
+      if (bisSlot) {
+        setTimeout(() => {
+          const slotSel = document.getElementById('bisSlotSelect');
+          if (slotSel) { slotSel.value = bisSlot; renderBisPanel(); }
         }, 50);
       }
     }, 100);
@@ -5460,15 +5492,19 @@ function renderGlossaryPanel() {
 function glossarySelectRaid() {
   _glossaryState.raid = document.getElementById('glRaid').value;
   _glossaryState.item = '';
-  // Auto-select first boss
   const bosses = _glossaryState.raid ? glossaryBossList(_glossaryState.raid) : [];
   _glossaryState.boss = bosses.length ? bosses[0] : '';
   _glossaryPendingConditions = [];
+  _urlSetParam('gl_raid', _glossaryState.raid);
+  _urlSetParam('gl_boss', _glossaryState.boss);
+  _urlSetParam('gl_item', '');
   renderGlossaryPanel();
 }
 function glossarySelectBoss() {
   _glossaryState.boss = document.getElementById('glBoss').value;
   _glossaryState.item = '';
+  _urlSetParam('gl_boss', _glossaryState.boss);
+  _urlSetParam('gl_item', '');
   renderGlossaryPanel();
 }
 function glossarySelectItem() {
@@ -5482,6 +5518,7 @@ function toggleGlossaryItemDropdown() {
 function glossarySelectItemCustom(itemName) {
   _glossaryState.item = itemName;
   _glossaryPendingConditions = [];
+  _urlSetParam('gl_item', itemName);
   const dd = document.getElementById('glItemDropdown');
   if (dd) dd.style.display = 'none';
   renderGlossaryPanel();
@@ -6213,6 +6250,8 @@ function initBisPanel() {
 function onBisSpecChange() {
   const spec = document.getElementById('bisSpecSelect').value;
   const phase = parseInt(document.getElementById('bisPhaseSelect').value); // 0 = all
+  _urlSetParam('bis_spec', spec);
+  _urlSetParam('bis_phase', phase || '');
   const slotSel = document.getElementById('bisSlotSelect');
   const prevSlot = slotSel.value;
 
@@ -6243,6 +6282,8 @@ function onBisSpecChange() {
 function renderBisPanel() {
   const spec = document.getElementById('bisSpecSelect').value;
   const phase = parseInt(document.getElementById('bisPhaseSelect').value); // 0 = all
+  const slot = document.getElementById('bisSlotSelect')?.value || '';
+  _urlSetParam('bis_slot', slot);
   const slot = document.getElementById('bisSlotSelect').value;
   const el = document.getElementById('bisContent');
 
@@ -6453,7 +6494,6 @@ async function bisAddItem() {
 
 // ── One-time migration: seed Worker KV from GitHub Pages JSON files ──────
 async function migrateFromGitHub() {
-  const btn = document.getElementById('migrateBtn');
   if (!CF_WORKER_URL) { alert('CF_WORKER_URL not set in source.'); return; }
   if (!writeToken) { alert('Write token required.'); return; }
   if (!confirm('This will overwrite all Worker KV data with the current GitHub Pages JSON files.\n\nThis should only be done once during initial setup. Continue?')) return;
@@ -6481,7 +6521,7 @@ async function migrateFromGitHub() {
       results.push(`${file}: error — ${e.message}`);
     }
   }
-  if (btn) { btn.textContent = 'Seed from GitHub'; btn.disabled = false; }
+
   alert('Migration complete:\n' + results.join('\n'));
 }
 
