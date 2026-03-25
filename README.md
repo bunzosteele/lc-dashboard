@@ -161,11 +161,11 @@ If you deployed your own Apps Script project in Section 2, no additional steps a
   ...
   "enable_wcl": true,
   "wcl_client_id": "paste-your-client-id-here",
-  "wcl_realm": "your-realm-slug"
+  "wcl_realm": "your-realm-name"
 }
 ```
 
-The realm slug is the lowercase hyphenated version of your realm name as it appears in WarcraftLogs URLs, e.g. `area-52`, `benediction`, `dreamscythe`.
+The realm name is the lowercase hyphenated version of your realm name as it appears in WarcraftLogs URLs, e.g. `area-52`, `nightslayer`, `dreamscythe`.
 
 ### Connect in the Dashboard
 
@@ -174,21 +174,19 @@ The realm slug is the lowercase hyphenated version of your realm name as it appe
 3. After authorising, you'll be redirected back and the button changes to **⚡ Connected to WarcraftLogs**
 4. WCL performance data will now appear in the WCL column on all player tables
 
-WCL data automatically uses the most recent raid zone — no zone ID configuration required.
-
 ---
 
 ## 7. Set Up CLA Sheets
 
-CLA (Combat Log Analyser) is the source of attendance, gear issues, and consumable data.
+CLA (Combat Log Analyser) is the source of attendance, current gear, gear issues, and consumable data.
 
-1. Navigate to the **CLA** tab in the dashboard (requires write token)
-2. Click **+ Add CLA Sheet** for each raid you want to import
+1. Navigate to the **CLA** tab in the dashboard
+2. Click **+ Add CLA Sheet** for each raid you want to import (requires write token)
 3. For each entry, provide:
    - **Label**: a short name shown in the attendance table (e.g. `Mar 19`)
    - **Google Sheet URL**: the URL of the CLA export sheet
    - **Issues GID**: the `gid=` parameter from the gear issues tab URL
-   - **Gear GID** *(optional)*: the `gid=` parameter from the gear listing tab URL
+   - **Gear GID**: the `gid=` parameter from the gear listing tab URL
    - **Consumes GID**: the `gid=` parameter from the buff consumables tab URL
 4. Click **Save** — data is fetched and attendance/gear scores update immediately
 
@@ -200,7 +198,7 @@ CLA (Combat Log Analyser) is the source of attendance, gear issues, and consumab
 
 1. Navigate to the **Roster** tab (part of the Management dropdown, requires write token)
 2. Use the **Add Raider** form at the bottom to add each player with their role and class
-3. As you add CLA sheets, any players seen in CLA exports but not on the roster will appear in the **Seen in CLA — Not on Roster** panel. Click ✕ to permanently exclude bench players
+3. As you add CLA sheets, any players seen in CLA exports but not on the roster will appear in the **Seen in CLA — Not on Roster** panel. Click ✕ to permanently exclude old  players
 
 ---
 
@@ -214,13 +212,12 @@ CLA (Combat Log Analyser) is the source of attendance, gear issues, and consumab
 
 ### Adding Loot
 
-On the **Loot Distribution** tab or via the **+ LOG** button in any player's loot dropdown on the Loot Distribution tab.
+On the **Loot Log** tab items can be assigned to raiders. Alternatively the **+ LOG** button in any player's loot dropdown on the Loot Distribution tab will add the item to that player on the most recent raid.
 
 ### Updating BiS Lists and Priorities
 
-- **Item Glossary** tab: set prioritization multipliers per item
-- **BiS Lists** tab: set EPV values per spec/slot
-- **T4/T5/T6** tabs: configure set bonus multipliers
+- **Item Glossary** tab: set prioritization multipliers per item, this is how the loot council can include custom role/class/player priorities in the Priority calculation.Tier tokens can have bonuses assigned to set completions to reflect the added value of set bonuses.
+- **BiS Lists** tab: set EPV values per spec/slot, EPV values are calculated via a mathematical formula, but if the loot council does not think the calculated value accurately represents the value of the item, it can be overridden.
 
 ---
 
