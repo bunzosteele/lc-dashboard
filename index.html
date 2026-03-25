@@ -3183,8 +3183,8 @@ function calculatePriority(p, bottom20threshold, top20threshold, pointValues) {
   // Suboptimal enchants only count as issues on top-5 BiS items for this player's spec
   const gi = latestGearIssuesByPlayer[normalizeName(p.name)];
   const gearIssueCount = (gi?.issues || []).reduce((count, issue) => {
-    if (typeof issue === 'string') return count + 1; // always-flagged (no gem/enchant)
-    if (issue?.suboptimal) return count + (isTop5BisItem(issue.itemName, p.name) ? 1 : 0);
+    if (typeof issue === 'string' && !/\bZG\b/i.test(issue)) return count + 1; // always-flagged (no gem/enchant)
+    if (issue?.suboptimal && !/\bZG\b/i.test(issue.raw || '')) return count + (isTop5BisItem(issue.itemName, p.name) ? 1 : 0);
     return count;
   }, 0);
   const gearMod = 1 / (1 + 0.1 * gearIssueCount);
@@ -3723,8 +3723,8 @@ function toggleLoot(td, playerName) {
   // Tier set progress section
   html += buildTierProgressHtml(playerName);
 
-  // Role / Class edit section (only when write token present)
-  if (writeToken) {
+  // Role / Class edit section (only on the Roster tab when write token present)
+  if (writeToken && groupingMode === 'attendance') {
     const _p = rosterData.players.find(p => normalizeName(p.name) === normalizeName(playerName));
     if (_p) {
       const _allRoles = ['Tanks','Physical DPS','Ranged DPS','Healers'];
@@ -6796,8 +6796,8 @@ function onItemChange() {
 
       const gi = latestGearIssuesByPlayer[normalizeName(p.name)];
       const gearIssueCount = (gi?.issues || []).reduce((count, issue) => {
-        if (typeof issue === 'string') return count + 1;
-        if (issue?.suboptimal) return count + (isTop5BisItem(issue.itemName, p.name) ? 1 : 0);
+        if (typeof issue === 'string' && !/\bZG\b/i.test(issue)) return count + 1;
+        if (issue?.suboptimal && !/\bZG\b/i.test(issue.raw || '')) return count + (isTop5BisItem(issue.itemName, p.name) ? 1 : 0);
         return count;
       }, 0);
       const gearMod = 1 / (1 + 0.1 * gearIssueCount);
@@ -7405,11 +7405,11 @@ function onItemChange() {
       }
 
       return id
-        ? `<span style="display:inline-flex;align-items:center;gap:5px;">${bisIndicator}<a href="https://www.wowhead.com/tbc/item=${id}" data-wowhead="item=${id}&dataset=tbc" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--gold-light);font-size:15px;" title="${name}">${icon}${name.length > 28 ? name.slice(0,27) + '…' : name}</a></span>`
-        : `<span style="display:inline-flex;align-items:center;gap:5px;">${bisIndicator}<span style="font-size:15px;color:var(--gold-light);">${name}</span></span>`;
+        ? `<span style="display:inline-flex;align-items:center;gap:5px;min-width:0;overflow:hidden;">${bisIndicator}<a href="https://www.wowhead.com/tbc/item=${id}" data-wowhead="item=${id}&dataset=tbc" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--gold-light);font-size:15px;overflow:hidden;" title="${name}">${icon}<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${name}</span></a></span>`
+        : `<span style="display:inline-flex;align-items:center;gap:5px;min-width:0;overflow:hidden;">${bisIndicator}<span style="font-size:15px;color:var(--gold-light);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${name}</span></span>`;
     }).join('<br style="margin:2px 0;">');
 
-    return `<td style="padding:3px 8px;vertical-align:middle;text-align:left;max-width:32ch;overflow:hidden;">${html}</td>`;
+    return `<td style="padding:3px 8px;vertical-align:middle;text-align:left;max-width:32ch;overflow:hidden;white-space:nowrap;">${html}</td>`;
   }
 
     const relevantSlots = getRelevantSlots(item);
@@ -7532,8 +7532,8 @@ function onItemChange() {
     const gi = latestGearIssuesByPlayer[key];
     // Compute effective gear issues for display — suboptimal only count on top-5 BiS items
     const _displayIssues = (gi?.issues || []).reduce((acc, issue) => {
-      if (typeof issue === 'string') acc.push(issue);
-      else if (issue?.suboptimal && isTop5BisItem(issue.itemName, p.name)) acc.push(issue.raw + ' (BiS item)');
+      if (typeof issue === 'string' && !/\bZG\b/i.test(issue)) acc.push(issue);
+      else if (issue?.suboptimal && !/\bZG\b/i.test(issue.raw || '') && isTop5BisItem(issue.itemName, p.name)) acc.push(issue.raw + ' (BiS item)');
       return acc;
     }, []);
     const gearHtml = _displayIssues.length ? `<span class="gear-flag" style="color:${gearColor(_displayIssues.length)};filter:drop-shadow(0 0 4px ${gearColor(_displayIssues.length)}88);" title="${_displayIssues.join('&#10;')}">⚠</span>` : '';
