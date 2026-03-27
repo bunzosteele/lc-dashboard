@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DBS LC</title>
+<title>LC Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -1253,7 +1253,7 @@
         <div>
           <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;color:var(--gold-dim);margin-bottom:8px;">FINAL SCORE</div>
           <div style="font-family:monospace;font-size:12px;background:var(--bg2);padding:8px 12px;border-left:2px solid var(--gold-dim);color:var(--text-dim);">
-            score = AttendanceScore × ConsumeMod × GearMod × LootMod × HardSoftPrio × BisMod
+            score = AttendanceScore<span id="formulaConsumeLabel"> × ConsumeMod</span><span id="formulaGearLabel"> × GearMod</span> × LootMod × HardSoftPrio<span id="formulaBisLabel"> × BisMod</span><span id="formulaAltLabel"> × AltMod</span>
           </div>
           <div style="margin-top:8px;color:var(--text-dim);">All scores are normalised so the highest-scoring eligible player = 100. Each modifier multiplies the running total — no single factor is additive.</div>
         </div>
@@ -1262,16 +1262,16 @@
           <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;color:var(--gold-dim);margin-bottom:8px;">ATTENDANCE SCORE <span style="color:var(--text-dim);font-weight:400;">(primary driver)</span></div>
           <div style="font-family:monospace;font-size:12px;background:var(--bg2);padding:8px 12px;border-left:2px solid var(--gold-dim);color:var(--text-dim);">
             tenure = 4 × log₂(raidsAttended + 1)<br>
-            effPct = rawPct + (100 − rawPct) × (1 − 1/(1 + raids/8))<br>
-            AttendanceScore = floor(effPct / 10) × tenure
+            <span id="formulaEffAttLine">effPct = rawPct + (100 − rawPct) × (1 − 1/(1 + raids/8))<br>
+            AttendanceScore = floor(effPct / 10) × tenure</span><span id="formulaRawAttLine" style="display:none;">AttendanceScore = floor(rawPct / 10) × tenure</span>
           </div>
           <div style="margin-top:8px;color:var(--text-dim);">
             Tenure follows a logarithmic curve, giving the most weight to early raids. The difference between attending 2 and 5 raids is much more significant than between 20 and 25. The curve flattens substantially after ~10 raids, preventing long-tenured veterans from being insurmountably ahead of established raiders.<br><br>
-            The effective attendance percentage blends a veteran's raw percentage toward 100% based on tenure, so an occasional absence does not permanently harm a long-standing raider's priority. New raiders receive little or no forgiveness — consistent attendance in the early weeks is expected and indicative of long-term reliability. Raiders must have attended at least 2 raids to receive any score.
+            <span id="formulaEffAttDesc">The effective attendance percentage blends a veteran's raw percentage toward 100% based on tenure, so an occasional absence does not permanently harm a long-standing raider's priority. New raiders receive little or no forgiveness — consistent attendance in the early weeks is expected and indicative of long-term reliability.</span><span id="formulaRawAttDesc" style="display:none;">Raw attendance percentage is used with no veteran forgiveness — every absence counts equally regardless of raid history.</span> Raiders must have attended at least 2 raids to receive any score.
           </div>
         </div>
 
-        <div>
+        <div id="formulaConsumeSection">
           <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;color:var(--gold-dim);margin-bottom:8px;">CONSUME MODIFIER <span style="color:var(--text-dim);font-weight:400;">(×0.5 – ×1.0)</span></div>
           <div style="font-family:monospace;font-size:12px;background:var(--bg2);padding:8px 12px;border-left:2px solid var(--gold-dim);color:var(--text-dim);">
             ConsumeMod = 1 / (1 + missingPct / 100)<br>
@@ -1284,7 +1284,7 @@
           </div>
         </div>
 
-        <div>
+        <div id="formulaGearSection">
           <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;color:var(--gold-dim);margin-bottom:8px;">GEAR MODIFIER <span style="color:var(--text-dim);font-weight:400;">(×0.5 – ×1.0)</span></div>
           <div style="font-family:monospace;font-size:12px;background:var(--bg2);padding:8px 12px;border-left:2px solid var(--gold-dim);color:var(--text-dim);">
             GearMod = 1 / (1 + 0.1 × gearIssues)
@@ -1318,7 +1318,7 @@
           <div style="margin-top:8px;color:var(--text-dim);">Configured per tier set by the Loot Council. Piece count is checked against loot distribution and currently equipped gear.</div>
         </div>
 
-        <div>
+        <div id="formulaAltSection">
           <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;color:var(--gold-dim);margin-bottom:8px;">ALTERNATIVES MODIFIER <span style="color:var(--text-dim);font-weight:400;">(×0.71 – ×1.0)</span></div>
           <div style="font-family:monospace;font-size:12px;background:var(--bg2);padding:8px 12px;border-left:2px solid var(--gold-dim);color:var(--text-dim);">
             AltMod = 1 / (1 + alts × 0.05)<br>
@@ -1327,7 +1327,7 @@
           <div style="margin-top:8px;color:var(--text-dim);">Counts unique items on the player's BiS list in the same slot with EPV more than 5% above their currently equipped item, limited to the phase in which the considered item first appears.</div>
         </div>
 
-        <div>
+        <div id="formulaBisSection">
           <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.15em;color:var(--gold-dim);margin-bottom:8px;">BIS UPGRADE MODIFIER <span style="color:var(--text-dim);font-weight:400;">(×0.1 – ×2.0)</span></div>
           <div style="font-family:monospace;font-size:12px;background:var(--bg2);padding:8px 12px;border-left:2px solid var(--gold-dim);color:var(--text-dim);">
             Within ±5%: ×1.0 (sidegrade) &nbsp;|&nbsp; Outside ±5%: ×(1.0 + pct×0.02), upgrades capped at +50%<br>
@@ -1367,7 +1367,10 @@
   <div id="claPanel" style="display:none;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
       <span style="font-family:'Cinzel',serif;font-size:13px;letter-spacing:0.15em;color:var(--gold);">⚔ CLA Sheets</span>
-      <span id="claCount" style="font-size:12px;color:var(--text-dim);"></span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span id="claCount" style="font-size:12px;color:var(--text-dim);"></span>
+        <button id="claReparseBtn" class="btn write-gated" onclick="reparseAllClaData()" title="Re-fetch all CLA sheets, re-parse, and cache for faster future loads" style="font-size:11px;padding:3px 10px;">Re-parse CLAs</button>
+      </div>
     </div>
     <div id="claList"></div>
     <div class="cla-io-row">
@@ -1379,12 +1382,21 @@
       <textarea class="cla-input wide" id="claImportText" class="write-gated" rows="3" placeholder="Paste exported CLA data here..." style="width:100%;resize:vertical;"></textarea>
       <button class="btn primary" onclick="importCla()" style="margin-top:6px;">Import</button>
     </div>
-    <div class="cla-add-form">
-      <input class="cla-input" id="claLabel" class="write-gated" placeholder="Label (e.g. 2/26)" />
-      <input class="cla-input wide" id="claUrl" class="write-gated" placeholder="Google Sheet URL" />
-      <input class="cla-input" id="claGearGid" class="write-gated" placeholder="Issues GID" />
-      <input class="cla-input" id="claGearListingGid" class="write-gated" placeholder="Gear GID (optional)" />
-      <input class="cla-input" id="claBuffGid" class="write-gated" placeholder="Consumes GID" />
+    <div class="cla-add-form" id="claAddForm">
+      <input class="cla-input" id="claLabel" placeholder="Label (e.g. 2/26)" />
+      <!-- Apps Script mode fields -->
+      <div id="claScriptFields">
+        <input class="cla-input wide" id="claUrl" placeholder="Google Sheet URL" />
+        <input class="cla-input" id="claGearGid" placeholder="Issues GID" />
+        <input class="cla-input" id="claGearListingGid" placeholder="Gear GID (optional)" />
+        <input class="cla-input" id="claBuffGid" placeholder="Consumes GID" />
+      </div>
+      <!-- Paste mode fields (shown when enable_apps_script: false) -->
+      <div id="claPasteFields" style="display:none;">
+        <textarea class="cla-input wide" id="claPasteGear" rows="3" placeholder="Ctrl+A, Ctrl+C from Gear Issues tab, paste here…" style="width:100%;resize:vertical;font-size:10px;"></textarea>
+        <textarea class="cla-input wide" id="claPasteGearListing" rows="3" placeholder="Ctrl+A, Ctrl+C from Gear Listing tab (optional)…" style="width:100%;resize:vertical;font-size:10px;margin-top:4px;"></textarea>
+        <textarea class="cla-input wide" id="claPasteBuff" rows="3" placeholder="Ctrl+A, Ctrl+C from Buff Consumables tab, paste here…" style="width:100%;resize:vertical;font-size:10px;margin-top:4px;"></textarea>
+      </div>
       <button class="btn write-gated" onclick="addCla()">+ Add</button>
     </div>
   </div>
@@ -1483,6 +1495,7 @@ let itemMap = {}; // normalized item name -> { id, name }
 let itemValueMap = {}; // normalized item name -> loot value (number)
 let itemIcons = {}; // item id -> icon name
 let claSheets = [];
+let _claStoredParsed = {}; // parsed CLA data loaded from KV, keyed by label
 let claDataByPlayer = {};
 let claPlayersByLabel = {}; // label -> Set of normalised player keys
 let canonicalNames = {}; // normalized key -> exact name with special chars from CLA
@@ -1815,6 +1828,23 @@ function rebuildGlossaryData() {
 }
 
 // Legacy stub — no longer fetches from sheet
+// Normalize pasted CLA content — handles both TSV (clipboard) and CSV (downloaded)
+function normalizeClaPaste(text) {
+  text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
+  // Detect TSV by checking if the first line has more tabs than commas
+  const firstLine = text.split('\n')[0] || '';
+  const tabCount = (firstLine.match(/\t/g) || []).length;
+  const commaCount = (firstLine.match(/,/g) || []).length;
+  if (tabCount <= commaCount) return text; // already CSV-like
+  // Convert TSV to CSV: tabs → commas, handle no special quoting needed for CLA data
+  return text.split('\n').map(line =>
+    line.split('\t').map(cell => {
+      // Quote cells containing commas
+      return cell.includes(',') ? '"' + cell.replace(/"/g, '""') + '"' : cell;
+    }).join(',')
+  ).join('\n');
+}
+
 function parseCsvRows(text) {
   const lines = text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').trim().split('\n');
   return lines.map(line => {
@@ -1985,6 +2015,13 @@ function setPlayerAttendanceOverride(playerName, dateStr, value) {
 function formatAttendanceDate(date) {
   // ISO date string YYYY-MM-DD
   return date.toISOString().slice(0, 10);
+}
+
+function todayMST() {
+  // Return today's date as YYYY-MM-DD in MST (UTC-7, no DST adjustment)
+  const now = new Date();
+  const mst = new Date(now.getTime() - 7 * 60 * 60 * 1000);
+  return mst.toISOString().slice(0, 10);
 }
 
 function formatRaidLabel(date) {
@@ -2440,9 +2477,10 @@ function buildLootByPlayerFromDistribution() {
       if (!result[key]) result[key] = [];
       const itemId = getItemId(entry.item);
       const value = itemId ? getItemLootValue(entry.recipient, itemId) : 0;
-      result[key].push({ name: entry.item, value });
+      result[key].push({ name: entry.item, value, date: raid.date, label: raid.label });
     }
   }
+  // Reverse so most recent appears first
   for (const key in result) result[key].reverse();
   return result;
 }
@@ -2551,7 +2589,8 @@ async function exchangeWclCode(code) {
   }));
   const rawUrl = APPS_SCRIPT + '?action=wclAuth&payload=' + encodeURIComponent(payload);
   try {
-    const text = await proxyFetch(rawUrl);
+    // Must go through corsproxy — Apps Script redirects through googleusercontent.com which has no CORS headers
+    const text = await appsScriptFetch(rawUrl);
     let data;
     try { data = JSON.parse(text); } catch(e) { console.warn('Token parse error:', text); return null; }
     if (data.error) { console.warn('Token exchange error:', data); return null; }
@@ -2572,16 +2611,21 @@ async function handleWclCallback() {
   wclTokenExpiry = Date.now() + ((data.expires_in || 3600) - 60) * 1000;
   sessionStorage.setItem('wclToken', wclToken);
   sessionStorage.setItem('wclTokenExpiry', String(wclTokenExpiry));
+  // Also persist to localStorage so token survives page reload
+  localStorage.setItem('wclToken', wclToken);
+  localStorage.setItem('wclTokenExpiry', String(wclTokenExpiry));
   setWclStatus('✓ Connected to WarcraftLogs!', 'success');
   return true; // fetchWclAllStars will be called after fetchData() completes
 }
 
-const WCL_CLIENT_ID = 'a1577bef-44fb-4fb3-87f6-555c24400a38';
+let WCL_CLIENT_ID = 'a1577bef-44fb-4fb3-87f6-555c24400a38';
+let WCL_ZONE_ID = 1048;        // TBC Classic zone — override via config.json wcl_zone_id
+let WCL_GAME_SLUG = 'tbc-classic'; // WCL game version slug
+let WCL_API_URL = 'https://classic.warcraftlogs.com/api/v2/client'; // Classic uses separate endpoint
 const WCL_REDIRECT_URI = 'https://bunzosteele.github.io/dbs-lc/';
-const WCL_REALM = 'dreamscythe';
+let WCL_REALM = 'dreamscythe';
 const WCL_AUTH_URL = 'https://www.warcraftlogs.com/oauth/authorize';
 const WCL_TOKEN_URL = 'https://www.warcraftlogs.com/oauth/token';
-const WCL_API_URL = 'https://fresh.warcraftlogs.com/api/v2/user'; // Anniversary Classic uses fresh subdomain
 const WCL_REGION = 'US';
 let wclToken = null;
 let wclTokenExpiry = 0;
@@ -2593,6 +2637,18 @@ let GUILD_NAME = "Don't Be Suspicious";
 let GUILD_SUBTITLE = 'Loot Council Summary';
 let PAGE_TITLE = 'DBS LC';
 let ENABLE_WCL = false; // default off until config loaded
+// Formula config — overridden by config.json
+let FORMULA_USE_EFFECTIVE_ATTENDANCE = true;
+let FORMULA_USE_CONSUME_MOD = true;
+let FORMULA_USE_GEAR_MOD = true;
+let FORMULA_USE_BIS_UPGRADE = true;
+let FORMULA_USE_ALT_MOD = true;
+let FORMULA_GEAR_MOD_WEIGHT = 0.1;
+let FORMULA_LOOT_MOD_FLOOR = 0.33;
+let FORMULA_LOOT_MOD_CEILING = 1.0;
+let FORMULA_ALT_MOD_WEIGHT = 0.05;
+let FORMULA_TENURE_FORGIVENESS_HALFLIFE = 8; // raids at which forgiveness reaches 50%
+let ENABLE_APPS_SCRIPT = true; // default on; set false to use paste-in mode for CLA
 const GITHUB_FILE = 'cla-sheets.json';
 const GEAR_IDS_FILE = 'gear-item-ids.json';
 let gearItemIds = {}; // item name (lowercase) -> wowhead item ID
@@ -2650,9 +2706,14 @@ function setWclStatus(msg, type = '') {
 async function getWclToken() {
   // Check in-memory token
   if (wclToken && Date.now() < wclTokenExpiry) return wclToken;
-  // Check sessionStorage (survives page reload from PKCE redirect)
-  const stored = sessionStorage.getItem('wclToken');
-  const storedExpiry = parseInt(sessionStorage.getItem('wclTokenExpiry') || '0');
+  // Check sessionStorage first (survives PKCE redirect within same tab)
+  let stored = sessionStorage.getItem('wclToken');
+  let storedExpiry = parseInt(sessionStorage.getItem('wclTokenExpiry') || '0');
+  // Fall back to localStorage (persists across page loads and tab closes)
+  if (!stored || Date.now() >= storedExpiry) {
+    stored = localStorage.getItem('wclToken');
+    storedExpiry = parseInt(localStorage.getItem('wclTokenExpiry') || '0');
+  }
   if (stored && Date.now() < storedExpiry) {
     wclToken = stored;
     wclTokenExpiry = storedExpiry;
@@ -2669,15 +2730,24 @@ async function wclFetch(url) {
 async function wclGraphQL(query, token) {
   const q = btoa(unescape(encodeURIComponent(query)));
   const rawUrl = APPS_SCRIPT + '?action=wclQuery&q=' + encodeURIComponent(q) + '&token=' + encodeURIComponent(token);
-  const text = await proxyFetch(rawUrl);
-  if (text.trimStart().startsWith('<')) throw new Error('Proxy returned HTML — URL may be too long or request failed');
+  // Must go through corsproxy — Apps Script redirects through googleusercontent.com which has no CORS headers
+  const text = await appsScriptFetch(rawUrl);
+  if (text.trimStart().startsWith('<')) throw new Error('Apps Script returned HTML — check deployment');
   return JSON.parse(text);
 }
 
 async function fetchWclAllStars(realm) {
   if (!ENABLE_WCL) return;
   const token = await getWclToken();
-  if (!token) return;
+  if (!token) {
+    // No token — clear all WCL spinners so they don't spin forever
+    if (lastRenderData) {
+      lastRenderData.roles.flatMap(r => r.players).forEach(p => {
+        if (p.name) updateWclCell(normalizeName(p.name), null);
+      });
+    }
+    return;
+  }
   try {
 
     // Build player list with their role for metric selection
@@ -2698,7 +2768,7 @@ async function fetchWclAllStars(realm) {
         const charQuery = `{
           characterData {
             character(name: "${wclName}", serverSlug: "${realm}", serverRegion: "${WCL_REGION}") {
-              zoneRankings(metric: ${metric})
+              zoneRankings(zoneID: ${WCL_ZONE_ID}, metric: ${metric})
             }
           }
         }`;
@@ -2788,10 +2858,11 @@ async function saveClaSheetsToGitHub() {
   _githubSaveTimer = null;
   try {
     const _wbase = (u => u.startsWith('http') ? u : 'https://' + u)(CF_WORKER_URL.trim().replace(/\/+$/, ''));
+    const claPayload = { sheets: claSheets, parsed: _claStoredParsed };
     const res = await fetch(`${_wbase}/cla-sheets.json`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-Token': writeToken },
-      body: JSON.stringify(claSheets, null, 2),
+      body: JSON.stringify(claPayload, null, 2),
     });
     if (res.ok) {
       setHint('✓ Saved!', 'success');
@@ -2826,9 +2897,18 @@ async function proxyFetch(targetUrl) {
   throw new Error('All proxies failed for: ' + targetUrl);
 }
 
+async function appsScriptFetch(url) {
+  // Apps Script redirects through script.googleusercontent.com
+  // corsproxy.io handles the redirect chain and returns CORS headers
+  const proxy = 'https://corsproxy.io/?' + encodeURIComponent(url);
+  const res = await fetch(proxy);
+  if (!res.ok) throw new Error('Apps Script fetch failed: ' + res.status);
+  return res.text();
+}
+
 async function fetchSheet(sheetId, gid) {
   const rawUrl = APPS_SCRIPT + '?sheetId=' + sheetId + '&gid=' + gid;
-  const text = await proxyFetch(rawUrl);
+  const text = await appsScriptFetch(rawUrl);
   if (!text.trim() || !text.includes(',')) throw new Error('Response does not look like CSV');
   return text;
 }
@@ -2913,6 +2993,8 @@ async function fetchData() {
     // Build lootByPlayer from loot-distribution.json
     lootByPlayer = buildLootByPlayerFromDistribution();
 
+    // Store parsed CLA data for future cached loads
+    _storeParsedClaData();
     // Build attendance from CLA data
     rebuildAttendanceFromCla();
     if (groupingMode === 'attendance') renderAttendancePanel();
@@ -3218,32 +3300,39 @@ function calculatePriority(p, bottom20threshold, top20threshold, pointValues) {
   // Must have attended more than 2 raids
   if (!p.pct || p.attended < 2) return { score: 0, tooltip: 'Insufficient raids attended' };
 
-  // Attendance score: log-curve tenure * effective pct tier
-  // - tenure: 4*log2(attended+1) gives diminishing returns after ~10 raids
-  // - effective pct: blends toward 100% for veterans, forgiving occasional absences
+  // Attendance score: log-curve tenure * pct tier (raw or effective based on config)
   const tenureScore = 4 * Math.log2(p.attended + 1);
-  const forgiveness = 1 - 1 / (1 + p.attended / 8);
-  const effPct = p.pct + (100 - p.pct) * forgiveness;
+  const forgiveness = 1 - 1 / (1 + p.attended / FORMULA_TENURE_FORGIVENESS_HALFLIFE);
+  const effPct = FORMULA_USE_EFFECTIVE_ATTENDANCE
+    ? p.pct + (100 - p.pct) * forgiveness
+    : p.pct;
   const attFloor = Math.floor(effPct / 10);
   const attScore = attFloor * tenureScore;
 
   // Consume modifier: 1 / (1 + missingConsumePct/100) — uses adjusted scores
-  const _adjConsumeScores = getAdjustedConsumeScores(p.name);
-  const avgConsume = _adjConsumeScores.length ? _adjConsumeScores.reduce((a, b) => a + b, 0) / _adjConsumeScores.length : 100;
-  const missingConsume = Math.max(0, 100 - avgConsume);
-  const consumeMod = 1 / (1 + missingConsume / 100);
+  let consumeMod = 1;
+  let missingConsume = 0;
+  if (FORMULA_USE_CONSUME_MOD) {
+    const _adjConsumeScores = getAdjustedConsumeScores(p.name);
+    const avgConsume = _adjConsumeScores.length ? _adjConsumeScores.reduce((a, b) => a + b, 0) / _adjConsumeScores.length : 100;
+    missingConsume = Math.max(0, 100 - avgConsume);
+    consumeMod = 1 / (1 + missingConsume / 100);
+  }
 
-  // Gear modifier: 1 / (1 + 0.1 * gearIssues)
-  // Suboptimal enchants only count as issues on top-5 BiS items for this player's spec
-  const gi = latestGearIssuesByPlayer[normalizeName(p.name)];
-  const gearIssueCount = (gi?.issues || []).reduce((count, issue) => {
-    if (typeof issue === 'string' && !/\bZG\b/i.test(issue)) return count + 1; // always-flagged (no gem/enchant)
-    if (issue?.suboptimal && !/\bZG\b/i.test(issue.raw || '')) return count + (isTop5BisItem(issue.itemName, p.name) ? 1 : 0);
-    return count;
-  }, 0);
-  const gearMod = 1 / (1 + 0.1 * gearIssueCount);
+  // Gear modifier: 1 / (1 + weight * gearIssues)
+  let gearMod = 1;
+  let gearIssueCount = 0;
+  if (FORMULA_USE_GEAR_MOD) {
+    const gi = latestGearIssuesByPlayer[normalizeName(p.name)];
+    gearIssueCount = (gi?.issues || []).reduce((count, issue) => {
+      if (typeof issue === 'string' && !/\bZG\b/i.test(issue)) return count + 1;
+      if (issue?.suboptimal && !/\bZG\b/i.test(issue.raw || '')) return count + (isTop5BisItem(issue.itemName, p.name) ? 1 : 0);
+      return count;
+    }, 0);
+    gearMod = 1 / (1 + FORMULA_GEAR_MOD_WEIGHT * gearIssueCount);
+  }
 
-  // Loot score modifier — 5 tiers based on points position within role
+  // Loot score modifier — continuous based on percentile within role
   const pts = pointsByPlayer[normalizeName(p.name)] ?? 0;
   const maxPts = pointValues.length > 0 ? pointValues[pointValues.length - 1] : 0;
   const nonZeroPts = pointValues.filter(v => v > 0);
@@ -3253,29 +3342,26 @@ function calculatePriority(p, bottom20threshold, top20threshold, pointValues) {
   const isZeroOrLowest = pts === 0 || (!hasZeros && minNonZeroPts !== null && pts === minNonZeroPts);
   const isTop20 = !isHighest && !isZeroOrLowest && pts >= top20threshold && pointValues.length > 0;
   const isBottom20 = !isHighest && !isZeroOrLowest && pts <= bottom20threshold && pointValues.length > 0;
-  // Continuous loot modifier: 0.7 - percentile*0.4 (range: 0.7 at zero → 0.3 at highest)
-  // percentile = position within role's point distribution (0=lowest, 1=highest)
   let lootPercentile = 0;
   if (pointValues.length > 1 && pts > 0) {
     const ranked = [...pointValues].sort((a,b) => a-b);
     const pos = ranked.filter(v => v < pts).length;
     lootPercentile = pos / (ranked.length - 1);
-  } else if (pts === 0 || pointValues.length === 0) {
-    lootPercentile = 0;
   }
-  const lootMod = 1.0 - lootPercentile * (2/3);
+  const lootRange = FORMULA_LOOT_MOD_CEILING - FORMULA_LOOT_MOD_FLOOR;
+  const lootMod = FORMULA_LOOT_MOD_CEILING - lootPercentile * lootRange;
   const lootTier = `Loot percentile ${(lootPercentile*100).toFixed(0)}% → ×${lootMod.toFixed(3)}`;
 
   const score = attScore * consumeMod * gearMod * lootMod;
 
-  const tooltip = [
-    `Attendance: floor(${effPct.toFixed(1)}%/10)×log(${p.attended}) = ${attScore.toFixed(2)}`,
-    `Consume mod: 1/(1+${missingConsume.toFixed(1)}%) = ×${consumeMod.toFixed(3)} (adj)`,
-    `Gear mod: 1/(1+0.1×${gearIssueCount}) = ×${gearMod.toFixed(3)}`,
-    `Loot mod: ${lootTier}`,
-  ].join('&#10;');
+  const tooltipParts = [
+    `Attendance: floor(${effPct.toFixed(1)}%/10)×log(${p.attended}) = ${attScore.toFixed(2)}${FORMULA_USE_EFFECTIVE_ATTENDANCE ? ' (eff)' : ''}`,
+  ];
+  if (FORMULA_USE_CONSUME_MOD) tooltipParts.push(`Consume mod: 1/(1+${missingConsume.toFixed(1)}%) = ×${consumeMod.toFixed(3)} (adj)`);
+  if (FORMULA_USE_GEAR_MOD)    tooltipParts.push(`Gear mod: 1/(1+${FORMULA_GEAR_MOD_WEIGHT}×${gearIssueCount}) = ×${gearMod.toFixed(3)}`);
+  tooltipParts.push(`Loot mod: ${lootTier}`);
 
-  return { score, tooltip };
+  return { score, tooltip: tooltipParts.join('&#10;') };
 }
 
 function groupPlayers(allPlayers) {
@@ -3681,7 +3767,7 @@ function lootLogAssignFromLootTab(playerName, itemName) {
   const latestRaid = sorted[0];
 
   // Check if latest raid date matches today
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayMST();
   if (latestRaid.date !== today) {
     const d = new Date(latestRaid.date + 'T12:00:00');
     const label = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
@@ -3753,7 +3839,7 @@ function toggleLoot(td, playerName) {
     html += `<em class="no-loot">No loot recorded</em>`;
   } else {
     const playerObj = lastRenderData.roles.flatMap(r => r.players).find(p => normalizeName(p.name) === key);
-    html += `<div class="loot-list">${items.map(({name, value}) => {
+    html += `<div class="loot-list">${items.map(({name, value, date, label}) => {
       const itemId = getItemId(name, playerName);
       const epv = itemId ? getAvgRewardEpv(itemId) : null;
       const formulaEpv = itemId ? getWeightedItemEpv(playerName, itemId) : 0;
@@ -3768,8 +3854,8 @@ function toggleLoot(td, playerName) {
       const _nLabel = _isToken ? `${effListCount} rewards (capped)` : `${effListCount} players`;
       const _epvLabel = _isToken ? 'avgEPV' : 'maxEPV';
       const epvTip = isOverridden
-        ? ` title="Loot Value: ${lootValue.toFixed(1)} (overridden)"`
-        : ` title="${_epvLabel}: ${epv ? epv.toFixed(1) : '0'} × ${logMult.toFixed(2)} (log ${_nLabel}) × avg^1.5(${rankAvg.toFixed(3)}) × best(${rankBest.toFixed(2)})^0.5${_is2h ? ' × 0.5 (2H)' : ''} = ${formulaEpv.toFixed(1)}"`;
+        ? ` title="${label ? label + ' — ' : ''}Loot Value: ${lootValue.toFixed(1)} (overridden)"`
+        : ` title="${label ? label + ' — ' : ''} ${_epvLabel}: ${epv ? epv.toFixed(1) : '0'} × ${logMult.toFixed(2)} (log ${_nLabel}) × avg^1.5(${rankAvg.toFixed(3)}) × best(${rankBest.toFixed(2)})^0.5${_is2h ? ' × 0.5 (2H)' : ''} = ${formulaEpv.toFixed(1)}"`;
       return `<span class="loot-item" style="border-color:${col};background:${col}18;"${epvTip}>${itemLink(name, name)}</span>`;
     }).join('')}</div>`;
   }
@@ -3991,7 +4077,9 @@ function renderClaList() {
     <div class="cla-row">
       <span class="cla-row-label">${s.label}</span>
       <span class="cla-row-url" title="${s.url}">${s.url.substring(0, 60)}...</span>
-      <span class="cla-row-gids">Issues: ${s.gearGid} / Gear: ${s.gearListingGid || '—'} / Consumes: ${s.buffGid}</span>
+      <span class="cla-row-gids">${s.sheetId
+        ? `Issues: ${s.gearGid} / Gear: ${s.gearListingGid || '—'} / Consumes: ${s.buffGid}`
+        : `Paste mode${s.csvGearListing ? ' (with gear listing)' : ''}`}</span>
       <button class="cla-remove" class="write-gated" onclick="removeCla(${i})" title="Remove">✕</button>
     </div>
   `).join('');
@@ -4036,10 +4124,9 @@ function parseGearListing(csvText) {
 async function lookupItemId(itemName) {
   try {
     // Call Apps Script directly (not via proxy) - it handles Wowhead fetch server-side
+    if (!ENABLE_APPS_SCRIPT || !APPS_SCRIPT) return null;
     const rawUrl = APPS_SCRIPT + '?action=itemLookup&name=' + encodeURIComponent(itemName);
-    const res = await fetch(rawUrl);
-    if (!res.ok) { console.warn('lookupItemId HTTP error:', res.status, itemName); return null; }
-    const text = await res.text();
+    const text = await appsScriptFetch(rawUrl);
     const data = JSON.parse(text);
     if (data.id) return { id: data.id, slot: data.slot || null };
     console.warn('No ID returned for:', itemName, data);
@@ -4095,7 +4182,7 @@ async function processGearListingForItemIds(sheetId, gearListingGid) {
           // Also fetch icon for new items
           let icon = null;
           try {
-            const iconText = await proxyFetch(`${ICON_SCRIPT}?itemId=${id}`);
+            const iconText = await appsScriptFetch(`${APPS_SCRIPT}?itemId=${id}`);
             const iconData = JSON.parse(iconText);
             if (iconData.icon) { icon = iconData.icon.toLowerCase(); itemIcons[id] = icon; }
           } catch(e) {}
@@ -4120,35 +4207,63 @@ async function processGearListingForItemIds(sheetId, gearListingGid) {
 
 function addCla() {
   const label = document.getElementById('claLabel').value.trim();
-  const url = document.getElementById('claUrl').value.trim();
-  const gearGid = document.getElementById('claGearGid').value.trim();
-  const buffGid = document.getElementById('claBuffGid').value.trim();
-  const gearListingGid = document.getElementById('claGearListingGid').value.trim();
-  if (!label || !url || !gearGid || !buffGid) {
-    alert('Please fill in all fields.');
-    return;
-  }
-  const sheetId = extractSheetId(url);
-  if (!sheetId) { alert('Could not parse Sheet ID from URL.'); return; }
+  if (!label) { alert('Please enter a label.'); return; }
 
-  const entry = { label, url, sheetId, gearGid, buffGid };
-  if (gearListingGid) entry.gearListingGid = gearListingGid;
+  let entry;
+  if (ENABLE_APPS_SCRIPT) {
+    // Apps Script mode — URL + GIDs
+    const url = document.getElementById('claUrl').value.trim();
+    const gearGid = document.getElementById('claGearGid').value.trim();
+    const buffGid = document.getElementById('claBuffGid').value.trim();
+    const gearListingGid = document.getElementById('claGearListingGid').value.trim();
+    if (!url || !gearGid || !buffGid) { alert('Please fill in the Sheet URL, Issues GID, and Consumes GID.'); return; }
+    const sheetId = extractSheetId(url);
+    if (!sheetId) { alert('Could not parse Sheet ID from URL.'); return; }
+    entry = { label, url, sheetId, gearGid, buffGid };
+    if (gearListingGid) entry.gearListingGid = gearListingGid;
+    // Gap-fill item IDs from gear listing if provided
+    if (gearListingGid && writeToken) processGearListingForItemIds(sheetId, gearListingGid);
+    document.getElementById('claUrl').value = '';
+    document.getElementById('claGearGid').value = '';
+    document.getElementById('claBuffGid').value = '';
+    document.getElementById('claGearListingGid').value = '';
+  } else {
+    // Paste mode — raw CSV pasted directly
+    const csvGearRaw = document.getElementById('claPasteGear').value.trim();
+    const csvBuffRaw = document.getElementById('claPasteBuff').value.trim();
+    const csvGearListingRaw = document.getElementById('claPasteGearListing').value.trim();
+    if (!csvGearRaw || !csvBuffRaw) { alert('Please paste the Gear Issues and Buff Consumables data.'); return; }
+    // Normalize TSV (Ctrl+A, Ctrl+C from Google Sheets) or CSV (downloaded)
+    const csvGear = normalizeClaPaste(csvGearRaw);
+    const csvBuff = normalizeClaPaste(csvBuffRaw);
+    const csvGearListing = csvGearListingRaw ? normalizeClaPaste(csvGearListingRaw) : '';
+    entry = { label, csvGear, csvBuff };
+    if (csvGearListing) entry.csvGearListing = csvGearListing;
+    // Parse immediately since we have the data now
+    try { parseGearIssues(csvGear, label); } catch(e) { console.warn('Gear issues parse error:', e); }
+    try { parseBuffConsumables(csvBuff, label); } catch(e) { console.warn('Buff consumables parse error:', e); }
+    if (csvGearListing) {
+      try {
+        const gearData = parseGearListing(csvGearListing);
+        Object.entries(gearData).forEach(([playerName, slots]) => {
+          const key = normalizeName(playerName);
+          gearListingByPlayer[key] = { label, slots };
+        });
+      } catch(e) { console.warn('Gear listing parse error:', e); }
+    }
+    _storeParsedClaData();
+    document.getElementById('claPasteGear').value = '';
+    document.getElementById('claPasteBuff').value = '';
+    document.getElementById('claPasteGearListing').value = '';
+  }
+
+  document.getElementById('claLabel').value = '';
   claSheets.push(entry);
   saveClaSheets();
   renderClaList();
   saveClaSheetsToGitHub();
-
-  // If gear listing GID + GitHub token provided, gap-fill item ID map
-  if (gearListingGid && writeToken) {
-    processGearListingForItemIds(sheetId, gearListingGid);
-  }
-
-  document.getElementById('claLabel').value = '';
-  document.getElementById('claUrl').value = '';
-  document.getElementById('claGearGid').value = '';
-  document.getElementById('claBuffGid').value = '';
-  document.getElementById('claGearListingGid').value = '';
-  document.getElementById('claToken').value = '';
+  rebuildAttendanceFromCla();
+  renderAttendancePanel();
 }
 
 function removeCla(i) {
@@ -4156,6 +4271,159 @@ function removeCla(i) {
   saveClaSheets();
   renderClaList();
   saveClaSheetsToGitHub();
+}
+
+
+// Apply stored parsed CLA data to in-memory globals
+function _applyClaStoredParsed() {
+  for (const [label, pd] of Object.entries(_claStoredParsed)) {
+    // sheetDate
+    if (pd.sheetDate) claSheetDates[label] = pd.sheetDate;
+
+    // claPresence
+    if (pd.claPresence) {
+      if (!claPlayersByLabel[label]) claPlayersByLabel[label] = new Set();
+      for (const key of (pd.claPresence || [])) {
+        claPlayersByLabel[label].add(key);
+        if (!canonicalNames[key]) {
+          const sheet = claSheets.find(s => s.label === label);
+          // canonical name stored separately
+        }
+      }
+    }
+
+    // canonicalNames
+    if (pd.canonicalNames) {
+      for (const [k, v] of Object.entries(pd.canonicalNames)) canonicalNames[k] = v;
+    }
+
+    // gearIssues
+    if (pd.gearIssues) {
+      for (const [key, data] of Object.entries(pd.gearIssues)) {
+        if (!claDataByPlayer[key]) claDataByPlayer[key] = { gearIssues: [], buffConsumables: [] };
+        claDataByPlayer[key].gearIssues.push(data);
+        // Apply recency logic for latestGearIssuesByPlayer
+        const existingLabel = latestGearIssuesByPlayer[key]?.label;
+        const existingDate = existingLabel ? (claSheetDates[existingLabel] || null) : null;
+        const thisDate = pd.sheetDate || null;
+        let isNewer;
+        if (thisDate && existingDate) { isNewer = thisDate >= existingDate; }
+        else {
+          const si = claSheets.findIndex(s => s.label === label);
+          const ei = existingLabel ? claSheets.findIndex(s => s.label === existingLabel) : -1;
+          isNewer = si >= ei;
+        }
+        if (isNewer) latestGearIssuesByPlayer[key] = { label, issues: data.issues };
+      }
+    }
+
+    // buffScores
+    if (pd.buffScores) {
+      for (const [key, scores] of Object.entries(pd.buffScores)) {
+        if (!claDataByPlayer[key]) claDataByPlayer[key] = { gearIssues: [], buffConsumables: [] };
+        for (const [dateStr, score] of Object.entries(scores)) {
+          if (!buffScoreByPlayerDate[key]) buffScoreByPlayerDate[key] = {};
+          buffScoreByPlayerDate[key][dateStr] = score;
+        }
+      }
+    }
+
+    // gearListing
+    if (pd.gearListing) {
+      for (const [key, slots] of Object.entries(pd.gearListing)) {
+        const existingLabel = gearListingByPlayer[key]?.label;
+        const existingDate = existingLabel ? (claSheetDates[existingLabel] || null) : null;
+        const thisDate = pd.sheetDate || null;
+        let isNewer;
+        if (thisDate && existingDate) { isNewer = thisDate >= existingDate; }
+        else {
+          const si = claSheets.findIndex(s => s.label === label);
+          const ei = existingLabel ? claSheets.findIndex(s => s.label === existingLabel) : -1;
+          isNewer = si >= ei;
+        }
+        if (isNewer) gearListingByPlayer[key] = { label, slots };
+      }
+    }
+  }
+  console.log('CLA cache applied:', Object.keys(claDataByPlayer).length, 'players,',
+    Object.keys(gearListingByPlayer).length, 'gear listings,',
+    Object.keys(buffScoreByPlayerDate).length, 'buff score players');
+}
+
+// Re-fetch all CLA sheets, re-parse, store in _claStoredParsed, and save
+async function reparseAllClaData() {
+  const btn = document.getElementById('claReparseBtn');
+  if (btn) { btn.textContent = 'Re-parsing…'; btn.disabled = true; }
+  try {
+    // Force full re-fetch by temporarily clearing cache
+    const backup = _claStoredParsed;
+    _claStoredParsed = {};
+    await fetchAllClaData();
+    // Store parsed results back into _claStoredParsed
+    _storeParsedClaData();
+    await saveClaSheetsToGitHub();
+    if (btn) { btn.textContent = '✓ Done'; setTimeout(() => { btn.textContent = 'Re-parse CLAs'; btn.disabled = false; }, 2000); }
+    setHint('CLA data re-parsed and cached — future loads will be instant.', 'success');
+  } catch(e) {
+    _claStoredParsed = backup;
+    if (btn) { btn.textContent = 'Re-parse CLAs'; btn.disabled = false; }
+    setHint('Re-parse failed: ' + e.message, 'error');
+  }
+}
+
+// Snapshot current in-memory parsed state into _claStoredParsed
+function _storeParsedClaData() {
+  _claStoredParsed = {};
+  for (const sheet of claSheets) {
+    const label = sheet.label;
+    const sheetDate = claSheetDates[label] || null;
+
+    // Gear issues per player for this label
+    const gearIssues = {};
+    for (const [key, data] of Object.entries(claDataByPlayer)) {
+      const entry = data.gearIssues.find(gi => gi.label === label);
+      if (entry) gearIssues[key] = entry;
+    }
+    // Also capture latestGearIssuesByPlayer for this label
+    const latestIssues = {};
+    for (const [key, data] of Object.entries(latestGearIssuesByPlayer)) {
+      if (data.label === label) latestIssues[key] = data;
+    }
+
+    // Buff scores per player for this label's date
+    const buffScores = {};
+    if (sheetDate) {
+      for (const [key, scores] of Object.entries(buffScoreByPlayerDate)) {
+        if (scores[sheetDate]) {
+          if (!buffScores[key]) buffScores[key] = {};
+          buffScores[key][sheetDate] = scores[sheetDate];
+        }
+      }
+    }
+
+    // Gear listing for this label
+    const gearListing = {};
+    for (const [key, data] of Object.entries(gearListingByPlayer)) {
+      if (data.label === label) gearListing[key] = data.slots;
+    }
+
+    // CLA presence
+    const claPresence = [...(claPlayersByLabel[label] || [])];
+
+    // Canonical names
+    const canonical = { ...canonicalNames };
+
+    _claStoredParsed[label] = {
+      sheetDate,
+      claPresence,
+      canonicalNames: canonical,
+      gearIssues,
+      latestIssues,
+      buffScores,
+      gearListing,
+    };
+  }
+  console.log('Stored parsed CLA data for', Object.keys(_claStoredParsed).length, 'sheets');
 }
 
 async function fetchAllClaData() {
@@ -4167,11 +4435,52 @@ async function fetchAllClaData() {
   claSheetDates = {};
   canonicalNames = {};
 
+  // Paste-mode entries already have parsed data stored — only fetch-mode entries need HTTP
+  const fetchSheets = ENABLE_APPS_SCRIPT ? claSheets.filter(s => s.sheetId) : [];
+  const pasteSheets = claSheets.filter(s => s.csvGear || s.csvBuff);
+
+  // If all sheets are either cached or paste-mode, skip fetching entirely
+  const allHandled = claSheets.length > 0 && claSheets.every(s =>
+    _claStoredParsed[s.label] || s.csvGear
+  );
+  if (allHandled) {
+    console.log('Loading CLA data from cache/paste (' + claSheets.length + ' sheets)');
+    // Apply paste-mode entries directly
+    pasteSheets.forEach(s => {
+      if (!_claStoredParsed[s.label]) {
+        try { parseGearIssues(normalizeClaPaste(s.csvGear||''), s.label); } catch(e) {}
+        try { parseBuffConsumables(normalizeClaPaste(s.csvBuff||''), s.label); } catch(e) {}
+        if (s.csvGearListing) {
+          try {
+            const gd = parseGearListing(normalizeClaPaste(s.csvGearListing));
+            Object.entries(gd).forEach(([n, slots]) => {
+              gearListingByPlayer[normalizeName(n)] = { label: s.label, slots };
+            });
+          } catch(e) {}
+        }
+      }
+    });
+    _applyClaStoredParsed();
+    return;
+  }
+
   // Fetch all CLA sheets in parallel, collecting raw results first
   const gearResults = [];        // { label, text }
   const gearListingResults = []; // { label, text, sheetIdx }
 
-  await Promise.all(claSheets.flatMap((sheet, sheetIdx) => [
+  // Parse paste-mode entries immediately (no fetch needed)
+  pasteSheets.forEach((sheet, idx) => {
+    const csvGear = normalizeClaPaste(sheet.csvGear || '');
+    const csvBuff = normalizeClaPaste(sheet.csvBuff || '');
+    const csvGearListing = sheet.csvGearListing ? normalizeClaPaste(sheet.csvGearListing) : '';
+    try { parseGearIssues(csvGear, sheet.label); } catch(e) {}
+    try { parseBuffConsumables(csvBuff, sheet.label); } catch(e) {}
+    if (csvGearListing) {
+      gearListingResults.push({ label: sheet.label, text: csvGearListing, sheetIdx: claSheets.indexOf(sheet) });
+    }
+  });
+
+  await Promise.all(fetchSheets.flatMap((sheet, sheetIdx) => [
     fetchSheet(sheet.sheetId, sheet.gearGid)
       .then(text => gearResults.push({ label: sheet.label, text }))
       .catch(e => addError(`CLA "${sheet.label}" — Gear Issues (gid: ${sheet.gearGid})`, e.message)),
@@ -4344,18 +4653,19 @@ if (typeof ENABLE_WCL === 'undefined' || ENABLE_WCL) initWclIfSaved();
 async function loadClaSheetsFromRepo() {
   try {
     let data;
-    try { data = await fetchFromWorker('cla-sheets.json'); } catch(e) { return; } // not yet saved, silently skip
-    if (!Array.isArray(data) || !data.length) return;
-    // Only use repo data if user has no locally saved sheets
+    try { data = await fetchFromWorker('cla-sheets.json'); } catch(e) { return; }
+    // Support both old format (array) and new format ({ sheets, parsed })
+    const sheets = Array.isArray(data) ? data : (data?.sheets || []);
+    const parsed = Array.isArray(data) ? null : (data?.parsed || null);
+    if (!sheets.length) return;
     if (!claSheets.length) {
-      claSheets = data;
+      claSheets = sheets;
+      if (parsed) _claStoredParsed = parsed;
       saveClaSheets();
       renderClaList();
-updateAuthState();
+      updateAuthState();
     }
-  } catch(e) {
-    // Not on GitHub Pages or file missing — ignore
-  }
+  } catch(e) {}
 }
 async function loadBisDataFromRepo() {
   try {
@@ -4404,9 +4714,25 @@ async function loadGearItemIdsFromRepo() {
     if (cfg.guild_name)          GUILD_NAME           = cfg.guild_name;
     if (cfg.guild_subtitle)      GUILD_SUBTITLE       = cfg.guild_subtitle;
     if (cfg.page_title)          PAGE_TITLE           = cfg.page_title;
-    if (cfg.enable_wcl != null)  ENABLE_WCL           = !!cfg.enable_wcl;
+    if (cfg.enable_wcl != null)        ENABLE_WCL          = !!cfg.enable_wcl;
+    if (cfg.formula) {
+      const f = cfg.formula;
+      if (f.use_effective_attendance != null) FORMULA_USE_EFFECTIVE_ATTENDANCE = !!f.use_effective_attendance;
+      if (f.use_consume_modifier     != null) FORMULA_USE_CONSUME_MOD          = !!f.use_consume_modifier;
+      if (f.use_gear_modifier        != null) FORMULA_USE_GEAR_MOD             = !!f.use_gear_modifier;
+      if (f.use_bis_upgrade_modifier != null) FORMULA_USE_BIS_UPGRADE          = !!f.use_bis_upgrade_modifier;
+      if (f.use_alt_modifier         != null) FORMULA_USE_ALT_MOD              = !!f.use_alt_modifier;
+      if (f.gear_modifier_weight     != null) FORMULA_GEAR_MOD_WEIGHT          = +f.gear_modifier_weight;
+      if (f.loot_mod_floor           != null) FORMULA_LOOT_MOD_FLOOR           = +f.loot_mod_floor;
+      if (f.loot_mod_ceiling         != null) FORMULA_LOOT_MOD_CEILING         = +f.loot_mod_ceiling;
+      if (f.alt_modifier_weight      != null) FORMULA_ALT_MOD_WEIGHT           = +f.alt_modifier_weight;
+    }
+    if (cfg.enable_apps_script != null) ENABLE_APPS_SCRIPT  = !!cfg.enable_apps_script;
     if (cfg.wcl_client_id)       WCL_CLIENT_ID        = cfg.wcl_client_id;
     if (cfg.wcl_realm)           WCL_REALM            = cfg.wcl_realm;
+    if (cfg.wcl_zone_id)         WCL_ZONE_ID          = cfg.wcl_zone_id;
+    if (cfg.wcl_game_slug)       WCL_GAME_SLUG        = cfg.wcl_game_slug;
+    if (cfg.wcl_api_url)         WCL_API_URL          = cfg.wcl_api_url;
     // Apply branding
     document.title = PAGE_TITLE;
     const h1 = document.querySelector('header h1');
@@ -4417,7 +4743,31 @@ async function loadGearItemIdsFromRepo() {
     const wclSec = document.getElementById('wclSection');
     if (wclSec) wclSec.style.display = ENABLE_WCL ? '' : 'none';
     if (!ENABLE_WCL) document.body.classList.add('wcl-hidden');
-    console.log('config.json loaded — worker:', CF_WORKER_URL, '| WCL:', ENABLE_WCL);
+    // Toggle CLA form mode based on enable_apps_script
+    const claScript = document.getElementById('claScriptFields');
+    const claPaste = document.getElementById('claPasteFields');
+    if (claScript && claPaste) {
+      claScript.style.display = ENABLE_APPS_SCRIPT ? '' : 'none';
+      claPaste.style.display = ENABLE_APPS_SCRIPT ? 'none' : '';
+    }
+    // Toggle formula explanation sections based on formula config
+    const _fToggle = (id, visible) => { const el = document.getElementById(id); if (el) el.style.display = visible ? '' : 'none'; };
+    _fToggle('formulaConsumeSection', FORMULA_USE_CONSUME_MOD);
+    _fToggle('formulaConsumeLabel',   FORMULA_USE_CONSUME_MOD);
+    _fToggle('formulaGearSection',    FORMULA_USE_GEAR_MOD);
+    _fToggle('formulaGearLabel',      FORMULA_USE_GEAR_MOD);
+    _fToggle('formulaBisSection',     FORMULA_USE_BIS_UPGRADE);
+    _fToggle('formulaBisLabel',       FORMULA_USE_BIS_UPGRADE);
+    _fToggle('formulaAltSection',     FORMULA_USE_ALT_MOD);
+    _fToggle('formulaAltLabel',       FORMULA_USE_ALT_MOD);
+    // Effective attendance toggle
+    _fToggle('formulaEffAttLine',  FORMULA_USE_EFFECTIVE_ATTENDANCE);
+    _fToggle('formulaEffAttDesc',  FORMULA_USE_EFFECTIVE_ATTENDANCE);
+    _fToggle('formulaRawAttLine',  !FORMULA_USE_EFFECTIVE_ATTENDANCE);
+    _fToggle('formulaRawAttDesc',  !FORMULA_USE_EFFECTIVE_ATTENDANCE);
+    const _hl = document.getElementById('formulaHalflifeDisplay');
+    if (_hl) _hl.textContent = FORMULA_TENURE_FORGIVENESS_HALFLIFE;
+    console.log('config.json loaded — worker:', CF_WORKER_URL, '| WCL:', ENABLE_WCL, '| Apps Script:', ENABLE_APPS_SCRIPT);
   } catch(e) {
     console.warn('config.json not found or invalid — using defaults:', e.message);
   }
@@ -4531,6 +4881,13 @@ loadClaSheetsFromRepo().then(async () => {
     const token = await getWclToken();
     if (token) {
       fetchWclAllStars(WCL_REALM);
+    } else {
+      // No valid token — clear all WCL spinners so they don't hang
+      if (lastRenderData?.roles) {
+        lastRenderData.roles.flatMap(r => r.players).forEach(p => {
+          if (p.name) updateWclCell(normalizeName(p.name), null);
+        });
+      }
     }
   }
 });
@@ -5110,7 +5467,13 @@ function renderAttendancePanel() {
             <tr style="border-bottom:2px solid var(--border);">
               <th style="text-align:left;padding:6px 12px;font-family:\'Cinzel\',serif;font-size:10px;letter-spacing:0.2em;color:var(--text-dim);white-space:nowrap;position:sticky;left:0;background:var(--bg);z-index:2;min-width:140px;">PLAYER</th>
 
-              ${raids.map(r => `<th style="${thStyle}"><div>${r.label}</div><div id="att-count-${r.date}" style="color:var(--gold-dim);font-size:11px;"></div></th>`).join('')}
+              ${raids.map(r => `<th style="${thStyle}cursor:pointer;" onclick="attendanceToggleDeleteRaid('${r.date}')" title="Click to delete raid">
+                <div style="display:flex;align-items:center;justify-content:center;gap:4px;">
+                  <span>${r.label}</span>
+                  <span id="att-del-${r.date}" style="display:none;color:var(--red);font-size:13px;font-weight:bold;" onclick="event.stopPropagation();attendanceDeleteRaid('${r.date}')" title="Delete this raid">✕</span>
+                </div>
+                <div id="att-count-${r.date}" style="color:var(--gold-dim);font-size:11px;"></div>
+              </th>`).join('')}
             </tr>
           </thead>
           <tbody id="attendanceTableBody"></tbody>
@@ -5258,6 +5621,33 @@ function renderAttendancePanel() {
   if (_attendanceDirty) {
     document.getElementById('attendanceSaveBtn')?.classList.add('gloss-btn-ready');
   }
+}
+
+
+function attendanceToggleDeleteRaid(dateStr) {
+  if (!writeToken) return;
+  // Hide all other X buttons first
+  document.querySelectorAll('[id^="att-del-"]').forEach(el => {
+    if (el.id !== 'att-del-' + dateStr) el.style.display = 'none';
+  });
+  const el = document.getElementById('att-del-' + dateStr);
+  if (el) el.style.display = el.style.display === 'none' ? 'inline' : 'none';
+}
+
+function attendanceDeleteRaid(dateStr) {
+  const raid = attendanceData.raids.find(r => r.date === dateStr);
+  if (!raid) return;
+  if (!confirm(`Delete raid "${raid.label}" (${dateStr}) and all its attendance data?\n\nThis cannot be undone.`)) return;
+  attendanceData.raids = attendanceData.raids.filter(r => r.date !== dateStr);
+  // Also clear any overrides for this date
+  for (const key of Object.keys(attendanceData.overrides || {})) {
+    if (attendanceData.overrides[key][dateStr] !== undefined) {
+      delete attendanceData.overrides[key][dateStr];
+    }
+  }
+  saveAttendanceToGitHub();
+  rebuildAttendanceFromCla();
+  renderAttendancePanel();
 }
 
 function attendanceAddRaid() {
@@ -7378,7 +7768,7 @@ function onItemChange() {
     altIds.delete(effectiveId);
 
     const alts = altIds.size;
-    const mult = 1 / (1 + alts * 0.05);
+    const mult = 1 / (1 + alts * FORMULA_ALT_MOD_WEIGHT);
     return { mult, alts };
   }
 
@@ -7387,7 +7777,9 @@ function onItemChange() {
     const setBonusMult = TOKEN_TIER_META[_candidateItemId]
       ? getSetBonusMultiplier(p.name, _candidateItemId).mult
       : 1;
-    return base * prioMultiplier(p).mult * bisMultiplier(p).mult * setBonusMult * altModifier(p).mult;
+    const _bisMult = FORMULA_USE_BIS_UPGRADE ? bisMultiplier(p).mult : 1;
+    const _altMult = FORMULA_USE_ALT_MOD ? altModifier(p).mult : 1;
+    return base * prioMultiplier(p).mult * _bisMult * setBonusMult * _altMult;
   }
 
   // Now that bisMultiplier is defined, compute normalization factor
@@ -7732,7 +8124,9 @@ function onItemChange() {
       ? getSetBonusMultiplier(p.name, _candidateTokenId)
       : { mult: 1, labels: [] };
     const { mult: altMult, alts: altCount } = altModifier(p);
-    const adjScore = prScore * mult * bisMult * setBonusMult * altMult;
+    const _adjBisMult = FORMULA_USE_BIS_UPGRADE ? bisMult : 1;
+    const _adjAltMult = FORMULA_USE_ALT_MOD ? altMult : 1;
+    const adjScore = prScore * mult * _adjBisMult * setBonusMult * _adjAltMult;
     const normPr = Math.round(adjScore * prNormFactor);
     const displayPr = normPr.toFixed(0);
     const prStr = prScore > 0 ? displayPr : '—';
