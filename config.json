@@ -3,19 +3,19 @@
   "guild_subtitle": "Loot Council Summary",
   "page_title": "Bulwark",
   "cf_worker_url": "https://my-lc-worker.aaron-dickens.workers.dev/",
-  "enable_apps_script": false, // Enables WCL, Automated Icon fetching, and CLA parsing. See scripts/apps-script.md if you want to set it up, but it is non-trivial.
+  "enable_apps_script": false, 
   "apps_script": "https://script.google.com/macros/s/YOURAPPSSCRIPT/exec",
   "formula": {
-    "use_effective_attendance": true, // Adds an element of forgiveness to missed raids over time
-    "tenure_forgiveness_halflife": 8, // Number of raids required to forgive half of a missed raid
-    "use_consume_modifier": true, // Missing consumeables will reduce loot priority
-    "use_gear_modifier": true, // Gear issues such as missing enchants and gems will reduce loot priority
+    "use_effective_attendance": true, 
+    "tenure_forgiveness_halflife": 8, 
+    "use_consume_modifier": true, 
+    "use_gear_modifier": true, 
     "gear_modifier_weight": 0.1,
-    "use_bis_upgrade_modifier": true, // Priority increased/decreased based on the extent of the upgrade betwen current and considered gear
-    "use_alt_modifier": true, // Having additional alternatives available on BIS lists reduces priority
+    "use_bis_upgrade_modifier": true, 
+    "use_alt_modifier": true, 
     "alt_modifier_weight": 0.05
-    "loot_mod_floor": 0.33, // Lowest multiplier that can be applied to player with most loot received
-    "loot_mod_ceiling": 1.0, // Highest multiplier that can be applied to player with the least loot received
+    "loot_mod_floor": 0.33, 
+    "loot_mod_ceiling": 1.0, 
   },
   "enable_wcl": false,
   "wcl_client_id": "your-wcl-client-id",
