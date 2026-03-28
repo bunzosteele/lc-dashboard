@@ -113,7 +113,7 @@ The dashboard reads all its data from Cloudflare KV. You need to push the initia
 
 ### Creating initial data
 
-1. Open your [deployed dashboard](https://<your-username>.github.io/<your-repo>/) in a browser
+1. Open your [deployed dashboard](https://<your-username>.github.io/<your-repo>/) (set up in Step 1) in a browser
 2. Enter your write token in the **Write Token** field and click **Save Token**
 3. Open the browser developer console (F12 → Console)
 4. Run:
