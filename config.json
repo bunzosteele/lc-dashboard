@@ -15,7 +15,7 @@
     "use_alt_modifier": true, 
     "alt_modifier_weight": 0.05,
     "loot_mod_floor": 0.33, 
-    "loot_mod_ceiling": 1.0, 
+    "loot_mod_ceiling": 1.0 
   },
   "enable_wcl": false,
   "wcl_client_id": "your-wcl-client-id",
