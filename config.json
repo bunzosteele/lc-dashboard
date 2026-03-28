@@ -3,7 +3,7 @@
   "guild_subtitle": "Loot Council Summary",
   "page_title": "Bulwark",
   "cf_worker_url": "https://my-lc-worker.aaron-dickens.workers.dev/",
-  "enable_apps_script": false, 
+  "enable_apps_script": false,
   "apps_script": "https://script.google.com/macros/s/YOURAPPSSCRIPT/exec",
   "formula": {
     "use_effective_attendance": true, 
