@@ -13,7 +13,7 @@
     "gear_modifier_weight": 0.1,
     "use_bis_upgrade_modifier": true, 
     "use_alt_modifier": true, 
-    "alt_modifier_weight": 0.05
+    "alt_modifier_weight": 0.05,
     "loot_mod_floor": 0.33, 
     "loot_mod_ceiling": 1.0, 
   },
