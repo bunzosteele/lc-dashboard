@@ -77,20 +77,28 @@ Raid overview screen allows you to track overall raider status by role and tier 
 
 ---
 
-## 2. Set Up Cloudflare KV
+## 2. Set Up the Google Apps Script Proxy *(Optional)*
+
+The Apps Script proxy enables fetching CLA data directly from Google Sheets by URL, loading item icons from Wowhead, and fetching Warcraftlogs player data. **This step is optional** and requires a non-trivial amount of work. — if you leave `"enable_apps_script": false` in `config.json`, you can skip it entirely and paste CLA CSV data manually in the dashboard instead.
+
+If you want to enable Apps Script, see **[APPS-SCRIPT.md](/scripts/apps-script.md)** for full setup instructions.
+
+---
+
+## 3. Set Up Cloudflare KV
 
 ### Create the KV Namespace
 
 1. Log in to [dash.cloudflare.com](https://dash.cloudflare.com), making a new account is free.
 2. Go to **Storage & databases → Workers KV**
-3. Click **Create a namespace**, name it anything (e.g. `LC_DATA`)
+3. Click **Create Instance**, name it anything (e.g. `LC_DATA`)
 4. Note the namespace ID
 
 ### Deploy the Worker
 
-1. Go to **Workers & Pages → Create application → Create Worker**
+1. Go to **Compute -> Workers & Pages → Create application → Start with Hello World!**
 2. Name it anything (e.g. `my-lc-worker`)
-3. Click **Deploy**, then **Edit code**
+3. Click **Deploy**, then in the top right **Edit code**
 4. Paste the contents of `cloudflare-worker.js` from the repo
 5. At the top of the file, replace `REPLACE_WITH_YOUR_TOKEN` with a secret string of your choice — this is your **write token** (keep it safe, share only with officers):
    ```js
@@ -100,26 +108,18 @@ Raid overview screen allows you to track overall raider status by role and tier 
 
 ### Bind the KV Namespace to the Worker
 
-1. In your Worker, go to **Settings → Bindings**
-2. Click **Add binding → KV Namespace**
+1. In your Worker, go to the **Bindings** tab
+2. Click **Add binding → KV Namespace -> Add Binding**
 3. Variable name: **`DB`** (must be exactly `DB`)
 4. Select the KV namespace you created
-5. Click **Save**
+5. Click **Add Binding**
 
 ### Get Your Worker URL
 
-Your Worker URL is shown on the Worker overview page:
+Your Worker URL is shown on the Worker overview tab:
 ```
 https://your-worker-name.your-subdomain.workers.dev
 ```
-
----
-
-## 3. Set Up the Google Apps Script Proxy *(Optional)*
-
-The Apps Script proxy enables fetching CLA data directly from Google Sheets by URL, loading item icons from Wowhead, and fetching Warcraftlogs player data. **This step is optional** and requires a non-trivial amount of work. — if you leave `"enable_apps_script": false` in `config.json`, you can skip it entirely and paste CLA CSV data manually in the dashboard instead.
-
-If you want to enable Apps Script, see **[APPS-SCRIPT.md](/scripts/apps-script.md)** for full setup instructions.
 
 ---
 
