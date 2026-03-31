@@ -24,7 +24,8 @@ function handleWcl(e) {
     // ── WCL OAuth Token Exchange ──────────────────────────────────
     // Dashboard sends PKCE token exchange params as base64 JSON payload
     if (action === 'wclAuth') {
-      const payload = JSON.parse(atob(params.payload));
+      const decodedPayload = Utilities.newBlob(Utilities.base64Decode(params.payload)).getDataAsString();
+      const payload = JSON.parse(decodedPayload);;
 
       const response = UrlFetchApp.fetch('https://www.warcraftlogs.com/oauth/token', {
         method: 'post',
