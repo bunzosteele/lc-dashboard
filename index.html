@@ -6324,8 +6324,15 @@ function renderRosterPanel() {
             <tr style="border-bottom:1px solid var(--border)20;">
               <td style="padding:7px 12px;color:${CLASS_COLORS[p.class]||'var(--text)'};font-weight:600;">${p.name}</td>
               <td style="padding:7px 12px;color:var(--text-dim);font-size:13px;">${ROLE_ICONS[p.role]||''} ${p.role}</td>
-              <td style="padding:7px 12px;font-size:13px;${classStyle(p.class)}">${p.class}</td>
-              <td style="padding:7px 12px;font-size:11px;color:var(--text-dim);letter-spacing:0.05em;">${p.isAlt ? '<span style="color:var(--gold-dim)">ALT</span>' : 'MAIN'}</td>
+              <td style="padding:7px 12px;font-size:13px;${classStyle(p.class)}">${p.class}</td><td style="padding:7px 12px;font-size:11px;color:var(--text-dim);letter-spacing:0.05em;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <input type="checkbox" ${p.isAlt ? 'checked' : ''} 
+                         onchange="rosterToggleAlt('${p.name}', this.checked)" 
+                         class="write-gated" 
+                         style="cursor:pointer; width:14px; height:14px; accent-color:var(--gold-dim);">
+                  <span style="${p.isAlt ? 'color:var(--gold-dim)' : ''}">${p.isAlt ? 'ALT' : 'MAIN'}</span>
+                </div>
+              </td>
               <td style="padding:7px 12px;text-align:right;">
                 <button class="write-gated" onclick="rosterRemovePlayer('${p.name}')" style="background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:13px;padding:2px 6px;" title="Remove from roster">✕</button>
               </td>
@@ -6376,6 +6383,26 @@ function renderRosterPanel() {
 
     </div>
   `;
+}
+
+  async function rosterToggleAlt(playerName, isChecked) {
+  // 1. Find the player in your rosterData object
+  const player = rosterData.players.find(p => normalizeName(p.name) === normalizeName(playerName));
+  
+  if (player) {
+    // 2. Update the value
+    player.isAlt = isChecked;
+    
+    // 3. Save the updated roster back to GitHub/Worker
+    await saveRosterToGitHub();
+    
+    // 4. Re-run the dashboard math so priority updates immediately
+    rebuildClassMap();
+    renderRosterPanel();
+    
+    // Optional: show a small toast or hint that it saved
+    if (window.setHint) setHint(`Updated ${playerName} to ${isChecked ? 'Alt' : 'Main'}`, 'success');
+  }
 }
 
 function rosterApplyFilter() {
