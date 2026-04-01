@@ -3760,12 +3760,12 @@ function buildTierProgressHtml(playerName) {
 
 
 async function rosterUpdatePlayer(playerName, newRole, newClass, isAlt) {
-  const p = rosterData.players.find(p => p.name === name);
+  const p = rosterData.players.find(p => normalizeName(p.name) === normalizeName(playerName));
   if (!p) return;
   p.role = newRole;
   p.class = newClass;
   p.isAlt = isAlt;
-  saveRosterToGitHub();
+  await saveRosterToGitHub();
   // Re-render attendance so colors/role grouping update
   if (groupingMode === 'attendance') renderAttendancePanel();
 }
