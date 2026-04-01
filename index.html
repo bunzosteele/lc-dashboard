@@ -5558,6 +5558,17 @@ function renderAttendancePanel() {
                 <option value="">— Select role first —</option>
               </select>
             </div>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <label style="font-size:11px;color:var(--text-dim);">Class</label>
+              <select id="rosterAddClass" class="write-gated" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:13px;" onchange="rosterCheckAddReady()" disabled>
+                <option value="">— Select role first —</option>
+              </select>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:4px;align-items:center;padding:0 8px;">
+              <label style="font-size:11px;color:var(--text-dim);">Alt?</label>
+              <input type="checkbox" id="rosterAddIsAlt" class="write-gated" style="width:16px;height:16px;cursor:pointer;accent-color:var(--gold-dim);">
+            </div>
             <button id="rosterAddBtn" class="gloss-btn-saveable write-gated" onclick="rosterAddPlayer()" style="background:var(--gold-dim);border:none;color:var(--bg);padding:7px 16px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.1em;transition:background 0.15s,box-shadow 0.15s;">ADD</button>
           </div>
         </div>
