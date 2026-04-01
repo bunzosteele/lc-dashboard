@@ -3881,31 +3881,41 @@ function toggleLoot(td, playerName) {
   // Tier set progress section
   html += buildTierProgressHtml(playerName);
 
-  // Role / Class edit section (only on the Roster tab when write token present)
+// Role / Class / Alt edit section (only on the Roster/Attendance tab when write token present)
   if (writeToken && groupingMode === 'attendance') {
     const _p = rosterData.players.find(p => normalizeName(p.name) === normalizeName(playerName));
     if (_p) {
       const _allRoles = ['Tanks','Physical DPS','Ranged DPS','Healers'];
       const _roleOpts = _allRoles.map(r => `<option value="${r}" ${r===_p.role?'selected':''}>${r}</option>`).join('');
       const _classOpts = (ROLE_CLASSES[_p.role]||[]).map(c => `<option value="${c}" ${c===_p.class?'selected':''}>${c}</option>`).join('');
+      
       html += `<div class="expand-section-title" style="margin-top:12px;">Edit Player</div>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px;">
           <select id="editRole_${normalizeName(playerName)}" onchange="
             var r=this.value;
             var cs=document.getElementById('editClass_${normalizeName(playerName)}');
-            cs.innerHTML=(ROLE_CLASSES[r]||[]).map(c=>'<option value=\''+c+'\'>'+c+'</option>').join('');
+            cs.innerHTML=(ROLE_CLASSES[r]||[]).map(c=>'<option value=\\'+c+'\\'>'+c+'</option>').join('');
           " style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:4px;font-size:13px;">
             ${_roleOpts}
           </select>
           <select id="editClass_${normalizeName(playerName)}" style="background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:4px;font-size:13px;">
             ${_classOpts}
           </select>
+          
+          <div style="display:flex;align-items:center;gap:6px;padding:0 4px;">
+            <label style="font-size:11px;color:var(--text-dim);">Alt?</label>
+            <input type="checkbox" id="editAlt_${normalizeName(playerName)}" ${_p.isAlt ? 'checked' : ''} 
+                   style="width:15px;height:15px;cursor:pointer;accent-color:var(--gold-dim);">
+          </div>
+
           <button onclick="
             var r=document.getElementById('editRole_${normalizeName(playerName)}').value;
             var c=document.getElementById('editClass_${normalizeName(playerName)}').value;
-            rosterUpdatePlayer('${playerName.replace(/'/g,"\\'")}',r,c);
+            var a=document.getElementById('editAlt_${normalizeName(playerName)}').checked;
+            rosterUpdatePlayer('${playerName.replace(/'/g,"\\\\'")}', r, c, a);
           " style="background:var(--gold-dim);border:none;color:var(--bg);padding:5px 12px;border-radius:4px;cursor:pointer;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.1em;">SAVE</button>
-          <button onclick="if(confirm('Remove ${playerName.replace(/'/g,"\\'")} from roster?'))rosterRemovePlayer('${playerName.replace(/'/g,"\\'")}');" style="background:none;border:1px solid var(--border);color:var(--text-dim);padding:5px 10px;border-radius:4px;cursor:pointer;font-size:12px;">Remove from Roster</button>
+          
+          <button onclick="if(confirm('Remove ${playerName.replace(/'/g,"\\\\'")} from roster?'))rosterRemovePlayer('${playerName.replace(/'/g,"\\\\'")}');" style="background:none;border:1px solid var(--border);color:var(--text-dim);padding:5px 10px;border-radius:4px;cursor:pointer;font-size:12px;">Remove</button>
         </div>`;
     }
   }
@@ -5558,13 +5568,6 @@ function renderAttendancePanel() {
                 <option value="">— Select role first —</option>
               </select>
             </div>
-            <div style="display:flex;flex-direction:column;gap:4px;">
-              <label style="font-size:11px;color:var(--text-dim);">Class</label>
-              <select id="rosterAddClass" class="write-gated" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-size:13px;" onchange="rosterCheckAddReady()" disabled>
-                <option value="">— Select role first —</option>
-              </select>
-            </div>
-
             <div style="display:flex;flex-direction:column;gap:4px;align-items:center;padding:0 8px;">
               <label style="font-size:11px;color:var(--text-dim);">Alt?</label>
               <input type="checkbox" id="rosterAddIsAlt" class="write-gated" style="width:16px;height:16px;cursor:pointer;accent-color:var(--gold-dim);">
