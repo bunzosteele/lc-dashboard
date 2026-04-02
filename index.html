@@ -6629,6 +6629,18 @@ const TOKEN_REWARDS = {
   // Magtheridon's Head (Finger) — id:32385
   32385: {Heal:28790, Tank:28792, Ret:28791, Prot:28792, Fury:28791, Arms:28791, Bear:28791, Cat:28791, Owl:28793, Tree:28790, Holy:28790, Shad:28793, Ele:28793, Enh:28791, Resto:28790, Arc:28793, Fire:28793, Aff:28793, Dest:28793, Rog:28791, BM:28791, SV:28791},
 
+  // Verdant Sphere (Neck) — id:32405 — quest reward from Nightbane (Karazhan)
+  // The Darkener's Grasp (30007)  — all tanks
+  // The Sun King's Talisman (30015) — ranged DPS except hunters (Arc, Fire, Ele, Aff, Dest, Shad, Owl)
+  // Telonicus's Pendant of Mayhem (30017) — physical DPS + hunters
+  // Lord Sanguinar's Claim (30018) — all healers
+  32405: {
+    Tank:30007, Prot:30007, Bear:30007,
+    Arc:30015, Fire:30015, Ele:30015, Aff:30015, Dest:30015, Shad:30015, Owl:30015,
+    Fury:30017, Arms:30017, Rog:30017, Ret:30017, Enh:30017, Cat:30017, BM:30017, SV:30017,
+    Heal:30018, Holy:30018, Tree:30018, Resto:30018,
+  },
+
   // ── T5 Vanquished tokens ─────────────────────────────────────────────────
   // Champion = Paladin (Crystalforge) + Rogue (Deathmantle) + Shaman (Cataclysm)
   // Defender = Warrior (Destroyer) + Priest (Avatar) + Druid (Nordrassil)
@@ -7812,8 +7824,12 @@ function onItemChange() {
 
     // Get current item(s) in relevant slots — inline slot lookup to avoid TDZ
     const gear = gearListingByPlayer[key]?.slots;
+    // For token items (e.g. Verdant Sphere, Magtheridon's Head), use the resolved reward item's
+    // slot — the token itself has no equip slot. Fall back to the raw candidate if no token reward.
+    const _effectiveIdForSlot = _candidateItemId !== _rawCandidateId ? _candidateItemId : _rawCandidateId;
     const _entry = gearItemIds[normalizeName(item)] || Object.values(gearItemIds).find(v => typeof v === 'object' && v.id === _rawCandidateId);
-    const _entrySlot = _entry && typeof _entry === 'object' ? _entry.slot : null;
+    const _rewardEntry = Object.values(gearItemIds).find(v => typeof v === 'object' && v.id === _effectiveIdForSlot);
+    const _entrySlot = (_rewardEntry?.slot) || (_entry && typeof _entry === 'object' ? _entry.slot : null);
     const _SLOT_MAP = {
       'Head': ['Head'], 'Neck': ['Neck'], 'Shoulder': ['Shoulders'],
       'Back': ['Cloak'], 'Chest': ['Chest'], 'Wrist': ['Bracers'],
@@ -8023,11 +8039,23 @@ function onItemChange() {
     // Primary: check stored slot in gearItemIds
     const normItem = normalizeName(itemName);
     const entry = gearItemIds[normItem];
+    // For token/quest items (slot 'Quest' or no WOWHEAD_SLOT_MAP match),
+    // resolve to the reward item's slot using TOKEN_REWARDS
     if (entry && typeof entry === 'object' && entry.slot) {
-      // Shields share Wowhead slot 'Off Hand' but should only map to ['Off-Hand']
       if (entry.slot === 'Off Hand' && entry.icon && entry.icon.startsWith('inv_shield')) return ['Off-Hand'];
       const mapped = WOWHEAD_SLOT_MAP[entry.slot];
       if (mapped) return mapped;
+      // slot didn't map (e.g. 'Quest') — try resolving via TOKEN_REWARDS
+      const rawId = typeof entry === 'object' ? entry.id : entry;
+      if (rawId && TOKEN_REWARDS[rawId]) {
+        // Get any reward item id and look up its slot
+        const anyRewardId = Object.values(TOKEN_REWARDS[rawId])[0];
+        const rewardEntry = Object.values(gearItemIds).find(v => typeof v === 'object' && v.id === anyRewardId);
+        if (rewardEntry?.slot) {
+          const rewardMapped = WOWHEAD_SLOT_MAP[rewardEntry.slot] || [rewardEntry.slot];
+          if (rewardMapped) return rewardMapped;
+        }
+      }
     }
 
     // Secondary: find slot by scanning player gear listings
