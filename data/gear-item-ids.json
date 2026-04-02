@@ -19033,9 +19033,15 @@
   },
   "theverdantsphere": {
     "id": 32405,
-    "name": "The Verdant Sphere",
-    "slot": "Trinket",
-    "icon": "inv_misc_gem_crystal_02"
+    "name": "Verdant Sphere",
+    "slot": "Neck",
+    "icon": "inv_misc_gem_pearl_06"
+  },
+  "verdantsphere": {
+    "id": 32405,
+    "name": "Verdant Sphere",
+    "slot": "Neck",
+    "icon": "inv_misc_gem_pearl_06"
   },
   "idolofthewhitestag": {
     "id": 32257,
