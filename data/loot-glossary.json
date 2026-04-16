@@ -1487,9 +1487,17 @@
           ]
         },
         {
-          "item": "The Verdant Sphere",
+          "item": "Verdant Sphere",
           "eligibleClasses": [
-            "Paladin"
+            "Druid",
+            "Hunter",
+            "Paladin",
+            "Rogue",
+            "Shaman",
+            "Warrior",
+            "Warlock",
+            "Priest",
+            "Mage",
           ]
         }
       ],
