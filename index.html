@@ -2076,7 +2076,7 @@ function buildAttendanceRenderData() {
       }
       const first = trueIdx[0], last = trueIdx[trueIdx.length - 1];
       const raidsSinceLast = (n - 1) - last;
-      const inactive = raidsSinceLast > 2;
+      const inactive = raidsSinceLast > 4;
       const windowEnd = inactive ? last : (n - 1);
       const window = windowEnd - first + 1;
       const attended = flags.slice(first, windowEnd + 1).filter(Boolean).length;
@@ -3095,7 +3095,7 @@ function parseCSV(text) {
     } else {
       const first = trueIdx[0], last = trueIdx[trueIdx.length - 1];
       const raidsSinceLast = (totalRaids - 1) - last; // how many raids after their last attendance
-      const inactive = raidsSinceLast > 2;
+      const inactive = raidsSinceLast > 4;
       // For active players, extend window to the latest raid so missing recent raids counts against them
       const windowEnd = inactive ? last : (totalRaids - 1);
       const window = windowEnd - first + 1;
