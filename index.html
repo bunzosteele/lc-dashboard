@@ -2038,9 +2038,36 @@ function formatAttendanceDate(date) {
   return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 }
 
+function phaseOneLockoutEpoch() {
+  // Phase 1 released on Feb 19, 2026 (a Thursday). The Lockout started on Tuesday Feb 17.
+  // Note that month is 0-indexed.
+  return new Date(2026, 1, 17);
+}
+
+function phaseTwoLockoutEpoch() {
+  // Phase 2 will release on May 14, 2026 (a Thursday). The Lockout started on Tuesday Feb 17.
+  // Note that month is 0-indexed.
+  return new Date(2026, 4, 12);
+}  
+  
 function todayMST() {
   // Return today's date as YYYY-MM-DD in MST (UTC-7, no DST adjustment)
   return formatAttendanceDate(new Date());
+}
+
+function getDaysBetween(date1, date2) {
+  const oneDay = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
+  const firstDate = new Date(date1);
+  const secondDate = new Date(date2);
+
+  // Calculate difference in milliseconds
+  const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+    
+  return diffDays;
+}
+
+function getDateLockoutNum(date) {
+  return Math.floor(getDaysBetween(date, phaseOneLockoutEpoch()) / 7)
 }
 
 function formatRaidLabel(date) {
@@ -2059,6 +2086,10 @@ function buildAttendanceRenderData() {
   const dates = raids.map(r => r.label);
   const n = raids.length;
 
+  const numRaidsPhase1 = 24; // all raids before May 14 based on CLA report history
+  const numLockoutsPhase1 = 13;
+  const numRaidsPhase2 = n - numRaidsPhase1;
+  
   const ROLE_ORDER = ['Tanks', 'Physical DPS', 'Ranged DPS', 'Healers'];
   const roleMap = {};
   for (const p of rosterData.players) {
@@ -2080,7 +2111,15 @@ function buildAttendanceRenderData() {
       const windowEnd = inactive ? last : (n - 1);
       const window = windowEnd - first + 1;
       const attended = flags.slice(first, windowEnd + 1).filter(Boolean).length;
-      const pct = (attended / window) * 100;
+
+      // Calculation for number of raids attended in phase 1 (based on number of lockouts attended)
+      const playerRaidsPhase1 = raids.slice(0, numRaidsPhase1);
+      const playerFirstLockoutPhase1 = getDateLockoutNum(playerRaidsPhase1[first].date);
+      const eligibleLockoutsPhase1 = numLockoutsPhase1 - playerFirstLockoutPhase1;      
+      
+      const totalEligibleRaids = eligibleLockoutsPhase1 + numRaidsPhase2;
+      const pct = (attended / totalEligibleRaids) * 100;
+      
       return { name: p.name, attended, window, pct, flags, n, first, last, inactive };
     });
     return { name: roleName, players };
