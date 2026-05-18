@@ -2086,10 +2086,9 @@ function buildAttendanceRenderData() {
   const dates = raids.map(r => r.label);
   const n = raids.length;
 
-  const numRaidsPhase1 = 24; // all raids before May 14 based on CLA report history
-  const numLockoutsPhase1 = 13;
-  const numRaidsPhase2 = n - numRaidsPhase1;
-  
+  const lastRaidDate = new Date(raids.at(-1));
+  const lastRaidLockout = getDateLockoutNum(lastRaidDate);
+
   const ROLE_ORDER = ['Tanks', 'Physical DPS', 'Ranged DPS', 'Healers'];
   const roleMap = {};
   for (const p of rosterData.players) {
@@ -2111,14 +2110,11 @@ function buildAttendanceRenderData() {
       const windowEnd = inactive ? last : (n - 1);
       const window = windowEnd - first + 1;
       const attended = flags.slice(first, windowEnd + 1).filter(Boolean).length;
-
-      // Calculation for number of raids attended in phase 1 (based on number of lockouts attended)
-      const playerRaidsPhase1 = raids.slice(0, numRaidsPhase1);
-      const playerFirstLockoutPhase1 = getDateLockoutNum(playerRaidsPhase1[first].date);
-      const eligibleLockoutsPhase1 = numLockoutsPhase1 - playerFirstLockoutPhase1;      
       
-      const totalEligibleRaids = eligibleLockoutsPhase1 + numRaidsPhase2;
-      const pct = (attended / totalEligibleRaids) * 100;
+      const playerFirstLockout = getDateLockoutNum(raids[first].date);
+      const playerLastLockout = getDateLockoutNum(raids[last].date);
+      const eligibleLockouts = (lastRaidLockout - playerFirstLockout) + 1;
+      const pct = (attended / eligibleLockouts) * 100;
       
       return { name: p.name, attended, window, pct, flags, n, first, last, inactive };
     });
