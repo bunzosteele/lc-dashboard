@@ -18822,37 +18822,37 @@
     "icon": "inv_pants_leather_13"
   },
   "helmofthevanquishedchampion": {
-    "id": 30248,
+    "id": 30242,
     "name": "Helm of the Vanquished Champion",
     "slot": "Head",
     "icon": "inv_helmet_06"
   },
   "helmofthevanquisheddefender": {
-    "id": 30249,
+    "id": 30243,
     "name": "Helm of the Vanquished Defender",
     "slot": "Head",
     "icon": "inv_helmet_06"
   },
   "helmofthevanquishedhero": {
-    "id": 30250,
+    "id": 30244,
     "name": "Helm of the Vanquished Hero",
     "slot": "Head",
     "icon": "inv_helmet_06"
   },
   "pauldronsofthevanquishedchampion": {
-    "id": 30242,
+    "id": 30248,
     "name": "Pauldrons of the Vanquished Champion",
     "slot": "Shoulders",
     "icon": "inv_shoulder_22"
   },
   "pauldronsofthevanquisheddefender": {
-    "id": 30243,
+    "id": 30249,
     "name": "Pauldrons of the Vanquished Defender",
     "slot": "Shoulders",
     "icon": "inv_shoulder_22"
   },
   "pauldronsofthevanquishedhero": {
-    "id": 30244,
+    "id": 30250,
     "name": "Pauldrons of the Vanquished Hero",
     "slot": "Shoulders",
     "icon": "inv_shoulder_22"
